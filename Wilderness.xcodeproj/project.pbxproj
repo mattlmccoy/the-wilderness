@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DE7FEC62E086B038A0D1875 /* WallText.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BDD2885BEE47A41C152161 /* WallText.swift */; };
 		0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34504EEACA619A61C36E1178 /* Palette.swift */; };
 		1B42BB5778852B23F8F7146B /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
@@ -67,6 +68,7 @@
 		D5C5982E11F5F02CA3E2E12B /* Wilderness.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wilderness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessApp.swift; sourceTree = "<group>"; };
+		F6BDD2885BEE47A41C152161 /* WallText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallText.swift; sourceTree = "<group>"; };
 		FEF2516EA0E49076236AEF71 /* annotations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = annotations.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,6 +105,7 @@
 				34504EEACA619A61C36E1178 /* Palette.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
 				6F06B70493ADCF9380EB26B7 /* Typography.swift */,
+				F6BDD2885BEE47A41C152161 /* WallText.swift */,
 				EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */,
 				95148E6B311B87780B181219 /* Content */,
 				DC82B29E8A01F255D138D2AE /* Fonts */,
@@ -273,6 +276,7 @@
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
 				3576D09A2B2003A03D056D30 /* Typography.swift in Sources */,
+				0DE7FEC62E086B038A0D1875 /* WallText.swift in Sources */,
 				52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

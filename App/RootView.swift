@@ -48,7 +48,7 @@ struct RootView: View {
                 ZStack(alignment: .topLeading) {
                     RegistrationTestPattern(strength: showPattern ? 1 : 0)
                         .animation(.easeInOut(duration: 1.2), value: showPattern)
-                    ExploreView(library: library, state: explore)
+                    ExploreView(library: library, state: explore, calibration: cal)
                     if explore == .idle {
                         GlintLayer(points: content.glints, tuning: .defaults, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
