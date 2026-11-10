@@ -1,0 +1,47 @@
+# XcodeGen spec. Regenerate the Xcode project with:  xcodegen generate
+name: Wilderness
+options:
+  bundleIdPrefix: com.mattmccoy
+  deploymentTarget:
+    tvOS: "17.0"
+packages:
+  WildernessCore:
+    path: Packages/WildernessCore
+targets:
+  Wilderness:
+    type: application
+    platform: tvOS
+    sources: [App]
+    dependencies:
+      - package: WildernessCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mattmccoy.wilderness
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: The Wilderness
+        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "3"
+        ASSETCATALOG_COMPILER_APPICON_NAME: "App Icon & Top Shelf Image"
+  WildernessUITests:
+    type: bundle.ui-testing
+    platform: tvOS
+    sources: [UITests]
+    dependencies:
+      - target: Wilderness
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.mattmccoy.wilderness.uitests
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "3"
+schemes:
+  Wilderness:
+    build:
+      targets:
+        Wilderness: all
+    test:
+      targets:
+        - WildernessUITests

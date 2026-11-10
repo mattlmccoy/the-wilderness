@@ -1,0 +1,140 @@
+{
+  "artworkAspect": 1.2,
+  "annotations": [
+    {
+      "id": "christ",
+      "title": "Christ",
+      "short": "Forty days without food, and he sits as if lost in thought.",
+      "extended": "Mark’s Gospel gives the scene two short verses: after his baptism, Christ was in the wilderness forty days, tempted by Satan, with the wild beasts, while angels served him. Moretto shows no struggle. Christ rests his head on his hand, a gesture long used in art for meditation and for melancholy.",
+      "references": [
+        "Mark 1:12–13",
+        "Matthew 4:1–2",
+        "The Met, 11.53"
+      ],
+      "evidence": "documented",
+      "anchor": {
+        "x": 0.77,
+        "y": 0.5
+      },
+      "textSide": "right",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "angels",
+      "title": "The Angels",
+      "short": "“And the angels ministered unto him.”",
+      "extended": "Mark and Matthew both end the wilderness story with angels attending Christ. Here two of them arrive in flight from the upper right.",
+      "references": [
+        "Mark 1:13",
+        "Matthew 4:11"
+      ],
+      "evidence": "documented",
+      "anchor": {
+        "x": 0.85,
+        "y": 0.18
+      },
+      "textSide": "right",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "basilisk",
+      "title": "The Basilisk",
+      "short": "A small winged serpent, almost hidden at the centre of the picture.",
+      "extended": "The creature is not named in the Met’s record; reading it as a basilisk is an interpretation. If it is one, it points to Psalm 91, which Satan quotes to Christ during the temptation. The next verse in the Latin Bible of Moretto’s day reads, in an early English translation: “Thou shalt walk upon the asp and the basilisk: and thou shalt trample under foot the lion and the dragon.”",
+      "references": [
+        "Psalm 91:11–13 (Vulgate 90:11–13)",
+        "Matthew 4:6"
+      ],
+      "evidence": "plausible",
+      "anchor": {
+        "x": 0.41,
+        "y": 0.64
+      },
+      "textSide": "left",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "lion",
+      "title": "The Lion",
+      "short": "Half cut off by the edge of the canvas, it lies at Christ’s feet.",
+      "extended": "Lions are among the wild beasts the Met identifies in the painting. In Christian art the lion can stand for strength and kingship, and the same verse of Psalm 91 that names the basilisk promises that the lion will be trampled. Here it is calm, which suits a reading of the wilderness as a place where creation is at peace with Christ.",
+      "references": [
+        "Mark 1:13",
+        "Psalm 91:13"
+      ],
+      "evidence": "iconographicTradition",
+      "anchor": {
+        "x": 0.91,
+        "y": 0.75
+      },
+      "textSide": "right",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "stag",
+      "title": "The Stag",
+      "short": "“As the hart panteth after the water brooks…”",
+      "extended": "A stag crosses the slope at the left. The deer was a familiar Christian image of the soul seeking God, taken from Psalm 42. Whether Moretto meant that here, or simply painted the animals of a wild place, cannot be settled from the picture alone.",
+      "references": [
+        "Psalm 42:1"
+      ],
+      "evidence": "plausible",
+      "anchor": {
+        "x": 0.19,
+        "y": 0.59
+      },
+      "textSide": "left",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "fox",
+      "title": "The Fox",
+      "short": "One of Mark’s wild beasts, resting a few steps from the serpent.",
+      "extended": "The Met’s catalogue lists foxes among the painting’s animals. No single symbolic meaning fits them securely here; they belong, with the bear and the deer, to the wild beasts Mark says were with Christ.",
+      "references": [
+        "Mark 1:13"
+      ],
+      "evidence": "documented",
+      "anchor": {
+        "x": 0.48,
+        "y": 0.59
+      },
+      "textSide": "left",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "bear",
+      "title": "The Bear",
+      "short": "A dark shape lying in the grass, as quiet as everything else.",
+      "extended": "The Met’s catalogue lists a bear among the painting’s animals. Predators lying at rest near grazing animals recall Isaiah’s peaceable kingdom, where the wolf lives with the lamb and the bear feeds beside the cow. That echo is a reading, not something the painting states.",
+      "references": [
+        "Isaiah 11:6–7",
+        "Mark 1:13"
+      ],
+      "evidence": "plausible",
+      "anchor": {
+        "x": 0.55,
+        "y": 0.74
+      },
+      "textSide": "left",
+      "geometrySource": "met-reference-estimate"
+    },
+    {
+      "id": "fragment",
+      "title": "The Missing Picture",
+      "short": "These faint cherubs mark where a larger painting was cut away.",
+      "extended": "The Met describes the canvas as a fragment of a larger work that once continued past the sketchy cherubim at the left and showed other events from Christ’s life. It has been suggested that Moretto’s Christ Blessing Saint John the Baptist, now in London, came from the same composition, though the National Gallery notes that the figures differ in scale.",
+      "references": [
+        "The Met, 11.53",
+        "National Gallery, London, NG3096"
+      ],
+      "evidence": "documented",
+      "anchor": {
+        "x": 0.09,
+        "y": 0.17
+      },
+      "textSide": "left",
+      "geometrySource": "met-reference-estimate"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.mattmccoy.wilderness.refresh</string>
+  <key>ProgramArguments</key>
+  <array><string>/Users/mattmccoy/Developer/Wilderness/scripts/refresh.sh</string></array>
+  <!-- Daily at 03:40; if the Mac is asleep then, launchd runs it on wake. -->
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>3</integer><key>Minute</key><integer>40</integer></dict>
+</dict>
+</plist>
