@@ -66,8 +66,10 @@ private let contentDir = contentURL.deletingLastPathComponent()
 }
 
 @Test func shippedVersesHaveTheirTranslationNotice() throws {
-    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
-    let script = try UnfoldScript.decode(Data(contentsOf: contentDir.appendingPathComponent("unfold.json")), library: lib)
+    let licensed = try LicensedVerses.decode(Data(contentsOf: contentDir.appendingPathComponent("licensed-verses.json")))
+    let raw = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let lib = raw.applying(licensed)
+    let script = try UnfoldScript.decode(Data(contentsOf: contentDir.appendingPathComponent("unfold.json")), library: raw).applying(licensed)
     let notices = try Notices.decode(Data(contentsOf: contentDir.appendingPathComponent("notices.json")))
     let used = Set((lib.annotations.compactMap(\.more) + script.beats.compactMap(\.more)).flatMap(\.verses).map(\.translation))
     for t in used where t.needsNotice {

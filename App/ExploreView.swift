@@ -46,9 +46,11 @@ enum ContentLoader {
     /// Loads and validates the bundled content. Failure is surfaced, never replaced with placeholders.
     static func load() -> Result<AppContent, Error> {
         Result {
+            // Verse wording pasted in from Matt's licensed Bible replaces the free placeholders.
+            let licensed = try LicensedVerses.decode(data("licensed-verses"))
             let library = try AnnotationLibrary.decode(data("annotations"))
-            return AppContent(library: library,
-                              script: try UnfoldScript.decode(data("unfold"), library: library),
+            return AppContent(library: library.applying(licensed),
+                              script: try UnfoldScript.decode(data("unfold"), library: library).applying(licensed),
                               glints: try GlintPoints.decode(data("glints")),
                               notices: try Notices.decode(data("notices")))
         }

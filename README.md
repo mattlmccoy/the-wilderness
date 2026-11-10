@@ -133,6 +133,26 @@ Wall copy is reviewed and approved line by line by Matt before it ships.
 TEST_RUNNER_SCREENSHOT_DIR=/path/to/folder xcodebuild test -project Wilderness.xcodeproj -scheme Wilderness -destination 'platform=tvOS Simulator,name=Apple TV 4K (4th generation) (at 1080p)' -only-testing:WildernessUITests/ScreenshotTour CODE_SIGNING_ALLOWED=NO
 ```
 
+## Licensed Bible translations
+
+Verses start as the public-domain Berean Standard Bible (BSB), with the Douay-Rheims for the Latin-Bible
+references. To use NIV, ESV or NLT instead, paste the wording from your own licensed Bible:
+
+```bash
+python3 -I scripts/paste_verses.py
+```
+
+It walks through each verse, asks for NIV/ESV/NLT and the matching phrase, then asks once for each
+translation's copyright notice (shown in Settings → About). Text goes only into
+`App/Content/licensed-verses.json` and `App/Content/notices.json`; the app swaps it in when it builds.
+A test fails if a quoted translation has no notice. Rebuild with the refresh command afterwards.
+
+Publisher terms checked 10 November 2026: Biblica (NIV) and Crossway (ESV) both allow up to 500 verses,
+never a whole book and under 25% of the work, without written permission, as long as the copyright
+notice is shown. Biblica also requires a license for any use of NIV text with AI tools, so the pasted
+wording is entered by hand here and never passed through Claude. Tyndale (NLT): check
+tyndale.com/permissions yourself.
+
 ## Refresh (free Apple ID, 7-day signing)
 
 `scripts/refresh.sh` rebuilds and reinstalls daily via launchd (`scripts/com.mattmccoy.wilderness.refresh.plist`).

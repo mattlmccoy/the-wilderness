@@ -35,6 +35,7 @@
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
 		D52C0C38148E458A5BB06309 /* notices.json in Resources */ = {isa = PBXBuildFile; fileRef = 4685DA18E56C3A97752987DC /* notices.json */; };
+		DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */ = {isa = PBXBuildFile; fileRef = 4D8385225EF6CEFBD3D833AD /* licensed-verses.json */; };
 		DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */; };
 		DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD97476B6D5814CC002BB613 /* TuningStore.swift */; };
 		E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
@@ -64,6 +65,7 @@
 		3F6E3C541A7FD4DED662EFED /* WildernessCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WildernessCore; path = Packages/WildernessCore; sourceTree = SOURCE_ROOT; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
 		4685DA18E56C3A97752987DC /* notices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = notices.json; sourceTree = "<group>"; };
+		4D8385225EF6CEFBD3D833AD /* licensed-verses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "licensed-verses.json"; sourceTree = "<group>"; };
 		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				FEF2516EA0E49076236AEF71 /* annotations.json */,
 				69A6BB2EC267DFB6DEB14308 /* glints.json */,
+				4D8385225EF6CEFBD3D833AD /* licensed-verses.json */,
 				4685DA18E56C3A97752987DC /* notices.json */,
 				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
@@ -281,6 +284,7 @@
 				AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */,
 				0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */,
 				563576B5C812D60693833113 /* glints.json in Resources */,
+				DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */,
 				D52C0C38148E458A5BB06309 /* notices.json in Resources */,
 				A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
