@@ -27,3 +27,26 @@ private let contentURL = URL(fileURLWithPath: #filePath)
     }
     #expect(seen.count == lib.annotations.count, "unreachable: \(Set(lib.annotations.map(\.id)).subtracting(seen))")
 }
+
+@Test func everyShippedSubjectHasAnOutline() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    for a in lib.annotations {
+        #expect((a.outline?.count ?? 0) >= 6, "\(a.id) has no usable outline")
+    }
+}
+
+@Test func shippedShortLinesRespectTheWordLimit() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    for a in lib.annotations {
+        #expect(WordLimits.count(a.short) <= WordLimits.short, "\(a.id): \(WordLimits.count(a.short)) words")
+    }
+}
+
+@Test func shippedMoreRespectsWordLimits() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    for a in lib.annotations {
+        guard let m = a.more, !m.draft else { continue }
+        #expect(WordLimits.count(m.story) <= WordLimits.story, "\(a.id) story")
+        for v in m.verses { #expect(WordLimits.count(v.text) <= WordLimits.verse, "\(a.id) \(v.ref)") }
+    }
+}

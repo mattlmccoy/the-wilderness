@@ -46,3 +46,37 @@ private let all = [stag, fox, christ, angels, lion, basilisk]
     let json = #"{"artworkAspect":1.2,"annotations":[\#(one),\#(one)]}"#
     #expect(throws: AnnotationLibrary.ValidationError.self) { try AnnotationLibrary.decode(Data(json.utf8)) }
 }
+
+private func libraryJSON(more: String?) -> Data {
+    let moreField = more.map { #","more":\#($0)"# } ?? ""
+    return Data(#"""
+    {"artworkAspect":1.2,"annotations":[{"id":"christ","title":"Christ","short":"s","extended":"e","references":[],
+     "evidence":"documented","anchor":{"x":0.77,"y":0.52},"textSide":"right","geometrySource":"t"\#(moreField)}]}
+    """#.utf8)
+}
+
+@Test func decodesMoreWithVerses() throws {
+    let more = #"""
+    {"story":"Israel wandered forty years.","connection":"inScripture","draft":true,"verses":[
+      {"ref":"Deuteronomy 8:3","text":"People do not live by bread alone.","testament":"old","translation":"NIV"},
+      {"ref":"Matthew 4:4","text":"Man shall not live by bread alone.","testament":"new","translation":"ESV"}]}
+    """#
+    let lib = try AnnotationLibrary.decode(libraryJSON(more: more))
+    #expect(lib.annotations[0].more?.verses.map(\.testament) == [.old, .new])
+    #expect(lib.annotations[0].more?.verses.map(\.translation) == [.niv, .esv])
+}
+
+@Test func moreWithoutVersesIsRejected() {
+    let more = #"{"story":"x","connection":"christianReading","draft":true,"verses":[]}"#
+    #expect(throws: (any Error).self) { try AnnotationLibrary.decode(libraryJSON(more: more)) }
+}
+
+@Test func moreWithEmptyStoryIsRejected() {
+    let more = #"{"story":" ","connection":"christianReading","draft":true,"verses":[{"ref":"Psalm 42:1","text":"t","testament":"old","translation":"NLT"}]}"#
+    #expect(throws: (any Error).self) { try AnnotationLibrary.decode(libraryJSON(more: more)) }
+}
+
+@Test func annotationWithoutMoreStillDecodes() throws {
+    let lib = try AnnotationLibrary.decode(libraryJSON(more: nil))
+    #expect(lib.annotations[0].more == nil)
+}

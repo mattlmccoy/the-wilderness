@@ -10,6 +10,37 @@ public enum Evidence: String, Codable, Sendable {
 
 public enum TextSide: String, Codable, Sendable { case left, right }
 
+public enum Testament: String, Codable, Sendable { case old, new }
+
+/// Modern translations for clarity; DRA (Douay-Rheims, the Vulgate in English) where it explains
+/// what Moretto painted, e.g. the basilisk of Psalm 90:13.
+public enum Translation: String, Codable, Sendable, CaseIterable { case niv = "NIV", esv = "ESV", nlt = "NLT", dra = "DRA" }
+
+/// Whether the New Testament itself makes the link, or it is a traditional Christian reading.
+public enum Connection: String, Codable, Sendable { case inScripture, christianReading }
+
+public struct Verse: Codable, Equatable, Sendable {
+    public var ref: String
+    public var text: String
+    public var testament: Testament
+    public var translation: Translation
+}
+
+/// What the second press shows: one line of story, then the verses (Old Testament first).
+public struct More: Codable, Equatable, Sendable {
+    public var story: String
+    public var verses: [Verse]
+    public var connection: Connection
+    /// True until Matt has approved the wording.
+    public var draft: Bool
+}
+
+/// Word limits for wall copy (spec §7). Enforced on shipped, approved copy by tests.
+public enum WordLimits {
+    public static let short = 15, story = 25, verse = 20
+    public static func count(_ s: String) -> Int { s.split(whereSeparator: \.isWhitespace).count }
+}
+
 public struct Annotation: Codable, Equatable, Identifiable, Sendable {
     public var id: String
     public var title: String
@@ -24,6 +55,8 @@ public struct Annotation: Codable, Equatable, Identifiable, Sendable {
     public var textSide: TextSide
     /// Provenance of the geometry, e.g. "met-reference-estimate" or "tapestry-photo-trace".
     public var geometrySource: String
+    /// Story and verses for the second press. nil until the copy pass.
+    public var more: More? = nil
 }
 
 public struct AnnotationLibrary: Codable, Sendable {
@@ -46,8 +79,18 @@ public struct AnnotationLibrary: Codable, Sendable {
                 throw ValidationError.invalid("\(a.id): geometry outside the artwork (0...1)")
             }
             if let o = a.outline, o.count < 3 { throw ValidationError.invalid("\(a.id): outline needs 3+ points") }
+            if let m = a.more { try validate(m, id: a.id) }
         }
         return lib
+    }
+
+    static func validate(_ m: More, id: String) throws {
+        let blank = { (s: String) in s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        guard !blank(m.story) else { throw ValidationError.invalid("\(id): more.story is empty") }
+        guard !m.verses.isEmpty else { throw ValidationError.invalid("\(id): more has no verses") }
+        for v in m.verses where blank(v.ref) || blank(v.text) {
+            throw ValidationError.invalid("\(id): a verse is missing its reference or text")
+        }
     }
 }
 
