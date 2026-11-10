@@ -74,11 +74,12 @@ final class ExperienceFlowUITests: XCTestCase {
         remote.press(.select, forDuration: 1.2)
         XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3))
         for _ in 0..<3 { remote.press(.down) }
-        let before = app.staticTexts["Show painting · off"].exists
+        let startsOn = app.staticTexts["Show painting · on"].exists
+        let flipped = startsOn ? "Show painting · off" : "Show painting · on"
+        let original = startsOn ? "Show painting · on" : "Show painting · off"
         remote.press(.select)
-        let after = app.staticTexts["Show painting · on"].waitForExistence(timeout: 2)
-        remote.press(.select)   // back off, so other tests start from a dark wall
-        XCTAssertTrue(before && after)
-        XCTAssertTrue(app.staticTexts["Show painting · off"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts[flipped].waitForExistence(timeout: 2))
+        remote.press(.select)   // restore what the viewer had
+        XCTAssertTrue(app.staticTexts[original].waitForExistence(timeout: 2))
     }
 }

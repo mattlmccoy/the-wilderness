@@ -35,6 +35,7 @@
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
 		D52C0C38148E458A5BB06309 /* notices.json in Resources */ = {isa = PBXBuildFile; fileRef = 4685DA18E56C3A97752987DC /* notices.json */; };
+		DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */; };
 		DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD97476B6D5814CC002BB613 /* TuningStore.swift */; };
 		E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		10055DBD8B0259D70A5114C9 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-CormorantGaramond.txt"; sourceTree = "<group>"; };
 		29BA13ECF8A5F9A7660C4A71 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				3E899EF5E0A146751A13B832 /* CalibrationView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
+				0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */,
 				7D05E43D6E479D37C55550E7 /* LightLayer.swift */,
 				AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */,
 				34504EEACA619A61C36E1178 /* Palette.swift */,
@@ -273,6 +276,7 @@
 				1B42BB5778852B23F8F7146B /* CormorantGaramond-Variable.ttf in Resources */,
 				E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */,
 				84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */,
+				DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */,
 				60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */,
 				AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */,
 				0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */,
@@ -337,6 +341,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Wilderness";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -432,6 +437,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Wilderness";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

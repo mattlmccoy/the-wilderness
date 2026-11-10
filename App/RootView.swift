@@ -9,7 +9,8 @@ struct RootView: View {
     @StateObject private var tuningStore = TuningStore()
     @Environment(\.scenePhase) private var scenePhase
     /// Debug: project the painting under everything to check where light and text land.
-    @AppStorage("debug.showPainting") private var showPainting = false
+    // On by default while the tapestry is not hung yet (Matt); turn off in Settings → Show painting.
+    @AppStorage("debug.showPainting") private var showPainting = true
     private static let painting: UIImage? = Bundle.main.path(forResource: "painting", ofType: "jpg").flatMap(UIImage.init(contentsOfFile:))
     @State private var machine: ModeMachine?
     @State private var tuningSession: TuningSession?
