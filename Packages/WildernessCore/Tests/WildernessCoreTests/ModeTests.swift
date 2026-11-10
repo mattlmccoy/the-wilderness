@@ -160,3 +160,12 @@ private extension ModeMachine {
     m.press(.select, at: 42)
     #expect(m.lastInputAt == 42)
 }
+
+@Test func awakePolicyReleasesAfterSixHoursAndResetsOnInput() {
+    let sixH1m = 6 * 3600.0 + 60
+    #expect(AwakePolicy.keepAwake(lastInputAt: 0, now: 6 * 3600.0 - 60))
+    #expect(!AwakePolicy.keepAwake(lastInputAt: 0, now: sixH1m))
+    var m = machine()
+    m.press(.select, at: sixH1m)
+    #expect(AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: sixH1m))
+}

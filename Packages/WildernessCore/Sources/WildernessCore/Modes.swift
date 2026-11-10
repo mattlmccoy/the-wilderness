@@ -101,3 +101,10 @@ public struct ModeMachine: Sendable {
 extension AppInput: Equatable {
     var direction: NudgeDirection? { if case let .move(d) = self { return d }; return nil }
 }
+
+/// While the app is open it holds off the screensaver and sleep, but hands that back after
+/// 6 hours with no remote press, so a projector switched off for the night lets the Apple TV sleep.
+public enum AwakePolicy {
+    public static let releaseAfter = 6.0 * 3600
+    public static func keepAwake(lastInputAt: Double, now: Double) -> Bool { now - lastInputAt < releaseAfter }
+}
