@@ -15,9 +15,21 @@
         ]
       ],
       "textSide": "left",
-      "title": "Eden: creatures at peace",
-      "short": "Draft: Eden: creatures at peace",
-      "more": null,
+      "title": "In the Beginning",
+      "short": "God gives the first man rule over every living creature.",
+      "more": {
+        "story": "When Adam fell, that rule was broken, and the wild animals became something to fear.",
+        "verses": [
+          {
+            "ref": "Genesis 1:28",
+            "text": "Rule over… every creature that crawls upon the earth.",
+            "testament": "old",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -29,9 +41,27 @@
         ]
       ],
       "textSide": "left",
-      "title": "The serpent and the promise",
-      "short": "Draft: The serpent and the promise",
-      "more": null,
+      "title": "The Promise",
+      "short": "God tells the serpent that a son of Eve will crush its head.",
+      "more": {
+        "story": "Christians have long read this as the first promise of Jesus Christ.",
+        "verses": [
+          {
+            "ref": "Genesis 3:15",
+            "text": "He will crush your head, and you will strike his heel.",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Galatians 4:4",
+            "text": "But when the time had fully come, God sent His Son, born of a woman",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -43,9 +73,21 @@
         ]
       ],
       "textSide": "left",
-      "title": "Forty years in the wilderness",
-      "short": "Draft: Forty years in the wilderness",
-      "more": null,
+      "title": "Forty Years",
+      "short": "Israel wandered in the wilderness for forty years and failed its test.",
+      "more": {
+        "story": "They complained of hunger and doubted God again and again.",
+        "verses": [
+          {
+            "ref": "Deuteronomy 8:2",
+            "text": "Remember that these forty years the LORD your God led you all the way in the wilderness",
+            "testament": "old",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "inScripture",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -57,9 +99,27 @@
         ]
       ],
       "textSide": "right",
-      "title": "Forty days",
-      "short": "Draft: Forty days",
-      "more": null,
+      "title": "Forty Days",
+      "short": "Jesus Christ goes into the same wilderness, hungry, for forty days.",
+      "more": {
+        "story": "Where Israel failed, he does not. Each time Satan tempts him, he answers from Deuteronomy.",
+        "verses": [
+          {
+            "ref": "Deuteronomy 8:3",
+            "text": "Man does not live on bread alone, but on every word that comes from the mouth of the LORD.",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Matthew 4:4",
+            "text": "Man shall not live on bread alone, but on every word that comes from the mouth of God.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "inScripture",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -71,9 +131,27 @@
         ]
       ],
       "textSide": "right",
-      "title": "Fed in the wilderness",
-      "short": "Draft: Fed in the wilderness",
-      "more": null,
+      "title": "What Is Man",
+      "short": "He is fully a man here, hungry and alone.",
+      "more": {
+        "story": "Psalm 8 gave man rule over the beasts. Hebrews says the man who finally holds it was tempted just as we are.",
+        "verses": [
+          {
+            "ref": "Psalm 8:6",
+            "text": "You made him ruler of the works of Your hands; You have placed everything under his feet",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Hebrews 4:15",
+            "text": "one who was tempted in every way that we are, yet was without sin.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -94,9 +172,27 @@
         ]
       ],
       "textSide": "left",
-      "title": "The peaceable kingdom",
-      "short": "Draft: The peaceable kingdom",
-      "more": null,
+      "title": "The Angels",
+      "short": "Satan promised him angels if he would leap from the Temple.",
+      "more": {
+        "story": "He would not test God. When the temptations ended, the angels came to serve him.",
+        "verses": [
+          {
+            "ref": "Psalm 91:11",
+            "text": "For He will command His angels concerning you to guard you in all your ways.",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Matthew 4:11",
+            "text": "Then the devil left Him, and angels came and ministered to Him.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "inScripture",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -111,9 +207,27 @@
         ]
       ],
       "textSide": "right",
-      "title": "The lion and the dragon",
-      "short": "Draft: The lion and the dragon",
-      "more": null,
+      "title": "The Lion and the Serpent",
+      "short": "Satan quoted Psalm 91 to Jesus. He stopped just before the verse about the lion.",
+      "more": {
+        "story": "In the picture, the lion and the serpent are already at his feet.",
+        "verses": [
+          {
+            "ref": "Psalm 91:13",
+            "text": "You will tread on the lion and cobra; you will trample the young lion and serpent.",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Luke 10:19",
+            "text": "I have given you authority to tread on snakes and scorpions",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      },
       "draft": true
     },
     {
@@ -128,9 +242,21 @@
         ]
       ],
       "textSide": "left",
-      "title": "The rest of the story",
-      "short": "Draft: The rest of the story",
-      "more": null,
+      "title": "That You May Believe",
+      "short": "This canvas was cut from a larger painting of the life of Jesus Christ.",
+      "more": {
+        "story": "What remains shows a hungry man who is also Lord of the wild beasts.",
+        "verses": [
+          {
+            "ref": "John 20:31",
+            "text": "These are written so that you may believe that Jesus is the Christ, the Son of God",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "inScripture",
+        "draft": true
+      },
       "draft": true
     }
   ]

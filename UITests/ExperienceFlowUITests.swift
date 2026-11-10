@@ -16,24 +16,24 @@ final class ExperienceFlowUITests: XCTestCase {
     func testArrowWakesExploreOnChrist() {
         let app = launch()
         remote.press(.right)
-        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
     }
 
     func testSelectTogglesStoryAndItPersistsAcrossSubjects() {
         let app = launch()
         remote.press(.right)
-        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
         remote.press(.select)
-        XCTAssertTrue(text(app, containing: "Mark’s Gospel").waitForExistence(timeout: 4))
+        XCTAssertTrue(text(app, containing: "He is hungry and tired").waitForExistence(timeout: 4))
         remote.press(.up)
-        XCTAssertTrue(text(app, containing: "Mark and Matthew both end").waitForExistence(timeout: 5),
+        XCTAssertTrue(text(app, containing: "Satan quoted the psalm about angels").waitForExistence(timeout: 5),
                       "the longer text should stay open on the next subject")
     }
 
     func testHoldSelectOpensSettingsWithoutTogglingText() {
         let app = launch()
         remote.press(.right)
-        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
         remote.press(.select, forDuration: 1.2)
         XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3))
         // If the release also counted as a Select, Settings would have opened Calibrate.
@@ -44,22 +44,22 @@ final class ExperienceFlowUITests: XCTestCase {
     func testPlayPauseStartsUnfold() {
         let app = launch()
         remote.press(.playPause)
-        XCTAssertTrue(app.staticTexts["Eden: creatures at peace"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["In the Beginning"].waitForExistence(timeout: 5))
     }
 
     func testBackReturnsToStillness() {
         let app = launch()
         remote.press(.right)
-        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
         remote.press(.menu)
-        XCTAssertFalse(app.staticTexts["Christ"].waitForExistence(timeout: 2.5))
+        XCTAssertFalse(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 2.5))
         XCTAssertEqual(app.state, .runningForeground)
     }
 
     func testPausedLineSitsUnderTheBeatTextOnScreen() {
         let app = launch()
         remote.press(.playPause)
-        let title = app.staticTexts["Eden: creatures at peace"]
+        let title = app.staticTexts["In the Beginning"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
         remote.press(.playPause)
         let paused = app.staticTexts["Paused"]

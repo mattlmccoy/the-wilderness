@@ -77,5 +77,5 @@ private let contentDir = contentURL.deletingLastPathComponent()
 
 @Test func noticesRequiredOnlyForCopyrightedTranslations() {
     #expect(Translation.niv.needsNotice && Translation.esv.needsNotice && Translation.nlt.needsNotice)
-    #expect(!Translation.dra.needsNotice)
+    #expect(!Translation.dra.needsNotice && !Translation.bsb.needsNotice)
 }

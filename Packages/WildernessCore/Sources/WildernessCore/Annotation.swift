@@ -14,7 +14,11 @@ public enum Testament: String, Codable, Sendable { case old, new }
 
 /// Modern translations for clarity; DRA (Douay-Rheims, the Vulgate in English) where it explains
 /// what Moretto painted, e.g. the basilisk of Psalm 90:13.
-public enum Translation: String, Codable, Sendable, CaseIterable { case niv = "NIV", esv = "ESV", nlt = "NLT", dra = "DRA" }
+public enum Translation: String, Codable, Sendable, CaseIterable {
+    case niv = "NIV", esv = "ESV", nlt = "NLT", dra = "DRA"
+    /// Berean Standard Bible: public domain; a stand-in until licensed NIV/ESV/NLT text is pasted in.
+    case bsb = "BSB"
+}
 
 /// Whether the New Testament itself makes the link, or it is a traditional Christian reading.
 public enum Connection: String, Codable, Sendable { case inScripture, christianReading }
@@ -125,8 +129,8 @@ public enum SpatialNavigator {
 
 extension Translation {
     /// NIV, ESV and NLT are copyrighted and may be quoted only with their notice (spec §7).
-    /// Douay-Rheims is public domain.
-    public var needsNotice: Bool { self != .dra }
+    /// Douay-Rheims and the Berean Standard Bible are public domain.
+    public var needsNotice: Bool { self != .dra && self != .bsb }
 }
 
 /// Bible translation copyright notices shown in Settings → About, keyed by abbreviation.
