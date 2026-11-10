@@ -1,0 +1,59 @@
+<title>Wilderness Wall Copy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+  /* Layout: one narrow column, like the text column on the wall; each line is addressable by id. */
+  :root {
+    --wall: #0b0a09;        /* projector black */
+    --light: #ede6d6;       /* Palette.ivory, the projected light */
+    --dim: #b9b09c;
+    --faint: #7d7566;
+    --rule: #2a2620;
+    --mark: #c7a55e;        /* Palette.gold: only for review marks, never wall text */
+    --over: #e0876a;
+    --title: "Cormorant Garamond", "Cormorant", Garamond, Georgia, serif;
+    --text: "EB Garamond", Garamond, Georgia, serif;
+    --ui: ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
+  }
+  body { background: var(--wall); color: var(--light); font-family: var(--text); }
+  main { max-width: 34rem; margin: 0 auto; padding-block: 2.5rem 4rem;
+         padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1 { font-family: var(--title); font-weight: 400; font-size: 2.6rem; line-height: 1.05; margin: 0; text-wrap: balance; }
+  .draft { font-family: var(--ui); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mark); margin: 0 0 .9rem; }
+  .intro { color: var(--dim); font-size: 1.08rem; line-height: 1.55; }
+  .intro li { margin-block: .35rem; }
+  h2 { font-family: var(--title); font-weight: 400; font-size: 1.7rem; margin: 3rem 0 .4rem; color: var(--light); }
+  .section-note { color: var(--faint); font-size: 1rem; margin: 0 0 1rem; }
+  .item { border-top: 1px solid var(--rule); padding-block: 1.6rem .6rem; display: flex; flex-direction: column; gap: .9rem; }
+  .item header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  h3 { font-family: var(--title); font-weight: 400; font-size: 2rem; margin: 0; line-height: 1.1; }
+  .kind { font-family: var(--ui); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+  .line { position: relative; display: flex; flex-direction: column; gap: .2rem; }
+  .line p { margin: 0; }
+  .lid { font-family: var(--ui); font-size: .66rem; letter-spacing: .06em; color: var(--mark); opacity: .8; }
+  .short p { font-style: italic; font-size: 1.3rem; line-height: 1.35; color: var(--light); }
+  .story p { font-size: 1.12rem; line-height: 1.55; color: var(--dim); }
+  .verse p:first-of-type { font-size: 1.18rem; line-height: 1.5; color: var(--light); }
+  .cite { font-size: .86rem; letter-spacing: .06em; color: var(--faint); display: flex; gap: .8rem; flex-wrap: wrap; align-items: baseline; }
+  .count { font-family: var(--ui); font-size: .66rem; color: var(--faint); letter-spacing: .04em; }
+  .count.over { color: var(--over); }
+  .conn { font-family: var(--ui); font-size: .74rem; color: var(--faint); margin: 0; }
+  .note { font-family: var(--ui); font-size: .82rem; line-height: 1.5; color: var(--dim); border-left: 2px solid var(--mark); padding-left: .7rem; margin: .2rem 0 0; }
+  .note b { color: var(--mark); font-weight: 500; }
+</style>
+<main>
+  <p class="draft">{{DRAFT}}</p>
+  <h1>Wall copy for The Wilderness</h1>
+  <div class="intro">
+    <p>Every line the app will project, in the order a guest meets it. Each has a small label (for example <b>christ.story</b>) so you can point at it in a comment or message.</p>
+    <ul>{{NOTES}}</ul>
+  </div>
+  <h2>Explore</h2>
+  <p class="section-note">First press shows the title and the short line. Second press adds the story and the verses, Old Testament first.</p>
+  {{SUBJECTS}}
+  <h2>Unfold</h2>
+  <p class="section-note">About 35 seconds per beat, about five minutes in all. Each beat shows its title, short line, story and verses.</p>
+  {{BEATS}}
+</main>
