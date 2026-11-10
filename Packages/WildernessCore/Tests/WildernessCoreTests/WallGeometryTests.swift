@@ -36,5 +36,15 @@ private func rect(x0: Double, x1: Double, y0: Double = 0.1, y1: Double = 0.9) ->
     #expect(abs(WallGeometry.wallInches(cal, side: .right) - 18) < 1e-9)
     let p = TextColumnLayout.place(preferred: .right, calibration: cal)
     #expect(p.position == .beside(.right))
-    #expect(abs(p.widthInches - 14) < 1e-9)
+    #expect(abs(p.widthInches - 15.5) < 1e-9)   // 18 - 2 gap - 0.5 margin
+}
+
+/// Matt's wall (option A): 87 in of wall, the 60 in tapestry centred, 13.5 in each side.
+@Test func mattsWallKeepsTextBesideTheTapestryInAnElevenInchColumn() {
+    // Tapestry spans 60 of 87 in → x0 = 13.5/87 of the frame width when the frame fills the wall.
+    let cal = rect(x0: 13.5 / 87, x1: 73.5 / 87)
+    #expect(abs(WallGeometry.wallInches(cal, side: .left) - 13.5) < 1e-9)
+    let p = TextColumnLayout.place(preferred: .left, calibration: cal)
+    #expect(p.position == .beside(.left))
+    #expect(abs(p.widthInches - 11) < 1e-9)
 }

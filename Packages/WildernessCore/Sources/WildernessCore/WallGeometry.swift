@@ -35,7 +35,8 @@ public struct ColumnPlacement: Equatable, Sendable {
 
 /// Where the wall text goes: beside the tapestry if a side has room, else over its lower edge.
 public enum TextColumnLayout {
-    public static let maxWidth = 19.0, minWidth = 14.0, gap = 3.0, margin = 1.0
+    // Option A (Matt): Matt's wall leaves 13.5 in each side, so the column narrows to ~11 in.
+    public static let maxWidth = 19.0, minWidth = 10.0, gap = 2.0, margin = 0.5
 
     public static func place(preferred: TextSide, calibration: Calibration) -> ColumnPlacement {
         let other: TextSide = preferred == .left ? .right : .left

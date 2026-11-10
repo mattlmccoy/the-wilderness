@@ -181,11 +181,12 @@ drawn through the same homography as the tapestry, so it lies flat on the wall.
 
 **Column width adapts (my call).** The available wall is computed from the saved calibration: the
 distance from the tapestry's edge to the edge of the projected frame.
-- The column is at most 19 in wide, with a 3 in gap and a 1 in margin at the frame edge.
-- It narrows to fit the wall that is actually there, down to 14 in.
-- Below 14 in on the preferred side, the text uses the other side.
-- If both sides are below 14 in, it sits over the lower edge of the tapestry. This should not happen at
-  10–12 ft.
+- The column is at most 19 in wide, with a 2 in gap and a 0.5 in margin at the frame edge.
+- It narrows to fit the wall that is actually there, down to 10 in. **Matt's wall is 87 in wide, which
+  leaves 13.5 in each side of the centred tapestry, so the column is about 11 in there (Matt chose
+  this, option A, after the first wall test).**
+- Below 10 in on the preferred side, the text uses the other side.
+- If both sides are below 10 in, it sits over the lower edge of the tapestry.
 
 ### 5.3 Unfold
 

@@ -78,4 +78,12 @@ final class ScreenshotTour: XCTestCase {
         for _ in 0..<3 { r.press(.down) }
         r.press(.select)   // leave it off afterwards
     }
+
+    /// Matt's wall: 87 in wide, tapestry 60 in centred (13.5 in each side).
+    func testMattsWall() {
+        _ = launch(calibration: Self.args(x0: 13.5 / 87, x1: 73.5 / 87))
+        let r = XCUIRemote.shared
+        r.press(.right); sleep(4); r.press(.select); sleep(3); shot("wall-1-christ-expanded")
+        r.press(.left); sleep(4); shot("wall-2-left-expanded")
+    }
 }
