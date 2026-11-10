@@ -2,7 +2,7 @@ import SwiftUI
 import WildernessCore
 
 /// Explore, drawn in artwork canvas units (1 unit ≈ 0.05 in on the wall; 20 units ≈ 1 in).
-/// A pool of warm light rests on the selected detail; its text sits on the bare wall beside
+/// Soft light rests on the selected detail (LightLayer); its text sits on the bare wall beside
 /// the tapestry. Text is placed outside the canvas bounds on purpose: the same homography
 /// carries it onto the wall plane, so it is perspective-correct too.
 struct ExploreView: View {
@@ -21,9 +21,8 @@ struct ExploreView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color.clear.frame(width: canvas.width, height: canvas.height)
+            LightLayer(library: library, tuning: .defaults, targets: targets, exploring: selected != nil)
             if case let (a, expanded)? = selected {
-                lightPool(at: a.anchor)
                 text(for: a, expanded: expanded)
                     .id(a.id)
                     .transition(.opacity)
@@ -32,13 +31,9 @@ struct ExploreView: View {
         .animation(.easeInOut(duration: 1.4), value: state)
     }
 
-    private func lightPool(at p: Point<ArtworkSpace>) -> some View {
-        let r: CGFloat = 150
-        return Circle()
-            .fill(RadialGradient(colors: [Palette.ivory.opacity(0.42), Palette.ivory.opacity(0.12), .clear],
-                                 center: .center, startRadius: 0, endRadius: r))
-            .frame(width: 2 * r, height: 2 * r)
-            .position(x: p.x * canvas.width, y: p.y * canvas.height)
+    private var targets: Set<String> {
+        if case let .exploring(id, _) = state { return [id] }
+        return []
     }
 
     private func text(for a: Annotation, expanded: Bool) -> some View {
