@@ -65,8 +65,11 @@ final class ExperienceFlowUITests: XCTestCase {
         let paused = app.staticTexts["Paused"]
         XCTAssertTrue(paused.waitForExistence(timeout: 3))
         XCTAssertTrue(app.frame.contains(paused.frame), "Paused is off the frame: \(paused.frame)")
-        XCTAssertLessThan(paused.frame.minY - title.frame.maxY, 250, "Paused is far from its text")
-        XCTAssertGreaterThan(paused.frame.minY, title.frame.maxY)
+        // Directly under the column's last line (the beat's last verse citation), not far below it.
+        let lastLine = text(app, containing: "Genesis 1:28 · ")
+        XCTAssertTrue(lastLine.exists)
+        XCTAssertGreaterThan(paused.frame.minY, lastLine.frame.maxY - 1)
+        XCTAssertLessThan(paused.frame.minY - lastLine.frame.maxY, 60, "Paused is far from its text")
     }
 
     func testShowPaintingToggles() {
