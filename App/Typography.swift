@@ -10,7 +10,8 @@ enum Typography {
     static let textItalicFace = "EBGaramond-Italic"
 
     enum Size {
-        static let title: CGFloat = 40, short: CGFloat = 22, story: CGFloat = 19, verse: CGFloat = 20, citation: CGFloat = 13
+        // Matt, first wall test: "a good bit larger, too hard to read". About 40% up from the first build.
+        static let title: CGFloat = 56, short: CGFloat = 32, story: CGFloat = 27, verse: CGFloat = 28, citation: CGFloat = 18
     }
 
     /// Registers every bundled .ttf for this process. Failures are logged, and SwiftUI falls

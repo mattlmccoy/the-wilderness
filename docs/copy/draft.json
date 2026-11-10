@@ -1,5 +1,5 @@
 {
-  "draft": "Draft 3 · 10 November 2026",
+  "draft": "Draft 3.1 · 10 November 2026",
   "notes": [
     "Written as worship, not description: by people who believe Jesus Christ is Lord and Savior, for guests standing in your home.",
     "He and His are capitalized for Jesus throughout, out of reverence.",
@@ -70,8 +70,8 @@
             "translation": "DRA"
           },
           {
-            "ref": "Romans 16:20",
-            "text": "The God of peace will soon crush Satan under your feet.",
+            "ref": "Luke 10:19",
+            "text": "I have given you authority to tread on snakes and scorpions",
             "testament": "new",
             "translation": "BSB"
           }
@@ -192,6 +192,79 @@
           }
         ],
         "connection": "inScripture",
+        "draft": true
+      }
+    },
+    {
+      "id": "pelican",
+      "title": "The Pelican",
+      "short": "A white bird bends low beside Him.",
+      "more": {
+        "story": "Christians once believed the pelican fed its young with its own blood. It became a picture of Christ, who gave His life for us.",
+        "verses": [
+          {
+            "ref": "Psalm 101:7",
+            "text": "I am become like to a pelican of the wilderness",
+            "testament": "old",
+            "translation": "DRA"
+          },
+          {
+            "ref": "John 15:13",
+            "text": "Greater love has no one than this, that he lay down his life for his friends.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      },
+      "note": "In the Latin Bible Moretto knew, Psalm 101:7 (102:6 today) names “a pelican of the wilderness”. This is the white bird beside His head; tell me if you meant another."
+    },
+    {
+      "id": "snake",
+      "title": "The Serpent at His Feet",
+      "short": "A thin serpent slips beneath His bare foot.",
+      "more": {
+        "story": "God promised in Eden that the serpent would strike the heel and have its head crushed. Here the heel rests above it, unafraid.",
+        "verses": [
+          {
+            "ref": "Genesis 3:15",
+            "text": "He will crush your head, and you will strike his heel.",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Romans 16:20",
+            "text": "The God of peace will soon crush Satan under your feet.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      }
+    },
+    {
+      "id": "tree",
+      "title": "The Tree",
+      "short": "A tree rises over Him, green and red against the sky.",
+      "more": {
+        "story": "Adam lost the tree of life in Eden. One day Jesus Christ would carry our sins on a tree, to open the way back.",
+        "verses": [
+          {
+            "ref": "Genesis 2:9",
+            "text": "In the middle of the garden were the tree of life",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "1 Peter 2:24",
+            "text": "He Himself bore our sins in His body on the tree",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
         "draft": true
       }
     }

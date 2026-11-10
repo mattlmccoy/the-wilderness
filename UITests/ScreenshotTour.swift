@@ -86,4 +86,13 @@ final class ScreenshotTour: XCTestCase {
         r.press(.right); sleep(4); r.press(.select); sleep(3); shot("wall-1-christ-expanded")
         r.press(.left); sleep(4); shot("wall-2-left-expanded")
     }
+
+    /// Matt's wall, largest texts expanded: Jesus Christ, then the pelican and the serpent.
+    func testBigText() {
+        _ = launch(calibration: Self.args(x0: 13.5 / 87, x1: 73.5 / 87))
+        let r = XCUIRemote.shared
+        r.press(.right); sleep(4); r.press(.select); sleep(3); shot("big-1-christ")
+        r.press(.up); sleep(4); shot("big-2-next")
+        r.press(.down); r.press(.down); sleep(4); shot("big-3-down")
+    }
 }

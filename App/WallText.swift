@@ -17,6 +17,7 @@ struct WallText: View {
     /// Unfold only: a small "Paused" line under the text.
     var paused: Bool = false
 
+    @State private var columnHeight: CGFloat = 0
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
     private static let unitsPerInch: CGFloat = 20
     private var column: CGFloat { placement.widthInches * Self.unitsPerInch }
@@ -26,9 +27,12 @@ struct WallText: View {
         case .beside(let side):
             let x = side == .right ? canvas.width + TextColumnLayout.gap * Self.unitsPerInch
                                    : -TextColumnLayout.gap * Self.unitsPerInch - column
+            // Start level with the subject, but move up as far as needed to keep the whole
+            // column on the tapestry's height (bigger type makes it tall).
             content
                 .frame(width: column, alignment: .leading)
-                .offset(x: x, y: min(max(anchorY * canvas.height - 90, 0), canvas.height - 460))
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
+                .offset(x: x, y: max(0, min(anchorY * canvas.height - 90, canvas.height - columnHeight)))
         case .overLowerEdge:
             content
                 .frame(width: column, alignment: .leading)
@@ -42,25 +46,25 @@ struct WallText: View {
         VStack(alignment: .leading, spacing: 14) {
             Text(title)
                 .font(Typography.title())
-                .foregroundStyle(Palette.ivory.opacity(0.9))
+                .foregroundStyle(Palette.ivory)
             Text(short)
                 .font(Typography.text(Typography.Size.short, italic: true))
-                .foregroundStyle(Palette.ivory.opacity(0.8))
+                .foregroundStyle(Palette.ivory.opacity(0.95))
             if expanded {
                 VStack(alignment: .leading, spacing: 22) {
                     if let story = more?.story ?? fallbackExtended {
                         Text(story)
                             .font(Typography.text(Typography.Size.story)).lineSpacing(6)
-                            .foregroundStyle(Palette.ivory.opacity(0.72))
+                            .foregroundStyle(Palette.ivory.opacity(0.9))
                     }
                     ForEach(orderedVerses, id: \.ref) { v in
                         VStack(alignment: .leading, spacing: 6) {
                             Text(v.text)
                                 .font(Typography.text(Typography.Size.verse)).lineSpacing(5)
-                                .foregroundStyle(Palette.ivory.opacity(0.82))
+                                .foregroundStyle(Palette.ivory.opacity(0.95))
                             Text("\(v.ref) · \(v.translation.rawValue)")
                                 .font(Typography.text(Typography.Size.citation)).tracking(1.5)
-                                .foregroundStyle(Palette.ivory.opacity(0.55))
+                                .foregroundStyle(Palette.ivory.opacity(0.75))
                         }
                     }
                 }
@@ -70,12 +74,14 @@ struct WallText: View {
             if paused {
                 Text("Paused")
                     .font(Typography.text(Typography.Size.citation)).tracking(1.5)
-                    .foregroundStyle(Palette.ivory.opacity(0.55))
+                    .foregroundStyle(Palette.ivory.opacity(0.75))
                     .padding(.top, 6)
                     .transition(.opacity)
             }
         }
         .multilineTextAlignment(.leading)
+        // Never truncate wall text: take the full height the words need.
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private var orderedVerses: [Verse] {
