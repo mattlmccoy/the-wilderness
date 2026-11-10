@@ -18,19 +18,10 @@ struct UnfoldView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            VStack(alignment: .leading, spacing: 0) {
-                WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
-                         expanded: beat.more != nil,
-                         placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
-                         anchorY: anchorY)
-                if playback.paused {
-                    Text("Paused")
-                        .font(Typography.text(Typography.Size.citation)).tracking(1.5)
-                        .foregroundStyle(Palette.ivory.opacity(0.55))
-                        .offset(x: pausedX, y: anchorY * Artwork.canvasHeight + 380)
-                        .transition(.opacity)
-                }
-            }
+            WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
+                     expanded: beat.more != nil,
+                     placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
+                     anchorY: anchorY, paused: playback.paused)
             .id(beat.id)
             .transition(.asymmetric(
                 insertion: .opacity.animation(.easeIn(duration: LightTiming.textIn).delay(LightTiming.textDelay)),
@@ -43,12 +34,5 @@ struct UnfoldView: View {
     private var anchorY: Double {
         let ids = beat.light.joined()
         return library.annotations.first { ids.contains($0.id) }?.anchor.y ?? 0.3
-    }
-
-    private var pausedX: CGFloat {
-        let p = TextColumnLayout.place(preferred: beat.textSide, calibration: calibration)
-        if case .beside(.right) = p.position { return Artwork.canvasWidth + TextColumnLayout.gap * 20 }
-        if case .beside(.left) = p.position { return -TextColumnLayout.gap * 20 - p.widthInches * 20 }
-        return 20
     }
 }

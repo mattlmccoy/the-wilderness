@@ -55,4 +55,17 @@ final class ExperienceFlowUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts["Christ"].waitForExistence(timeout: 2.5))
         XCTAssertEqual(app.state, .runningForeground)
     }
+
+    func testPausedLineSitsUnderTheBeatTextOnScreen() {
+        let app = launch()
+        remote.press(.playPause)
+        let title = app.staticTexts["Eden: creatures at peace"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        remote.press(.playPause)
+        let paused = app.staticTexts["Paused"]
+        XCTAssertTrue(paused.waitForExistence(timeout: 3))
+        XCTAssertTrue(app.frame.contains(paused.frame), "Paused is off the frame: \(paused.frame)")
+        XCTAssertLessThan(paused.frame.minY - title.frame.maxY, 250, "Paused is far from its text")
+        XCTAssertGreaterThan(paused.frame.minY, title.frame.maxY)
+    }
 }

@@ -169,3 +169,45 @@ private extension ModeMachine {
     m.press(.select, at: sixH1m)
     #expect(AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: sixH1m))
 }
+
+// Final review: nothing may stay projected indefinitely when nobody is using the remote.
+
+@Test func settingsAndAboutReturnToStillnessAfter45SecondsIdle() {
+    for start: Mode in [.settings(focus: .tune), .about] {
+        var m = machine(start)
+        m.press(.move(.down), at: 100)
+        m.tick(now: 144.9, dt: 0.25, script: script)
+        #expect(m.mode != .stillness, "\(start) left too early")
+        m.tick(now: 145.1, dt: 0.25, script: script)
+        #expect(m.mode == .stillness, "from \(start)")
+    }
+}
+
+@Test func tuningPatternAndPausedUnfoldReturnToStillnessAfterFiveMinutesIdle() {
+    for start: Mode in [.tuning, .pattern, .unfold(.init(beat: 1, elapsed: 3, paused: true))] {
+        var m = machine(start)
+        m.press(.move(.up), at: 100)
+        m.tick(now: 100 + 299, dt: 0.25, script: script)
+        #expect(m.mode != .stillness, "\(start) left too early")
+        m.tick(now: 100 + 301, dt: 0.25, script: script)
+        #expect(m.mode == .stillness, "from \(start)")
+    }
+}
+
+@Test func playingUnfoldAndCalibrationNeverTimeOut() {
+    var u = machine(.unfold(.init(beat: 0, elapsed: 0, paused: false)))
+    u.press(.move(.up), at: 0)
+    u.tick(now: 1000, dt: 0.25, script: script)
+    #expect(u.mode == .unfold(.init(beat: 0, elapsed: 0.25, paused: false)))
+    var c = machine(.calibrating)
+    c.tick(now: 100_000, dt: 0.25, script: script)
+    #expect(c.mode == .calibrating)
+}
+
+@Test func noteActivityResetsAwakeWithoutChangingMode() {
+    var m = machine(.explore(id: "christ", expanded: true))
+    let later = 7 * 3600.0
+    m.noteActivity(now: later)
+    #expect(m.mode == .explore(id: "christ", expanded: true))
+    #expect(AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: later + 60))
+}

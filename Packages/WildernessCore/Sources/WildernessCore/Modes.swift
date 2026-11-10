@@ -78,17 +78,35 @@ public struct ModeMachine: Equatable, Sendable {
         return nil
     }
 
-    /// Time passing: Explore falls back to Stillness after 45 s idle; Unfold plays on.
+    /// Settings and About return to Stillness after this long without a press.
+    public static let menuIdleTimeout = 45.0
+    /// Tune light, the alignment pattern and a paused Unfold get longer: they are used while
+    /// looking at the wall, but must not stay projected all evening.
+    public static let workIdleTimeout = 300.0
+
+    /// Time passing: idle modes fall back to Stillness; a playing Unfold plays on to its end.
+    /// Calibration never times out.
     public mutating func tick(now: Double, dt: Double, script: UnfoldScript) {
+        let idle = now - lastInputAt
         switch mode {
-        case .explore where now - lastInputAt >= Self.exploreIdleTimeout:
+        case .explore where idle >= Self.exploreIdleTimeout,
+             .settings where idle >= Self.menuIdleTimeout,
+             .about where idle >= Self.menuIdleTimeout,
+             .tuning where idle >= Self.workIdleTimeout,
+             .pattern where idle >= Self.workIdleTimeout:
             mode = .stillness
+        case .unfold(let p) where p.paused:
+            if idle >= Self.workIdleTimeout { mode = .stillness }
         case .unfold(let p):
             mode = script.advance(p, by: dt).map { .unfold($0) } ?? .stillness
         default:
             break
         }
     }
+
+    /// Something happened that wasn't a press this machine saw, such as the app returning to
+    /// the foreground after the Apple TV woke. Counts as use for the awake policy and timeouts.
+    public mutating func noteActivity(now: Double) { lastInputAt = now }
 
     public mutating func finishCalibration() {
         if mode == .calibrating { mode = .stillness }

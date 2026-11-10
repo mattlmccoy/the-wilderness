@@ -14,6 +14,8 @@ struct WallText: View {
     let placement: ColumnPlacement
     /// Vertical position of the subject, 0…1 in the artwork.
     let anchorY: Double
+    /// Unfold only: a small "Paused" line under the text.
+    var paused: Bool = false
 
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
     private static let unitsPerInch: CGFloat = 20
@@ -64,6 +66,13 @@ struct WallText: View {
                 }
                 .padding(.top, 8)
                 .transition(.opacity.animation(.easeInOut(duration: LightTiming.textIn)))
+            }
+            if paused {
+                Text("Paused")
+                    .font(Typography.text(Typography.Size.citation)).tracking(1.5)
+                    .foregroundStyle(Palette.ivory.opacity(0.55))
+                    .padding(.top, 6)
+                    .transition(.opacity)
             }
         }
         .multilineTextAlignment(.leading)

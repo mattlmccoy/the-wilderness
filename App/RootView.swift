@@ -7,6 +7,7 @@ import WildernessCore
 struct RootView: View {
     @StateObject private var store = CalibrationStore()
     @StateObject private var tuningStore = TuningStore()
+    @Environment(\.scenePhase) private var scenePhase
     @State private var machine: ModeMachine?
     @State private var tuningSession: TuningSession?
     private let content = ContentLoader.load()
@@ -40,6 +41,11 @@ struct RootView: View {
             if machine == nil { machine = ModeMachine(calibrated: store.saved != nil, now: Self.now) }
         }
         .onReceive(ticker) { _ in tick() }
+        // Waking the Apple TV (or dismissing its screensaver) is use, even though the press
+        // never reaches the app: hold the screensaver off again for the next 6 hours.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { machine?.noteActivity(now: Self.now); updateIdleTimer() }
+        }
     }
 
     @ViewBuilder
