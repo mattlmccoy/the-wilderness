@@ -99,7 +99,9 @@ struct RootView: View {
                 if mode == .tuning { tuningSession?.select(); applyTuning() }
                 send(.select, content)   // in tuning this only records the press
             }
-            .onLongPressGesture(minimumDuration: 1.0) { send(.holdSelect, content) }
+            // Hold Select for a second → Settings. A UIKit press recognizer, because SwiftUI's
+            // long press is cancelled by the thumb's small movements on a real Siri Remote.
+            .background(SelectHoldDetector { send(.holdSelect, content) })
             .onPlayPauseCommand { send(.playPause, content) }
             // In Stillness, pass Back through so tvOS returns to the home screen.
             .onExitCommand(perform: mode == .stillness ? nil : { send(.back, content) })

@@ -31,6 +31,7 @@
 		9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
 		A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
+		AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE8658D36AD63360176932D /* SelectHoldDetector.swift */; };
 		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
@@ -84,6 +85,7 @@
 		C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-EBGaramond.txt"; sourceTree = "<group>"; };
 		D5C5982E11F5F02CA3E2E12B /* Wilderness.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wilderness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
+		EAE8658D36AD63360176932D /* SelectHoldDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectHoldDetector.swift; sourceTree = "<group>"; };
 		EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessApp.swift; sourceTree = "<group>"; };
 		F6BDD2885BEE47A41C152161 /* WallText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallText.swift; sourceTree = "<group>"; };
 		FD97476B6D5814CC002BB613 /* TuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TuningStore.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */,
 				34504EEACA619A61C36E1178 /* Palette.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
+				EAE8658D36AD63360176932D /* SelectHoldDetector.swift */,
 				96443CC736D66435C0FEE8F1 /* SettingsView.swift */,
 				FD97476B6D5814CC002BB613 /* TuningStore.swift */,
 				6F06B70493ADCF9380EB26B7 /* Typography.swift */,
@@ -306,6 +309,7 @@
 				218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */,
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
+				AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */,
 				2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */,
 				DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */,
 				3576D09A2B2003A03D056D30 /* Typography.swift in Sources */,
