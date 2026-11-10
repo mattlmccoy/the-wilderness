@@ -59,3 +59,8 @@ private let contentDir = contentURL.deletingLastPathComponent()
     #expect(script.beats.count == 8)
     #expect(script.beats.first?.id == "eden" && script.beats.last?.id == "rest-of-story")
 }
+
+@Test func shippedGlintPointsDecode() throws {
+    let g = try GlintPoints.decode(Data(contentsOf: contentDir.appendingPathComponent("glints.json")))
+    #expect(g.points.count >= 40)
+}
