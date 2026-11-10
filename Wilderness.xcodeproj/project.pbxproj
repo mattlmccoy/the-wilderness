@@ -9,19 +9,26 @@
 /* Begin PBXBuildFile section */
 		0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34504EEACA619A61C36E1178 /* Palette.swift */; };
+		1B42BB5778852B23F8F7146B /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
 		1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */; };
 		21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425BD17EFB125958F97DC424 /* GlintLayer.swift */; };
 		218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */; };
 		3112350BA2ADE9C0DD2AB7BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63272EBAD19DCC2048941CE0 /* Assets.xcassets */; };
+		3576D09A2B2003A03D056D30 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06B70493ADCF9380EB26B7 /* Typography.swift */; };
 		5260564F328098D8AD414850 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = CC94F1B3458529F9BDDDB5AD /* WildernessCore */; };
 		52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */; };
 		563576B5C812D60693833113 /* glints.json in Resources */ = {isa = PBXBuildFile; fileRef = 69A6BB2EC267DFB6DEB14308 /* glints.json */; };
 		595051D0CC6239EB1FFFF05F /* ScreenshotTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */; };
+		607B28E705A4A3CC43B5D727 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
+		60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10055DBD8B0259D70A5114C9 /* ExploreView.swift */; };
 		719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E899EF5E0A146751A13B832 /* CalibrationView.swift */; };
+		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
+		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
+		E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		10055DBD8B0259D70A5114C9 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-CormorantGaramond.txt"; sourceTree = "<group>"; };
 		29BA13ECF8A5F9A7660C4A71 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationFlowUITests.swift; sourceTree = "<group>"; };
 		2BEA43B01189736807F84B94 /* WildernessUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,11 +55,17 @@
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		69A6BB2EC267DFB6DEB14308 /* glints.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = glints.json; sourceTree = "<group>"; };
+		6F06B70493ADCF9380EB26B7 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		7D05E43D6E479D37C55550E7 /* LightLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightLayer.swift; sourceTree = "<group>"; };
+		896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
+		A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappedCanvas.swift; sourceTree = "<group>"; };
 		B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStore.swift; sourceTree = "<group>"; };
+		C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-EBGaramond.txt"; sourceTree = "<group>"; };
 		D5C5982E11F5F02CA3E2E12B /* Wilderness.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wilderness.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessApp.swift; sourceTree = "<group>"; };
 		FEF2516EA0E49076236AEF71 /* annotations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = annotations.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,8 +102,10 @@
 				AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */,
 				34504EEACA619A61C36E1178 /* Palette.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
+				6F06B70493ADCF9380EB26B7 /* Typography.swift */,
 				EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */,
 				95148E6B311B87780B181219 /* Content */,
+				DC82B29E8A01F255D138D2AE /* Fonts */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -130,6 +146,19 @@
 				369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */,
 			);
 			path = UITests;
+			sourceTree = "<group>";
+		};
+		DC82B29E8A01F255D138D2AE /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */,
+				A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */,
+				DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */,
+				66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */,
+				1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */,
+				C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,6 +245,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3112350BA2ADE9C0DD2AB7BF /* Assets.xcassets in Resources */,
+				607B28E705A4A3CC43B5D727 /* CormorantGaramond-Italic-Variable.ttf in Resources */,
+				1B42BB5778852B23F8F7146B /* CormorantGaramond-Variable.ttf in Resources */,
+				E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */,
+				84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */,
+				60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */,
+				AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */,
 				0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */,
 				563576B5C812D60693833113 /* glints.json in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
@@ -237,6 +272,7 @@
 				218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */,
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
+				3576D09A2B2003A03D056D30 /* Typography.swift in Sources */,
 				52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
