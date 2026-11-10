@@ -30,6 +30,7 @@
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
+		A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
 		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
@@ -70,6 +71,7 @@
 		7D05E43D6E479D37C55550E7 /* LightLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightLayer.swift; sourceTree = "<group>"; };
 		896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFlowUITests.swift; sourceTree = "<group>"; };
+		949D7018FF5ACDAE3CF94E43 /* painting.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = painting.jpg; sourceTree = "<group>"; };
 		96443CC736D66435C0FEE8F1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappedCanvas.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				FEF2516EA0E49076236AEF71 /* annotations.json */,
 				69A6BB2EC267DFB6DEB14308 /* glints.json */,
 				4685DA18E56C3A97752987DC /* notices.json */,
+				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
 			);
 			path = Content;
@@ -275,6 +278,7 @@
 				0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */,
 				563576B5C812D60693833113 /* glints.json in Resources */,
 				D52C0C38148E458A5BB06309 /* notices.json in Resources */,
+				A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

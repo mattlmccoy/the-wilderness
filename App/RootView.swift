@@ -8,6 +8,9 @@ struct RootView: View {
     @StateObject private var store = CalibrationStore()
     @StateObject private var tuningStore = TuningStore()
     @Environment(\.scenePhase) private var scenePhase
+    /// Debug: project the painting under everything to check where light and text land.
+    @AppStorage("debug.showPainting") private var showPainting = false
+    private static let painting: UIImage? = Bundle.main.path(forResource: "painting", ofType: "jpg").flatMap(UIImage.init(contentsOfFile:))
     @State private var machine: ModeMachine?
     @State private var tuningSession: TuningSession?
     private let content = ContentLoader.load()
@@ -59,6 +62,10 @@ struct RootView: View {
             let mode = machine?.mode ?? .stillness
             MappedCanvas(calibration: cal, screen: screen) {
                 ZStack(alignment: .topLeading) {
+                    if showPainting, let img = Self.painting {
+                        Image(uiImage: img).resizable()
+                            .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
+                    }
                     LightLayer(library: content.library, tuning: tuningStore.tuning,
                                targets: lightTargets(mode, content), exploring: isExploring(mode))
                     switch mode {
@@ -74,9 +81,9 @@ struct RootView: View {
                         RegistrationTestPattern()
                     case .tuning:
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal, demo: true)
-                        SettingsView(mode: mode, tuning: tuningSession, notices: content.notices)
+                        SettingsView(mode: mode, tuning: tuningSession, notices: content.notices, showPainting: showPainting)
                     case .settings, .about:
-                        SettingsView(mode: mode, tuning: nil, notices: content.notices)
+                        SettingsView(mode: mode, tuning: nil, notices: content.notices, showPainting: showPainting)
                     case .calibrating:
                         EmptyView()
                     }
@@ -100,7 +107,9 @@ struct RootView: View {
 
     private func send(_ input: AppInput, _ content: AppContent) {
         guard var m = machine else { return }
-        m.handle(input, now: Self.now, library: content.library, script: content.script)
+        if m.handle(input, now: Self.now, library: content.library, script: content.script) == .togglePainting {
+            showPainting.toggle()
+        }
         if m.mode == .tuning, tuningSession == nil { tuningSession = TuningSession(tuning: tuningStore.tuning) }
         if m.mode != .tuning { tuningSession = nil }
         machine = m

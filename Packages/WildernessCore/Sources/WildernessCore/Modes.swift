@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, about }
+public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, painting, about }
 
 /// Everything the app can be showing (spec §5).
 public enum Mode: Equatable, Sendable {
@@ -12,7 +12,11 @@ public enum Mode: Equatable, Sendable {
 }
 
 public enum AppInput: Sendable { case move(NudgeDirection), select, holdSelect, playPause, back }
-public enum ModeEffect: Equatable, Sendable { case exitApp }
+public enum ModeEffect: Equatable, Sendable {
+    case exitApp
+    /// Debug: show or hide the painting projected under everything (Settings → Show painting).
+    case togglePainting
+}
 
 /// The remote map of spec §5.5 as a pure state machine. Calibration and tuning presses are
 /// handled by `CalibrationSession` / `TuningSession`; this machine only knows how to leave them.
@@ -59,11 +63,13 @@ public struct ModeMachine: Equatable, Sendable {
             mode = .settings(focus: SettingsItem(rawValue: max(f.rawValue - 1, 0))!)
         case (.settings(let f), .move(.down)):
             mode = .settings(focus: SettingsItem(rawValue: min(f.rawValue + 1, SettingsItem.allCases.count - 1))!)
+        case (.settings(.painting), .select):
+            return .togglePainting
         case (.settings(let f), .select):
             mode = switch f {
             case .calibrate: .calibrating
             case .tune: .tuning
-            case .pattern: .pattern
+            case .pattern, .painting: .pattern
             case .about: .about
             }
         case (.tuning, .back):

@@ -100,11 +100,13 @@ and allows TestFlight.
 | Stillness | Explore (Christ) | nothing | Settings | Start Unfold | Leave the app |
 | Explore | Move to the nearest subject that way | Story and verses on/off (stays open as you move) | Settings | Start Unfold | Stillness |
 | Unfold | ← → previous / next beat | nothing | nothing | Pause / resume | Stillness |
-| Settings | ↑ ↓ choose | Open | | | Close |
+| Settings | ↑ ↓ choose | Open (Show painting: on/off) | | | Close |
 | Tune light | ↑ ↓ choose · ← → change | Reset (on its row) | | | Back to Settings |
 | Calibration | Move the corner | Next corner → review → save | | Coarse / fine | Cancel (first setup: leave the app) |
 
-Explore returns to Stillness after 45 s without a press. While the app is open the Apple TV's
+Settings → **Show painting** projects the painting under everything (debugging only; remembered until
+switched off). Explore, Settings and About return to Stillness after 45 s without a press; Tune light,
+the alignment pattern and a paused Unfold after 5 min. While the app is open the Apple TV's
 screensaver is held off; after 6 h without a press it is allowed to sleep again.
 
 ## Content

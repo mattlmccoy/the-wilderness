@@ -66,4 +66,16 @@ final class ScreenshotTour: XCTestCase {
         sleep(38); shot("unfold-2-40s")
         sleep(35); shot("unfold-3-75s")
     }
+
+    func testPainting() {
+        _ = launch()
+        let r = XCUIRemote.shared
+        r.press(.select, forDuration: 1.2); sleep(1)
+        for _ in 0..<3 { r.press(.down) }
+        r.press(.select); r.press(.menu); sleep(2)
+        r.press(.right); sleep(4); shot("painting-1-christ")
+        r.press(.select, forDuration: 1.2); sleep(1)
+        for _ in 0..<3 { r.press(.down) }
+        r.press(.select)   // leave it off afterwards
+    }
 }

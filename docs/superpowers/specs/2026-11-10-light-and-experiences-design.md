@@ -94,8 +94,9 @@ Everything the app draws is light added to the tapestry.
 
 The layers, from bottom to top:
 
-1. **Base wash.** A very faint, even, warm wash over the whole tapestry.
-   - Default 0.16 of full strength (from the round-3 study).
+1. **Base wash.** An optional faint, even, warm wash over the whole tapestry.
+   - **Default 0: the background is completely black, for as much contrast as possible (Matt,
+     after the first wall test).** It stays in Tune light for experiments.
    - **(my call)** Its only job is to give Explore something to take away. When a subject is selected,
      the wash drops to 45% of its level elsewhere, so the rest "recedes" even though the projector
      can't go darker than black.
@@ -223,7 +224,7 @@ Matt in the copy pass (§7).
 
 - **Opening:** hold Select for 1 s from Stillness or Explore. This is already how calibration opens.
 - **What it shows:** a small, plain list on the wall: **Calibrate**, **Tune light**, **Alignment pattern**,
-  **About**. About holds the Bible translations' copyright notices and the Met image credit.
+  **Show painting** (debug: projects the painting under everything, on/off, remembered), **About**. About holds the Bible translations' copyright notices and the Met image credit.
   Focus moves with up and down, Select opens an item, and ‹ Back closes the list.
 - **(my call)** The alignment pattern moves here from Play/Pause, which Unfold now needs.
 

@@ -68,4 +68,17 @@ final class ExperienceFlowUITests: XCTestCase {
         XCTAssertLessThan(paused.frame.minY - title.frame.maxY, 250, "Paused is far from its text")
         XCTAssertGreaterThan(paused.frame.minY, title.frame.maxY)
     }
+
+    func testShowPaintingToggles() {
+        let app = launch()
+        remote.press(.select, forDuration: 1.2)
+        XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3))
+        for _ in 0..<3 { remote.press(.down) }
+        let before = app.staticTexts["Show painting · off"].exists
+        remote.press(.select)
+        let after = app.staticTexts["Show painting · on"].waitForExistence(timeout: 2)
+        remote.press(.select)   // back off, so other tests start from a dark wall
+        XCTAssertTrue(before && after)
+        XCTAssertTrue(app.staticTexts["Show painting · off"].waitForExistence(timeout: 2))
+    }
 }

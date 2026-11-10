@@ -3,7 +3,7 @@ import Foundation
 /// Light values tuned live on the wall (spec §5.4). Defaults are the spec's starting points.
 public struct Tuning: Codable, Equatable, Sendable {
     public var subjectStrength = 0.44
-    public var baseWash = 0.16
+    public var baseWash = 0.0   // Matt: the background must be completely black
     public var exploreWashFactor = 0.45
     public var glintMeanInterval = 8.0
     public var glintBrightness = 1.0

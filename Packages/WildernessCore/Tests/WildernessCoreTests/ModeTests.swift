@@ -93,7 +93,7 @@ private extension ModeMachine {
 
 @Test func settingsFocusMovesAndSelectOpensEachItem() {
     let expected: [SettingsItem: Mode] = [.calibrate: .calibrating, .tune: .tuning, .pattern: .pattern, .about: .about]
-    for item in SettingsItem.allCases {
+    for item in SettingsItem.allCases where item != .painting {
         var m = machine(.settings(focus: .calibrate))
         for _ in 0..<item.rawValue { m.press(.move(.down)) }
         #expect(m.mode == .settings(focus: item))
@@ -210,4 +210,14 @@ private extension ModeMachine {
     m.noteActivity(now: later)
     #expect(m.mode == .explore(id: "christ", expanded: true))
     #expect(AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: later + 60))
+}
+
+@Test func selectOnShowPaintingTogglesItAndStaysInSettings() {
+    var m = machine(.settings(focus: .painting))
+    #expect(m.press(.select) == .togglePainting)
+    #expect(m.mode == .settings(focus: .painting))
+}
+
+@Test func showPaintingSitsBetweenPatternAndAbout() {
+    #expect(SettingsItem.allCases == [.calibrate, .tune, .pattern, .painting, .about])
 }

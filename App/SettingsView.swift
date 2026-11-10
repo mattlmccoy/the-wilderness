@@ -7,12 +7,16 @@ struct SettingsView: View {
     let mode: Mode
     let tuning: TuningSession?
     let notices: Notices
+    let showPainting: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             switch mode {
             case .settings(let focus):
-                ForEach(SettingsItem.allCases, id: \.self) { row(Self.title($0), focused: $0 == focus) }
+                ForEach(SettingsItem.allCases, id: \.self) { item in
+                    row(item == .painting ? "Show painting · \(showPainting ? "on" : "off")" : Self.title(item),
+                        focused: item == focus)
+                }
             case .tuning:
                 if let t = tuning {
                     ForEach(TuningRow.allCases, id: \.self) { r in
@@ -38,6 +42,7 @@ struct SettingsView: View {
         case .calibrate: "Calibrate"
         case .tune: "Tune light"
         case .pattern: "Alignment pattern"
+        case .painting: "Show painting"
         case .about: "About"
         }
     }
