@@ -122,3 +122,15 @@ public enum SpatialNavigator {
             .min { $0.1 < $1.1 }?.0
     }
 }
+
+extension Translation {
+    /// NIV, ESV and NLT are copyrighted and may be quoted only with their notice (spec §7).
+    /// Douay-Rheims is public domain.
+    public var needsNotice: Bool { self != .dra }
+}
+
+/// Bible translation copyright notices shown in Settings → About, keyed by abbreviation.
+public struct Notices: Codable, Sendable {
+    public var notices: [String: String]
+    public static func decode(_ data: Data) throws -> Notices { try JSONDecoder().decode(Notices.self, from: data) }
+}

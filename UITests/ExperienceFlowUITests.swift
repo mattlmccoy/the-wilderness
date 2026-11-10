@@ -1,0 +1,58 @@
+import XCTest
+
+/// Drives the real app with Siri Remote presses, starting calibrated and in Stillness.
+final class ExperienceFlowUITests: XCTestCase {
+    private func launch() -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments += SavedCalibration.args()
+        app.launch()
+        return app
+    }
+    private let remote = XCUIRemote.shared
+    private func text(_ app: XCUIApplication, containing s: String) -> XCUIElement {
+        app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", s)).firstMatch
+    }
+
+    func testArrowWakesExploreOnChrist() {
+        let app = launch()
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+    }
+
+    func testSelectTogglesStoryAndItPersistsAcrossSubjects() {
+        let app = launch()
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        remote.press(.select)
+        XCTAssertTrue(text(app, containing: "Mark’s Gospel").waitForExistence(timeout: 4))
+        remote.press(.up)
+        XCTAssertTrue(text(app, containing: "Mark and Matthew both end").waitForExistence(timeout: 5),
+                      "the longer text should stay open on the next subject")
+    }
+
+    func testHoldSelectOpensSettingsWithoutTogglingText() {
+        let app = launch()
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        remote.press(.select, forDuration: 1.2)
+        XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3))
+        // If the release also counted as a Select, Settings would have opened Calibrate.
+        XCTAssertFalse(app.staticTexts["Top left · 1 of 4"].waitForExistence(timeout: 1.5))
+        XCTAssertTrue(app.staticTexts["Tune light"].exists && app.staticTexts["About"].exists)
+    }
+
+    func testPlayPauseStartsUnfold() {
+        let app = launch()
+        remote.press(.playPause)
+        XCTAssertTrue(app.staticTexts["Eden: creatures at peace"].waitForExistence(timeout: 5))
+    }
+
+    func testBackReturnsToStillness() {
+        let app = launch()
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Christ"].waitForExistence(timeout: 5))
+        remote.press(.menu)
+        XCTAssertFalse(app.staticTexts["Christ"].waitForExistence(timeout: 2.5))
+        XCTAssertEqual(app.state, .runningForeground)
+    }
+}

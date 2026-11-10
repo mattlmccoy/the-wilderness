@@ -64,3 +64,18 @@ private let contentDir = contentURL.deletingLastPathComponent()
     let g = try GlintPoints.decode(Data(contentsOf: contentDir.appendingPathComponent("glints.json")))
     #expect(g.points.count >= 40)
 }
+
+@Test func shippedVersesHaveTheirTranslationNotice() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let script = try UnfoldScript.decode(Data(contentsOf: contentDir.appendingPathComponent("unfold.json")), library: lib)
+    let notices = try Notices.decode(Data(contentsOf: contentDir.appendingPathComponent("notices.json")))
+    let used = Set((lib.annotations.compactMap(\.more) + script.beats.compactMap(\.more)).flatMap(\.verses).map(\.translation))
+    for t in used where t.needsNotice {
+        #expect(notices.notices[t.rawValue] != nil, "\(t.rawValue) is quoted but has no copyright notice in notices.json")
+    }
+}
+
+@Test func noticesRequiredOnlyForCopyrightedTranslations() {
+    #expect(Translation.niv.needsNotice && Translation.esv.needsNotice && Translation.nlt.needsNotice)
+    #expect(!Translation.dra.needsNotice)
+}

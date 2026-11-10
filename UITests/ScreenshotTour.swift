@@ -12,14 +12,8 @@ final class ScreenshotTour: XCTestCase {
         out = dir
     }
 
-    static var calibratedArgs: [String] { args(x0: 0.23, x1: 0.77) }
-
-    /// A saved calibration with the tapestry between x0 and x1 of the frame.
-    static func args(x0: Double, x1: Double) -> [String] {
-        let json = #"{"version":1,"createdAt":0,"name":"Default","artworkAspect":1.2,"output":{"width":1920,"height":1080},"corners":[{"x":\#(x0),"y":0.1},{"x":\#(x1),"y":0.1},{"x":\#(x1),"y":0.9},{"x":\#(x0),"y":0.9}]}"#
-        let hex = json.utf8.map { String(format: "%02x", $0) }.joined()
-        return ["-calibration.v1", "<\(hex)>"]
-    }
+    static var calibratedArgs: [String] { SavedCalibration.args() }
+    static func args(x0: Double, x1: Double) -> [String] { SavedCalibration.args(x0: x0, x1: x1) }
 
     func shot(_ name: String) {
         let png = XCUIScreen.main.screenshot().pngRepresentation
@@ -55,5 +49,21 @@ final class ScreenshotTour: XCTestCase {
     func testNarrowWall() {
         _ = launch(calibration: Self.args(x0: 0.05, x1: 0.95))
         XCUIRemote.shared.press(.right); sleep(4); shot("text-3-narrow")
+    }
+
+    func testSettings() {
+        _ = launch()
+        let r = XCUIRemote.shared
+        r.press(.select, forDuration: 1.2); sleep(1); shot("settings-1-list")
+        r.press(.down); r.press(.select); sleep(3); shot("settings-2-tuning")
+        r.press(.menu); r.press(.down); r.press(.down); r.press(.select); sleep(1); shot("settings-3-about")
+    }
+
+    func testUnfold() {
+        _ = launch()
+        XCUIRemote.shared.press(.playPause)
+        sleep(2); shot("unfold-1-2s")
+        sleep(38); shot("unfold-2-40s")
+        sleep(35); shot("unfold-3-75s")
     }
 }

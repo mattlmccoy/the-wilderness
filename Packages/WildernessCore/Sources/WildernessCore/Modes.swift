@@ -16,7 +16,7 @@ public enum ModeEffect: Equatable, Sendable { case exitApp }
 
 /// The remote map of spec §5.5 as a pure state machine. Calibration and tuning presses are
 /// handled by `CalibrationSession` / `TuningSession`; this machine only knows how to leave them.
-public struct ModeMachine: Sendable {
+public struct ModeMachine: Equatable, Sendable {
     public static let exploreIdleTimeout = 45.0
 
     public private(set) var mode: Mode

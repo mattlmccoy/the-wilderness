@@ -1,22 +1,23 @@
 import SwiftUI
 import WildernessCore
 
-/// Plays the guided arc (spec §5.3) in artwork canvas units: each beat's light steps through
-/// its targets, and its text appears once the light has settled.
+/// The guided arc's text (spec §5.3) in artwork canvas units. The root LightLayer steps
+/// through each beat's targets (`targets`); the text appears once the light has settled.
 struct UnfoldView: View {
     let script: UnfoldScript
     let playback: UnfoldPlayback
     let library: AnnotationLibrary
-    let tuning: Tuning
     let calibration: Calibration
 
     private var beat: UnfoldBeat { script.beats[playback.beat] }
-    private var targets: Set<String> { Set(beat.light[script.step(playback)]) }
+
+    /// What the root LightLayer lights for this moment of Unfold.
+    static func targets(_ script: UnfoldScript, _ p: UnfoldPlayback) -> Set<String> {
+        Set(script.beats[p.beat].light[script.step(p)])
+    }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            LightLayer(library: library, tuning: tuning, targets: targets,
-                       exploring: !targets.contains(UnfoldBeat.wholeTarget))
             VStack(alignment: .leading, spacing: 0) {
                 WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
                          expanded: beat.more != nil,

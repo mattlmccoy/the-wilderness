@@ -1,38 +1,45 @@
 import SwiftUI
 import WildernessCore
 
-/// Remote map
-///   Dark wall:  arrows → Explore (Christ lit) · Play/Pause → registration pattern
-///               hold Select (1 s) → calibration · Menu → leave the app
-///   Explore:    arrows → move between details by position · Select → longer text · Menu → dark
-///   Calibrate:  see CalibrationView (Select through the corners, Select again to save; ‹ cancels)
+/// Wires the remote to `ModeMachine` (the remote map of spec §5.5) and draws each mode.
+/// One LightLayer stays on screen across modes, so light fades between them instead of
+/// popping; text, glints and Settings sit on top.
 struct RootView: View {
     @StateObject private var store = CalibrationStore()
-    @State private var calibrating = false
-    @State private var showPattern = false
-    @State private var explore = ExploreState.idle
+    @StateObject private var tuningStore = TuningStore()
+    @State private var machine: ModeMachine?
+    @State private var tuningSession: TuningSession?
     private let content = ContentLoader.load()
+    private let ticker = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
+
+    private static var now: Double { Date().timeIntervalSinceReferenceDate }
 
     var body: some View {
         GeometryReader { geo in
             let screen = PixelSize(width: geo.size.width, height: geo.size.height)
             ZStack {
                 Color.black
-                if calibrating || store.saved == nil {
-                    CalibrationView(
-                        start: startingCalibration(for: screen),
-                        screen: geo.size,
-                        canCancel: store.saved != nil,
-                        onFinish: { outcome in
-                            if case let .save(cal) = outcome { store.save(cal) }
-                            calibrating = false
-                        })
-                } else if let cal = store.saved {
-                    artwork(cal, screen: geo.size)
+                if let m = machine {
+                    if m.mode == .calibrating || store.saved == nil {
+                        CalibrationView(
+                            start: startingCalibration(for: screen),
+                            screen: geo.size,
+                            canCancel: store.saved != nil,
+                            onFinish: { outcome in
+                                if case let .save(cal) = outcome { store.save(cal) }
+                                machine?.finishCalibration()
+                            })
+                    } else if let cal = store.saved {
+                        artwork(cal, screen: geo.size)
+                    }
                 }
             }
         }
         .ignoresSafeArea()
+        .onAppear {
+            if machine == nil { machine = ModeMachine(calibrated: store.saved != nil, now: Self.now) }
+        }
+        .onReceive(ticker) { _ in tick() }
     }
 
     @ViewBuilder
@@ -43,27 +50,92 @@ struct RootView: View {
             Text("Content failed to load: \(String(describing: error))")
                 .font(.system(size: 18)).foregroundStyle(Palette.gold)
         case let .success(content):
-            let library = content.library
+            let mode = machine?.mode ?? .stillness
             MappedCanvas(calibration: cal, screen: screen) {
                 ZStack(alignment: .topLeading) {
-                    RegistrationTestPattern(strength: showPattern ? 1 : 0)
-                        .animation(.easeInOut(duration: 1.2), value: showPattern)
-                    ExploreView(library: library, state: explore, calibration: cal)
-                    if explore == .idle {
-                        GlintLayer(points: content.glints, tuning: .defaults, calibration: cal,
+                    LightLayer(library: content.library, tuning: tuningStore.tuning,
+                               targets: lightTargets(mode, content), exploring: isExploring(mode))
+                    switch mode {
+                    case .stillness:
+                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
+                    case let .explore(id, expanded):
+                        ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
+                                    calibration: cal)
+                    case let .unfold(p):
+                        UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal)
+                    case .pattern:
+                        RegistrationTestPattern()
+                    case .tuning:
+                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal, demo: true)
+                        SettingsView(mode: mode, tuning: tuningSession, notices: content.notices)
+                    case .settings, .about:
+                        SettingsView(mode: mode, tuning: nil, notices: content.notices)
+                    case .calibrating:
+                        EmptyView()
                     }
                 }
             }
             .focusable()
             .onMoveCommand { direction in
-                explore.handle(.move(direction.nudge), library: library)
+                if mode == .tuning { tuningSession?.handle(direction.nudge); applyTuning() }
+                send(.move(direction.nudge), content)   // in tuning this only records the press
             }
-            .onTapGesture { explore.handle(.select, library: library) }
-            .onLongPressGesture(minimumDuration: 1.0) { explore = .idle; calibrating = true }
-            .onPlayPauseCommand { showPattern.toggle() }
-            // On a dark wall, pass Menu through so tvOS returns to the home screen.
-            .onExitCommand(perform: explore == .idle ? nil : { explore.handle(.back, library: library) })
+            .onTapGesture {
+                if mode == .tuning { tuningSession?.select(); applyTuning() }
+                send(.select, content)   // in tuning this only records the press
+            }
+            .onLongPressGesture(minimumDuration: 1.0) { send(.holdSelect, content) }
+            .onPlayPauseCommand { send(.playPause, content) }
+            // In Stillness, pass Back through so tvOS returns to the home screen.
+            .onExitCommand(perform: mode == .stillness ? nil : { send(.back, content) })
+        }
+    }
+
+    private func send(_ input: AppInput, _ content: AppContent) {
+        guard var m = machine else { return }
+        m.handle(input, now: Self.now, library: content.library, script: content.script)
+        if m.mode == .tuning, tuningSession == nil { tuningSession = TuningSession(tuning: tuningStore.tuning) }
+        if m.mode != .tuning { tuningSession = nil }
+        machine = m
+        updateIdleTimer()
+    }
+
+    private func applyTuning() {
+        if let t = tuningSession?.tuning, t != tuningStore.tuning { tuningStore.tuning = t }
+    }
+
+    private func tick() {
+        guard var m = machine, case let .success(c) = content else { return }
+        m.tick(now: Self.now, dt: 0.25, script: c.script)
+        if m != machine { machine = m }
+        updateIdleTimer()
+    }
+
+    private func updateIdleTimer() {
+        guard let m = machine else { return }
+        let keep = AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: Self.now)
+        if UIApplication.shared.isIdleTimerDisabled != keep { UIApplication.shared.isIdleTimerDisabled = keep }
+    }
+
+    private func lightTargets(_ mode: Mode, _ c: AppContent) -> Set<String> {
+        switch mode {
+        case let .explore(id, _): [id]
+        case let .unfold(p): UnfoldView.targets(c.script, p)
+        case .tuning: ["christ"]
+        default: []
+        }
+    }
+
+    private func isExploring(_ mode: Mode) -> Bool {
+        switch mode {
+        case .explore, .tuning:
+            return true
+        case let .unfold(p):
+            guard case let .success(c) = content else { return true }
+            return !UnfoldView.targets(c.script, p).contains(UnfoldBeat.wholeTarget)
+        default:
+            return false
         }
     }
 

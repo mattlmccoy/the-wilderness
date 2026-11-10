@@ -2,8 +2,8 @@ import SwiftUI
 import WildernessCore
 
 /// Explore, drawn in artwork canvas units (1 unit ≈ 0.05 in on the wall; 20 units ≈ 1 in).
-/// Soft light rests on the selected detail (LightLayer); its text (WallText) sits on the bare
-/// wall beside the tapestry. Text is placed outside the canvas bounds on purpose: the same
+/// Explore's text (WallText) on the bare wall beside the tapestry; the light itself is the
+/// root LightLayer. Text is placed outside the canvas bounds on purpose: the same
 /// homography carries it onto the wall plane, so it is perspective-correct too.
 struct ExploreView: View {
     let library: AnnotationLibrary
@@ -18,7 +18,6 @@ struct ExploreView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            LightLayer(library: library, tuning: .defaults, targets: targets, exploring: selected != nil)
             if case let (a, expanded)? = selected {
                 WallText(title: a.title, short: a.short, more: a.more, fallbackExtended: a.extended,
                          expanded: expanded,
@@ -33,10 +32,6 @@ struct ExploreView: View {
         .animation(.easeInOut(duration: LightTiming.textOut), value: state)
     }
 
-    private var targets: Set<String> {
-        if case let .exploring(id, _) = state { return [id] }
-        return []
-    }
 }
 
 /// Everything the app reads from its bundle.
@@ -44,6 +39,7 @@ struct AppContent {
     let library: AnnotationLibrary
     let script: UnfoldScript
     let glints: GlintPoints
+    let notices: Notices
 }
 
 enum ContentLoader {
@@ -53,7 +49,8 @@ enum ContentLoader {
             let library = try AnnotationLibrary.decode(data("annotations"))
             return AppContent(library: library,
                               script: try UnfoldScript.decode(data("unfold"), library: library),
-                              glints: try GlintPoints.decode(data("glints")))
+                              glints: try GlintPoints.decode(data("glints")),
+                              notices: try Notices.decode(data("notices")))
         }
     }
 
