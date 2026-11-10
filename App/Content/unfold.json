@@ -16,9 +16,9 @@
       ],
       "textSide": "left",
       "title": "In the Beginning",
-      "short": "God gives the first man rule over every living creature.",
+      "short": "God made us to rule over His creation, at peace with every living thing.",
       "more": {
-        "story": "When Adam fell, that rule was broken, and the wild animals became something to fear.",
+        "story": "When we turned from God, that peace was lost. The wild became something to fear.",
         "verses": [
           {
             "ref": "Genesis 1:28",
@@ -42,9 +42,9 @@
       ],
       "textSide": "left",
       "title": "The Promise",
-      "short": "God tells the serpent that a son of Eve will crush its head.",
+      "short": "Even as sin entered the world, God promised a Savior.",
       "more": {
-        "story": "Christians have long read this as the first promise of Jesus Christ.",
+        "story": "A son of Eve would crush the serpent’s head. That son is Jesus Christ, born of a woman for us.",
         "verses": [
           {
             "ref": "Genesis 3:15",
@@ -74,9 +74,9 @@
       ],
       "textSide": "left",
       "title": "Forty Years",
-      "short": "Israel wandered in the wilderness for forty years and failed its test.",
+      "short": "God led His people through the wilderness for forty years.",
       "more": {
-        "story": "They complained of hunger and doubted God again and again.",
+        "story": "He fed them every morning, and still they doubted Him. We are not so different.",
         "verses": [
           {
             "ref": "Deuteronomy 8:2",
@@ -100,9 +100,9 @@
       ],
       "textSide": "right",
       "title": "Forty Days",
-      "short": "Jesus Christ goes into the same wilderness, hungry, for forty days.",
+      "short": "Jesus Christ walks into the same wilderness and goes without food for forty days.",
       "more": {
-        "story": "Where Israel failed, he does not. Each time Satan tempts him, he answers from Deuteronomy.",
+        "story": "Where Israel failed, and where we fail, He stood firm. Each time He answered the tempter with the word of God.",
         "verses": [
           {
             "ref": "Deuteronomy 8:3",
@@ -131,25 +131,25 @@
         ]
       ],
       "textSide": "right",
-      "title": "What Is Man",
-      "short": "He is fully a man here, hungry and alone.",
+      "title": "Fully Man",
+      "short": "He felt hunger and weariness as we do.",
       "more": {
-        "story": "Psalm 8 gave man rule over the beasts. Hebrews says the man who finally holds it was tempted just as we are.",
+        "story": "God made man a little lower than the angels. The Son of God came down to that place to lift us up.",
         "verses": [
           {
-            "ref": "Psalm 8:6",
-            "text": "You made him ruler of the works of Your hands; You have placed everything under his feet",
+            "ref": "Psalm 8:5",
+            "text": "You made him a little lower than the angels; You crowned him with glory and honor.",
             "testament": "old",
             "translation": "BSB"
           },
           {
-            "ref": "Hebrews 4:15",
-            "text": "one who was tempted in every way that we are, yet was without sin.",
+            "ref": "Hebrews 2:9",
+            "text": "But we see Jesus, who was made a little lower than the angels, now crowned with glory and honor",
             "testament": "new",
             "translation": "BSB"
           }
         ],
-        "connection": "christianReading",
+        "connection": "inScripture",
         "draft": true
       },
       "draft": true
@@ -173,9 +173,9 @@
       ],
       "textSide": "left",
       "title": "The Angels",
-      "short": "Satan promised him angels if he would leap from the Temple.",
+      "short": "Satan offered Him angels as a test.",
       "more": {
-        "story": "He would not test God. When the temptations ended, the angels came to serve him.",
+        "story": "He would not test His Father. When the temptations ended, the angels came to serve Him.",
         "verses": [
           {
             "ref": "Psalm 91:11",
@@ -207,10 +207,10 @@
         ]
       ],
       "textSide": "right",
-      "title": "The Lion and the Serpent",
-      "short": "Satan quoted Psalm 91 to Jesus. He stopped just before the verse about the lion.",
+      "title": "Lord of the Wild",
+      "short": "Satan quoted Psalm 91 to Him, and stopped just before the verse about the lion.",
       "more": {
-        "story": "In the picture, the lion and the serpent are already at his feet.",
+        "story": "Here the lion and the serpent already lie at His feet. The psalm Satan left unfinished is fulfilled in Him.",
         "verses": [
           {
             "ref": "Psalm 91:13",
@@ -243,9 +243,9 @@
       ],
       "textSide": "left",
       "title": "That You May Believe",
-      "short": "This canvas was cut from a larger painting of the life of Jesus Christ.",
+      "short": "Moretto painted the Son of God hungry, and the wild beasts bowing to Him.",
       "more": {
-        "story": "What remains shows a hungry man who is also Lord of the wild beasts.",
+        "story": "Both are true. He became one of us, so that we could belong to Him forever.",
         "verses": [
           {
             "ref": "John 20:31",
