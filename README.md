@@ -9,7 +9,15 @@ driven by an Apple TV.
 ```
 project.yml                 XcodeGen spec (run `xcodegen generate` after adding files)
 App/                        tvOS app (SwiftUI)
-  RootView.swift            artwork mode ⇄ calibration mode
+  RootView.swift            remote → ModeMachine; draws the current mode over one LightLayer
+  LightLayer.swift          base wash + feathered subject light, with fades
+  GlintLayer.swift          rare glints in Stillness
+  WallText.swift            title, short line, story and verses on the wall
+  ExploreView.swift         Explore's text; ContentLoader (all bundled JSON)
+  UnfoldView.swift          Unfold's text and light targets
+  SettingsView.swift        hidden Settings list, Tune light, About
+  TuningStore.swift         persists tuning on the Apple TV
+  Typography.swift          bundled Cormorant Garamond / EB Garamond (App/Fonts, OFL)
   CalibrationView.swift     four-corner calibration with the Siri Remote
   MappedCanvas.swift        draws in artwork coordinates, warps with one homography
   CalibrationStore.swift    persists calibration on the Apple TV
@@ -19,6 +27,16 @@ Packages/WildernessCore/    pure Swift, unit-tested on the Mac
   Homography.swift          4-point solve, inverse, composition, SwiftUI conversion
   Calibration.swift         saved profile, validity, remote corner editing
   CalibrationSession.swift  calibration screen flow: corners → review → save / cancel
+  Modes.swift               Stillness / Explore / Unfold / Settings state machine; awake policy
+  Unfold.swift              Unfold beats and timeline
+  Glints.swift              glint scheduler, seeded random source, glint points
+  WallGeometry.swift        pixels per inch, wall beside the tapestry, text column placement
+  Tuning.swift              tunable light values and the tuning screen's logic
+  LightTiming.swift         fade durations
+scripts/
+  import_outlines.py        estimated outlines → annotations.json
+  make_glints.py            reference image → glints.json (tests in scripts/tests)
+docs/                       brief, design spec, build plan, round-3 light study, reference images
 ```
 
 ## Coordinate spaces
@@ -38,8 +56,18 @@ spaces, so mixing spaces is a compile error. Calibration stores the tapestry's f
 ## Tests
 
 ```bash
-Packages/WildernessCore/test.sh
+cd Packages/WildernessCore && swift test
 ```
+
+```bash
+xcodebuild test -project Wilderness.xcodeproj -scheme Wilderness -destination 'platform=tvOS Simulator,name=Apple TV 4K (4th generation) (at 1080p)' CODE_SIGNING_ALLOWED=NO
+```
+
+```bash
+python3 -m pytest scripts/tests -q
+```
+
+`Packages/WildernessCore/test.sh` runs the core tests with only the Command Line Tools installed.
 
 ## One-time Mac setup
 
@@ -67,19 +95,41 @@ and allows TestFlight.
 
 ## Remote
 
-Dark wall: **arrows** wake Explore on Christ · **Play/Pause** registration pattern ·
-**hold Select (1 s)** calibration · **Menu** returns to the Apple TV home screen.
-Explore: **arrows** move the light to the nearest detail that way · **Select** shows or hides the longer text (it stays open as you move between details) · **‹ Back** back to dark.
-Calibration: **arrows** move the selected corner · **Select** next corner; after the fourth, a review step where **Select** saves and **‹ Back** returns to adjusting · **Play/Pause** coarse/fine · **‹ Back** while adjusting cancels (on first setup it leaves the app).
+| Where | Arrows | Select | Hold Select (1 s) | Play/Pause | ‹ Back |
+|---|---|---|---|---|---|
+| Stillness | Explore (Christ) | nothing | Settings | Start Unfold | Leave the app |
+| Explore | Move to the nearest subject that way | Story and verses on/off (stays open as you move) | Settings | Start Unfold | Stillness |
+| Unfold | ← → previous / next beat | nothing | nothing | Pause / resume | Stillness |
+| Settings | ↑ ↓ choose | Open | | | Close |
+| Tune light | ↑ ↓ choose · ← → change | Reset (on its row) | | | Back to Settings |
+| Calibration | Move the corner | Next corner → review → save | | Coarse / fine | Cancel (first setup: leave the app) |
+
+Explore returns to Stillness after 45 s without a press. While the app is open the Apple TV's
+screensaver is held off; after 6 h without a press it is allowed to sleep again.
 
 ## Content
 
-`App/Content/annotations.json` holds every detail's text, evidence label, and position.
-Positions are currently estimated from the Met's reference image (`geometrySource: met-reference-estimate`);
-outlines are empty until traced on a photo of the tapestry. A test validates the shipped file and checks every
-detail is reachable with the remote.
+All of it is data, validated by tests that load the shipped files:
 
-Evidence labels: Documented · Christian tradition · A likely reading · Conjecture.
+- `App/Content/annotations.json`: each subject's text, evidence class, anchor, outline, and (after the
+  copy pass) `more`: one line of story plus Old and New Testament verses. Outlines are rough estimates
+  from the Met's reference image (`geometrySource: met-reference-estimate`) until traced on a photo of
+  the tapestry.
+- `App/Content/unfold.json`: the eight beats of Unfold (draft text until the copy pass).
+- `App/Content/glints.json`: where glints may appear; regenerate with
+  `python3 -I scripts/make_glints.py docs/reference/met-11.53-600x502.jpg App/Content/glints.json`.
+- `App/Content/notices.json`: Bible translation copyright notices (NIV, ESV, NLT), shown in
+  Settings → About. A test fails if a quoted translation has no notice.
+
+Wall copy is reviewed and approved line by line by Matt before it ships.
+
+## Visual checks
+
+`UITests/ScreenshotTour.swift` drives the remote and saves screenshots. It skips unless a folder is given:
+
+```bash
+TEST_RUNNER_SCREENSHOT_DIR=/path/to/folder xcodebuild test -project Wilderness.xcodeproj -scheme Wilderness -destination 'platform=tvOS Simulator,name=Apple TV 4K (4th generation) (at 1080p)' -only-testing:WildernessUITests/ScreenshotTour CODE_SIGNING_ALLOWED=NO
+```
 
 ## Refresh (free Apple ID, 7-day signing)
 
