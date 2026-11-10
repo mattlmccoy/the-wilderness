@@ -1,45 +1,43 @@
 {
-  "draft": "Draft 2 · 10 November 2026",
+  "draft": "Draft 3 · 10 November 2026",
   "notes": [
-    "The thread through every line: his humanity in plain sight (hungry, tired, alone) and his divinity in how the wild beasts behave around him.",
-    "“Jesus Christ” in full at the first mention in each subject and beat; “he” after that.",
-    "Translation: the Berean Standard Bible (BSB), a modern translation in the style of the NIV and ESV that is in the public domain, so it can be quoted freely. The Douay-Rheims stays for the Latin Bible Moretto knew. NIV, ESV and NLT are copyrighted, so I won't copy their text; if you want a particular verse in one of them, paste it in from your own Bible and the app will show it with its abbreviation.",
-    "Every verse is copied from the published BSB or Douay-Rheims text and checked by script. Verses are trimmed to the phrase that matters, with an ellipsis where words are skipped.",
-    "The BSB capitalizes He and His for God; my own lines do not.",
+    "Written as worship, not description: by people who believe Jesus Christ is Lord and Savior, for guests standing in your home.",
+    "He and His are capitalized for Jesus throughout, out of reverence.",
+    "Verses are the free Berean Standard Bible for now. Once you have your licenses, choose NIV, ESV or NLT per verse and paste the text in; I'll set up a page for that.",
+    "Every verse was checked by script against its source text.",
     "Nothing is final. Every line stays marked draft until you approve it."
   ],
   "subjects": [
     {
       "id": "christ",
       "title": "Jesus Christ",
-      "short": "Forty days without food. Jesus Christ sits alone, his chin in his hand.",
+      "short": "The Son of God, hungry after forty days, rests His head in His hand.",
       "more": {
-        "story": "He is hungry and tired, as any man would be. Yet around him the wild animals lie still.",
+        "story": "He chose this weakness for us. He knows hunger and weariness from the inside, and He did not turn from either.",
         "verses": [
           {
-            "ref": "Psalm 8:5",
-            "text": "You made him a little lower than the angels; You crowned him with glory and honor.",
+            "ref": "Isaiah 53:4",
+            "text": "Surely He took up our infirmities and carried our sorrows",
             "testament": "old",
             "translation": "BSB"
           },
           {
-            "ref": "Hebrews 2:9",
-            "text": "But we see Jesus, who was made a little lower than the angels, now crowned with glory and honor",
+            "ref": "Hebrews 4:15",
+            "text": "we have one who was tempted in every way that we are, yet was without sin.",
             "testament": "new",
             "translation": "BSB"
           }
         ],
-        "connection": "inScripture",
+        "connection": "christianReading",
         "draft": true
-      },
-      "note": "The whole idea of the piece in two verses: fully a man, and crowned. Hebrews quotes Psalm 8 and applies it to Jesus."
+      }
     },
     {
       "id": "angels",
       "title": "The Angels",
-      "short": "Two angels come down from the upper right to serve him.",
+      "short": "Angels come from heaven to serve the Lord in His hunger.",
       "more": {
-        "story": "Satan quoted the psalm about angels and told him to jump from the Temple. He refused. Afterward the angels came anyway.",
+        "story": "Satan tempted Him with the promise of angels. He refused to test His Father, and the angels came anyway, as servants to their King.",
         "verses": [
           {
             "ref": "Psalm 91:11",
@@ -61,9 +59,9 @@
     {
       "id": "basilisk",
       "title": "The Basilisk",
-      "short": "A small winged serpent, half hidden near the center. It may be a basilisk.",
+      "short": "A small winged serpent lies low near Him. It may be a basilisk.",
       "more": {
-        "story": "In the Latin Bible Moretto knew, the psalm Satan quoted goes on to put the basilisk under foot. Here it crouches low near Jesus Christ.",
+        "story": "Moretto’s Bible promised that the faithful would tread on the basilisk. In Christ that promise is kept, and the serpent’s power over us is broken.",
         "verses": [
           {
             "ref": "Psalm 90:13",
@@ -81,14 +79,14 @@
         "connection": "christianReading",
         "draft": true
       },
-      "note": "Psalm 90:13 is the Latin Bible's numbering (91:13 in modern Bibles). The Met does not name the creature, so the short line says “may be”."
+      "note": "Psalm 90:13 is the Latin Bible’s numbering (91:13 in modern Bibles). The Met does not name the creature, so the short line says “may be”."
     },
     {
       "id": "lion",
       "title": "The Lion",
-      "short": "The lion lies at his feet, head lowered, half outside the picture.",
+      "short": "The lion, king of beasts, lies at the feet of the King of kings.",
       "more": {
-        "story": "God sent an angel to shut the lions’ mouths for Daniel. This lion needs no angel; it lies down before Jesus Christ.",
+        "story": "Daniel needed an angel to shut the lions’ mouths. This lion needs no angel. It knows its Lord and lies down.",
         "verses": [
           {
             "ref": "Daniel 6:22",
@@ -110,9 +108,9 @@
     {
       "id": "stag",
       "title": "The Stag",
-      "short": "A stag at the left stretches forward, its head lowered toward him.",
+      "short": "A stag bends toward Him, its head lowered.",
       "more": {
-        "story": "The deer is not one of the dangerous ones. Christians have long seen it as the soul, thirsty for God.",
+        "story": "The psalmist longed for God as a deer longs for water. Here that longing has found Him. Whoever is thirsty may come.",
         "verses": [
           {
             "ref": "Psalm 42:1",
@@ -134,9 +132,9 @@
     {
       "id": "fox",
       "title": "The Fox",
-      "short": "A fox rests a few steps from the serpent.",
+      "short": "A fox rests a few steps from Him.",
       "more": {
-        "story": "Every animal on this hillside has a den or a nest. The one through whom they were made has nowhere to lay his head.",
+        "story": "Every creature on this hillside has a place to sleep. Their Maker had nowhere to lay His head, and He bore it for us.",
         "verses": [
           {
             "ref": "John 1:3",
@@ -153,15 +151,14 @@
         ],
         "connection": "christianReading",
         "draft": true
-      },
-      "note": "Both verses are from the New Testament here; the story line carries the humanity and the divinity together."
+      }
     },
     {
       "id": "bear",
       "title": "The Bear",
-      "short": "A bear lies in the grass, head down, as quiet as the rest.",
+      "short": "A bear lies in the grass with its head bowed.",
       "more": {
-        "story": "Alone in these hills, a man would fear a bear. Beside Jesus Christ it lies down as calmly as the cow in Isaiah’s vision.",
+        "story": "A man alone in these hills should fear a bear. With Jesus Christ, the wild is at peace, as Isaiah said it would be.",
         "verses": [
           {
             "ref": "Isaiah 11:7",
@@ -183,9 +180,9 @@
     {
       "id": "fragment",
       "title": "The Missing Picture",
-      "short": "Faint cherubs at the left edge, where the original canvas was cut down.",
+      "short": "Faint cherubs at the left edge, where the original canvas was cut away.",
       "more": {
-        "story": "Moretto’s painting once continued past this edge, with other scenes from the life of Jesus Christ.",
+        "story": "This was once part of a larger painting of His life. His story continues past the frame, to the cross and the empty tomb.",
         "verses": [
           {
             "ref": "John 21:25",
@@ -203,9 +200,9 @@
     {
       "id": "beat1",
       "title": "In the Beginning",
-      "short": "God gives the first man rule over every living creature.",
+      "short": "God made us to rule over His creation, at peace with every living thing.",
       "more": {
-        "story": "When Adam fell, that rule was broken, and the wild animals became something to fear.",
+        "story": "When we turned from God, that peace was lost. The wild became something to fear.",
         "verses": [
           {
             "ref": "Genesis 1:28",
@@ -221,9 +218,9 @@
     {
       "id": "beat2",
       "title": "The Promise",
-      "short": "God tells the serpent that a son of Eve will crush its head.",
+      "short": "Even as sin entered the world, God promised a Savior.",
       "more": {
-        "story": "Christians have long read this as the first promise of Jesus Christ.",
+        "story": "A son of Eve would crush the serpent’s head. That son is Jesus Christ, born of a woman for us.",
         "verses": [
           {
             "ref": "Genesis 3:15",
@@ -245,9 +242,9 @@
     {
       "id": "beat3",
       "title": "Forty Years",
-      "short": "Israel wandered in the wilderness for forty years and failed its test.",
+      "short": "God led His people through the wilderness for forty years.",
       "more": {
-        "story": "They complained of hunger and doubted God again and again.",
+        "story": "He fed them every morning, and still they doubted Him. We are not so different.",
         "verses": [
           {
             "ref": "Deuteronomy 8:2",
@@ -263,9 +260,9 @@
     {
       "id": "beat4",
       "title": "Forty Days",
-      "short": "Jesus Christ goes into the same wilderness, hungry, for forty days.",
+      "short": "Jesus Christ walks into the same wilderness and goes without food for forty days.",
       "more": {
-        "story": "Where Israel failed, he does not. Each time Satan tempts him, he answers from Deuteronomy.",
+        "story": "Where Israel failed, and where we fail, He stood firm. Each time He answered the tempter with the word of God.",
         "verses": [
           {
             "ref": "Deuteronomy 8:3",
@@ -286,34 +283,34 @@
     },
     {
       "id": "beat5",
-      "title": "What Is Man",
-      "short": "He is fully a man here, hungry and alone.",
+      "title": "Fully Man",
+      "short": "He felt hunger and weariness as we do.",
       "more": {
-        "story": "Psalm 8 gave man rule over the beasts. Hebrews says the man who finally holds it was tempted just as we are.",
+        "story": "God made man a little lower than the angels. The Son of God came down to that place to lift us up.",
         "verses": [
           {
-            "ref": "Psalm 8:6",
-            "text": "You made him ruler of the works of Your hands; You have placed everything under his feet",
+            "ref": "Psalm 8:5",
+            "text": "You made him a little lower than the angels; You crowned him with glory and honor.",
             "testament": "old",
             "translation": "BSB"
           },
           {
-            "ref": "Hebrews 4:15",
-            "text": "one who was tempted in every way that we are, yet was without sin.",
+            "ref": "Hebrews 2:9",
+            "text": "But we see Jesus, who was made a little lower than the angels, now crowned with glory and honor",
             "testament": "new",
             "translation": "BSB"
           }
         ],
-        "connection": "christianReading",
+        "connection": "inScripture",
         "draft": true
       }
     },
     {
       "id": "beat6",
       "title": "The Angels",
-      "short": "Satan promised him angels if he would leap from the Temple.",
+      "short": "Satan offered Him angels as a test.",
       "more": {
-        "story": "He would not test God. When the temptations ended, the angels came to serve him.",
+        "story": "He would not test His Father. When the temptations ended, the angels came to serve Him.",
         "verses": [
           {
             "ref": "Psalm 91:11",
@@ -334,10 +331,10 @@
     },
     {
       "id": "beat7",
-      "title": "The Lion and the Serpent",
-      "short": "Satan quoted Psalm 91 to Jesus. He stopped just before the verse about the lion.",
+      "title": "Lord of the Wild",
+      "short": "Satan quoted Psalm 91 to Him, and stopped just before the verse about the lion.",
       "more": {
-        "story": "In the picture, the lion and the serpent are already at his feet.",
+        "story": "Here the lion and the serpent already lie at His feet. The psalm Satan left unfinished is fulfilled in Him.",
         "verses": [
           {
             "ref": "Psalm 91:13",
@@ -355,14 +352,14 @@
         "connection": "christianReading",
         "draft": true
       },
-      "note": "Satan quotes Psalm 91:11–12 in Matthew 4:6; verse 13 is the next line. The modern number (91) is used here."
+      "note": "Satan quotes Psalm 91:11–12 in Matthew 4:6; verse 13 is the next line."
     },
     {
       "id": "beat8",
       "title": "That You May Believe",
-      "short": "This canvas was cut from a larger painting of the life of Jesus Christ.",
+      "short": "Moretto painted the Son of God hungry, and the wild beasts bowing to Him.",
       "more": {
-        "story": "What remains shows a hungry man who is also Lord of the wild beasts.",
+        "story": "Both are true. He became one of us, so that we could belong to Him forever.",
         "verses": [
           {
             "ref": "John 20:31",
