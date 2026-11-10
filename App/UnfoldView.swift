@@ -1,0 +1,53 @@
+import SwiftUI
+import WildernessCore
+
+/// Plays the guided arc (spec §5.3) in artwork canvas units: each beat's light steps through
+/// its targets, and its text appears once the light has settled.
+struct UnfoldView: View {
+    let script: UnfoldScript
+    let playback: UnfoldPlayback
+    let library: AnnotationLibrary
+    let tuning: Tuning
+    let calibration: Calibration
+
+    private var beat: UnfoldBeat { script.beats[playback.beat] }
+    private var targets: Set<String> { Set(beat.light[script.step(playback)]) }
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            LightLayer(library: library, tuning: tuning, targets: targets,
+                       exploring: !targets.contains(UnfoldBeat.wholeTarget))
+            VStack(alignment: .leading, spacing: 0) {
+                WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
+                         expanded: beat.more != nil,
+                         placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
+                         anchorY: anchorY)
+                if playback.paused {
+                    Text("Paused")
+                        .font(Typography.text(Typography.Size.citation)).tracking(1.5)
+                        .foregroundStyle(Palette.ivory.opacity(0.55))
+                        .offset(x: pausedX, y: anchorY * Artwork.canvasHeight + 380)
+                        .transition(.opacity)
+                }
+            }
+            .id(beat.id)
+            .transition(.asymmetric(
+                insertion: .opacity.animation(.easeIn(duration: LightTiming.textIn).delay(LightTiming.textDelay)),
+                removal: .opacity.animation(.easeOut(duration: LightTiming.textOut))))
+        }
+        .animation(.easeInOut(duration: LightTiming.textOut), value: playback.paused)
+    }
+
+    /// The first lit subject's height, or upper third for whole-piece beats.
+    private var anchorY: Double {
+        let ids = beat.light.joined()
+        return library.annotations.first { ids.contains($0.id) }?.anchor.y ?? 0.3
+    }
+
+    private var pausedX: CGFloat {
+        let p = TextColumnLayout.place(preferred: beat.textSide, calibration: calibration)
+        if case .beside(.right) = p.position { return Artwork.canvasWidth + TextColumnLayout.gap * 20 }
+        if case .beside(.left) = p.position { return -TextColumnLayout.gap * 20 - p.widthInches * 20 }
+        return 20
+    }
+}

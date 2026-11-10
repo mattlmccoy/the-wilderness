@@ -24,6 +24,7 @@
 		60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10055DBD8B0259D70A5114C9 /* ExploreView.swift */; };
 		719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E899EF5E0A146751A13B832 /* CalibrationView.swift */; };
+		7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5575DEF51153E5584DC61376 /* UnfoldView.swift */; };
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
 		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
@@ -54,6 +55,7 @@
 		3E899EF5E0A146751A13B832 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		3F6E3C541A7FD4DED662EFED /* WildernessCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WildernessCore; path = Packages/WildernessCore; sourceTree = SOURCE_ROOT; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
+		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Variable.ttf"; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				34504EEACA619A61C36E1178 /* Palette.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
 				6F06B70493ADCF9380EB26B7 /* Typography.swift */,
+				5575DEF51153E5584DC61376 /* UnfoldView.swift */,
 				F6BDD2885BEE47A41C152161 /* WallText.swift */,
 				EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */,
 				95148E6B311B87780B181219 /* Content */,
@@ -276,6 +279,7 @@
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
 				3576D09A2B2003A03D056D30 /* Typography.swift in Sources */,
+				7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */,
 				0DE7FEC62E086B038A0D1875 /* WallText.swift in Sources */,
 				52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */,
 			);
