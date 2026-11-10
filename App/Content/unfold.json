@@ -1,0 +1,137 @@
+{
+  "beats": [
+    {
+      "id": "eden",
+      "duration": 35,
+      "light": [
+        [
+          "whole"
+        ],
+        [
+          "stag",
+          "fox",
+          "bear",
+          "lion"
+        ]
+      ],
+      "textSide": "left",
+      "title": "Eden: creatures at peace",
+      "short": "Draft: Eden: creatures at peace",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "serpent",
+      "duration": 35,
+      "light": [
+        [
+          "basilisk"
+        ]
+      ],
+      "textSide": "left",
+      "title": "The serpent and the promise",
+      "short": "Draft: The serpent and the promise",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "forty-years",
+      "duration": 35,
+      "light": [
+        [
+          "whole"
+        ]
+      ],
+      "textSide": "left",
+      "title": "Forty years in the wilderness",
+      "short": "Draft: Forty years in the wilderness",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "forty-days",
+      "duration": 35,
+      "light": [
+        [
+          "christ"
+        ]
+      ],
+      "textSide": "right",
+      "title": "Forty days",
+      "short": "Draft: Forty days",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "fed",
+      "duration": 35,
+      "light": [
+        [
+          "angels"
+        ]
+      ],
+      "textSide": "right",
+      "title": "Fed in the wilderness",
+      "short": "Draft: Fed in the wilderness",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "peaceable",
+      "duration": 35,
+      "light": [
+        [
+          "stag"
+        ],
+        [
+          "fox"
+        ],
+        [
+          "bear"
+        ],
+        [
+          "lion"
+        ]
+      ],
+      "textSide": "left",
+      "title": "The peaceable kingdom",
+      "short": "Draft: The peaceable kingdom",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "lion-dragon",
+      "duration": 35,
+      "light": [
+        [
+          "lion"
+        ],
+        [
+          "basilisk"
+        ]
+      ],
+      "textSide": "right",
+      "title": "The lion and the dragon",
+      "short": "Draft: The lion and the dragon",
+      "more": null,
+      "draft": true
+    },
+    {
+      "id": "rest-of-story",
+      "duration": 35,
+      "light": [
+        [
+          "fragment"
+        ],
+        [
+          "whole"
+        ]
+      ],
+      "textSide": "left",
+      "title": "The rest of the story",
+      "short": "Draft: The rest of the story",
+      "more": null,
+      "draft": true
+    }
+  ]
+}

@@ -50,3 +50,12 @@ private let contentURL = URL(fileURLWithPath: #filePath)
         for v in m.verses { #expect(WordLimits.count(v.text) <= WordLimits.verse, "\(a.id) \(v.ref)") }
     }
 }
+
+private let contentDir = contentURL.deletingLastPathComponent()
+
+@Test func shippedUnfoldDecodesAgainstShippedAnnotations() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let script = try UnfoldScript.decode(Data(contentsOf: contentDir.appendingPathComponent("unfold.json")), library: lib)
+    #expect(script.beats.count == 8)
+    #expect(script.beats.first?.id == "eden" && script.beats.last?.id == "rest-of-story")
+}
