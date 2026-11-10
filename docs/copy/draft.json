@@ -1,59 +1,60 @@
 {
-  "draft": "Draft 1 · 10 November 2026",
+  "draft": "Draft 2 · 10 November 2026",
   "notes": [
-    "Translations: NIV for most verses because it reads plainly aloud; ESV where it reads better (the sparrow, and Mark 1:13 in beat 6); the Douay-Rheims only for the basilisk, because it is the English of the Latin Bible Moretto knew.",
-    "Every verse was copied from the published text on BibleGateway. Verses are trimmed to the phrase that matters; where one starts mid-verse its first letter is capitalized.",
-    "The story lines try not to repeat the verses. The verse carries the meaning.",
-    "Unfold beat titles are now wall titles, not the working names from the design document.",
-    "Nothing here is final. Every line stays marked draft until you approve it."
+    "The thread through every line: his humanity in plain sight (hungry, tired, alone) and his divinity in how the wild beasts behave around him.",
+    "“Jesus Christ” in full at the first mention in each subject and beat; “he” after that.",
+    "Translation: the Berean Standard Bible (BSB), a modern translation in the style of the NIV and ESV that is in the public domain, so it can be quoted freely. The Douay-Rheims stays for the Latin Bible Moretto knew. NIV, ESV and NLT are copyrighted, so I won't copy their text; if you want a particular verse in one of them, paste it in from your own Bible and the app will show it with its abbreviation.",
+    "Every verse is copied from the published BSB or Douay-Rheims text and checked by script. Verses are trimmed to the phrase that matters, with an ellipsis where words are skipped.",
+    "The BSB capitalizes He and His for God; my own lines do not.",
+    "Nothing is final. Every line stays marked draft until you approve it."
   ],
   "subjects": [
     {
       "id": "christ",
-      "title": "Christ",
-      "short": "Forty days without food. He sits with his chin in his hand.",
+      "title": "Jesus Christ",
+      "short": "Forty days without food. Jesus Christ sits alone, his chin in his hand.",
       "more": {
-        "story": "Israel spent forty years in the wilderness, complaining about bread. When Satan tells the hungry Jesus to make some, he answers from Deuteronomy.",
+        "story": "He is hungry and tired, as any man would be. Yet around him the wild animals lie still.",
         "verses": [
           {
-            "ref": "Deuteronomy 8:3",
-            "text": "Man does not live on bread alone but on every word that comes from the mouth of the LORD.",
+            "ref": "Psalm 8:5",
+            "text": "You made him a little lower than the angels; You crowned him with glory and honor.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
-            "ref": "Matthew 4:4",
-            "text": "Man shall not live on bread alone, but on every word that comes from the mouth of God.",
+            "ref": "Hebrews 2:9",
+            "text": "But we see Jesus, who was made a little lower than the angels, now crowned with glory and honor",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "inScripture",
         "draft": true
       },
-      "note": "The two verses nearly match on purpose: Jesus is quoting Deuteronomy word for word."
+      "note": "The whole idea of the piece in two verses: fully a man, and crowned. Hebrews quotes Psalm 8 and applies it to Jesus."
     },
     {
       "id": "angels",
       "title": "The Angels",
-      "short": "Two angels come down from the upper right to care for him.",
+      "short": "Two angels come down from the upper right to serve him.",
       "more": {
-        "story": "Elijah ran into the wilderness and lay down to die. An angel woke him and fed him, and he walked forty days on that food.",
+        "story": "Satan quoted the psalm about angels and told him to jump from the Temple. He refused. Afterward the angels came anyway.",
         "verses": [
           {
-            "ref": "1 Kings 19:5",
-            "text": "All at once an angel touched him and said, “Get up and eat.”",
+            "ref": "Psalm 91:11",
+            "text": "For He will command His angels concerning you to guard you in all your ways.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
             "ref": "Matthew 4:11",
-            "text": "Then the devil left him, and angels came and attended him.",
+            "text": "Then the devil left Him, and angels came and ministered to Him.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
-        "connection": "christianReading",
+        "connection": "inScripture",
         "draft": true
       }
     },
@@ -62,7 +63,7 @@
       "title": "The Basilisk",
       "short": "A small winged serpent, half hidden near the center. It may be a basilisk.",
       "more": {
-        "story": "The Latin Bible Moretto knew names a basilisk in the psalm that Satan quotes to Jesus here in the wilderness.",
+        "story": "In the Latin Bible Moretto knew, the psalm Satan quoted goes on to put the basilisk under foot. Here it crouches low near Jesus Christ.",
         "verses": [
           {
             "ref": "Psalm 90:13",
@@ -74,57 +75,56 @@
             "ref": "Romans 16:20",
             "text": "The God of peace will soon crush Satan under your feet.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
         "draft": true
       },
-      "note": "Psalm 90:13 is the Latin Bible's numbering; modern Bibles call it 91:13. The Met does not name the creature, so the short line says “may be”."
+      "note": "Psalm 90:13 is the Latin Bible's numbering (91:13 in modern Bibles). The Met does not name the creature, so the short line says “may be”."
     },
     {
       "id": "lion",
       "title": "The Lion",
-      "short": "A lion lies at the lower right, half outside the picture.",
+      "short": "The lion lies at his feet, head lowered, half outside the picture.",
       "more": {
-        "story": "Here the lion lies calm, close to Christ. In the Bible the lion is first Judah’s sign, then a name for Jesus.",
+        "story": "God sent an angel to shut the lions’ mouths for Daniel. This lion needs no angel; it lies down before Jesus Christ.",
         "verses": [
           {
-            "ref": "Genesis 49:9",
-            "text": "You are a lion’s cub, Judah… Like a lion he crouches and lies down.",
+            "ref": "Daniel 6:22",
+            "text": "My God sent His angel and shut the mouths of the lions.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
             "ref": "Revelation 5:5",
-            "text": "See, the Lion of the tribe of Judah, the Root of David, has triumphed.",
+            "text": "Behold, the Lion of the tribe of Judah, the Root of David, has triumphed",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
-        "connection": "inScripture",
+        "connection": "christianReading",
         "draft": true
-      },
-      "note": "The Genesis line uses one ellipsis to join two phrases of the same verse."
+      }
     },
     {
       "id": "stag",
       "title": "The Stag",
-      "short": "A stag crosses the slope at the left.",
+      "short": "A stag at the left stretches forward, its head lowered toward him.",
       "more": {
-        "story": "A deer searching for water was the psalmist’s picture of a soul that longs for God.",
+        "story": "The deer is not one of the dangerous ones. Christians have long seen it as the soul, thirsty for God.",
         "verses": [
           {
             "ref": "Psalm 42:1",
-            "text": "As the deer pants for streams of water, so my soul pants for you, my God.",
+            "text": "As the deer pants for streams of water, so my soul longs after You, O God.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
             "ref": "John 7:37",
-            "text": "Let anyone who is thirsty come to me and drink.",
+            "text": "If anyone is thirsty, let him come to Me and drink.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
@@ -136,44 +136,44 @@
       "title": "The Fox",
       "short": "A fox rests a few steps from the serpent.",
       "more": {
-        "story": "Mark says only that Jesus was with the wild animals. Moretto filled the slope with them, the fox among them.",
+        "story": "Every animal on this hillside has a den or a nest. The one through whom they were made has nowhere to lay his head.",
         "verses": [
           {
-            "ref": "Psalm 84:3",
-            "text": "Even the sparrow finds a home, and the swallow a nest for herself",
-            "testament": "old",
-            "translation": "ESV"
+            "ref": "John 1:3",
+            "text": "Through Him all things were made",
+            "testament": "new",
+            "translation": "BSB"
           },
           {
             "ref": "Luke 9:58",
-            "text": "Foxes have dens and birds have nests, but the Son of Man has no place to lay his head.",
+            "text": "Foxes have dens… but the Son of Man has no place to lay His head.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
         "draft": true
       },
-      "note": "The weakest pairing: creatures with homes, and Jesus without one. Cut the Psalm if it feels forced."
+      "note": "Both verses are from the New Testament here; the story line carries the humanity and the divinity together."
     },
     {
       "id": "bear",
       "title": "The Bear",
-      "short": "A dark bear lies in the grass, as quiet as everything else.",
+      "short": "A bear lies in the grass, head down, as quiet as the rest.",
       "more": {
-        "story": "Isaiah described a coming king whose peace would reach even the wild animals.",
+        "story": "Alone in these hills, a man would fear a bear. Beside Jesus Christ it lies down as calmly as the cow in Isaiah’s vision.",
         "verses": [
           {
             "ref": "Isaiah 11:7",
-            "text": "The cow will feed with the bear, their young will lie down together",
+            "text": "The cow will graze with the bear, their young will lie down together",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
             "ref": "Mark 1:13",
-            "text": "He was with the wild animals.",
+            "text": "He was with the wild animals, and the angels ministered to Him.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
@@ -185,34 +185,33 @@
       "title": "The Missing Picture",
       "short": "Faint cherubs at the left edge, where the original canvas was cut down.",
       "more": {
-        "story": "Moretto’s painting once continued past this edge, with other scenes from Christ’s life.",
+        "story": "Moretto’s painting once continued past this edge, with other scenes from the life of Jesus Christ.",
         "verses": [
           {
             "ref": "John 21:25",
-            "text": "Jesus did many other things as well.",
+            "text": "There are many more things that Jesus did.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "inScripture",
         "draft": true
-      },
-      "note": "Only one verse here, from the New Testament. I could not find an Old Testament pairing that did not feel forced."
+      }
     }
   ],
   "beats": [
     {
       "id": "beat1",
       "title": "In the Beginning",
-      "short": "God brings the animals to the first man, and he names them.",
+      "short": "God gives the first man rule over every living creature.",
       "more": {
-        "story": "Genesis begins in a garden where the first man lives among the animals without fear.",
+        "story": "When Adam fell, that rule was broken, and the wild animals became something to fear.",
         "verses": [
           {
-            "ref": "Genesis 2:19",
-            "text": "He brought them to the man to see what he would name them",
+            "ref": "Genesis 1:28",
+            "text": "Rule over… every creature that crawls upon the earth.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
@@ -222,21 +221,21 @@
     {
       "id": "beat2",
       "title": "The Promise",
-      "short": "After the fall, God tells the serpent that its head will be crushed.",
+      "short": "God tells the serpent that a son of Eve will crush its head.",
       "more": {
-        "story": "Christians have long read this as the first promise of Christ.",
+        "story": "Christians have long read this as the first promise of Jesus Christ.",
         "verses": [
           {
             "ref": "Genesis 3:15",
             "text": "He will crush your head, and you will strike his heel.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
-            "ref": "Romans 16:20",
-            "text": "The God of peace will soon crush Satan under your feet.",
+            "ref": "Galatians 4:4",
+            "text": "But when the time had fully come, God sent His Son, born of a woman",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
@@ -246,15 +245,15 @@
     {
       "id": "beat3",
       "title": "Forty Years",
-      "short": "Israel wandered in the wilderness for forty years.",
+      "short": "Israel wandered in the wilderness for forty years and failed its test.",
       "more": {
-        "story": "Each morning God gave them manna, enough for that day.",
+        "story": "They complained of hunger and doubted God again and again.",
         "verses": [
           {
             "ref": "Deuteronomy 8:2",
-            "text": "Remember how the LORD your God led you all the way in the wilderness these forty years",
+            "text": "Remember that these forty years the LORD your God led you all the way in the wilderness",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "inScripture",
@@ -264,21 +263,21 @@
     {
       "id": "beat4",
       "title": "Forty Days",
-      "short": "Jesus goes into the same wilderness for forty days.",
+      "short": "Jesus Christ goes into the same wilderness, hungry, for forty days.",
       "more": {
-        "story": "Hungry and tempted, he answers Satan three times with words from Deuteronomy.",
+        "story": "Where Israel failed, he does not. Each time Satan tempts him, he answers from Deuteronomy.",
         "verses": [
           {
             "ref": "Deuteronomy 8:3",
-            "text": "Man does not live on bread alone but on every word that comes from the mouth of the LORD.",
+            "text": "Man does not live on bread alone, but on every word that comes from the mouth of the LORD.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
-            "ref": "Matthew 4:2",
-            "text": "After fasting forty days and forty nights, he was hungry.",
+            "ref": "Matthew 4:4",
+            "text": "Man shall not live on bread alone, but on every word that comes from the mouth of God.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "inScripture",
@@ -287,22 +286,22 @@
     },
     {
       "id": "beat5",
-      "title": "Fed in the Wilderness",
-      "short": "An angel once fed the prophet Elijah in the wilderness.",
+      "title": "What Is Man",
+      "short": "He is fully a man here, hungry and alone.",
       "more": {
-        "story": "When the temptations are over, angels come and care for Jesus.",
+        "story": "Psalm 8 gave man rule over the beasts. Hebrews says the man who finally holds it was tempted just as we are.",
         "verses": [
           {
-            "ref": "1 Kings 19:5",
-            "text": "All at once an angel touched him and said, “Get up and eat.”",
+            "ref": "Psalm 8:6",
+            "text": "You made him ruler of the works of Your hands; You have placed everything under his feet",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
-            "ref": "Matthew 4:11",
-            "text": "Then the devil left him, and angels came and attended him.",
+            "ref": "Hebrews 4:15",
+            "text": "one who was tempted in every way that we are, yet was without sin.",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
@@ -311,25 +310,25 @@
     },
     {
       "id": "beat6",
-      "title": "The Peaceable Kingdom",
-      "short": "Isaiah saw a peace that would reach even the wild animals.",
+      "title": "The Angels",
+      "short": "Satan promised him angels if he would leap from the Temple.",
       "more": {
-        "story": "Moretto painted the hunters and the hunted lying still together around Christ.",
+        "story": "He would not test God. When the temptations ended, the angels came to serve him.",
         "verses": [
           {
-            "ref": "Isaiah 11:6",
-            "text": "The wolf will live with the lamb, the leopard will lie down with the goat",
+            "ref": "Psalm 91:11",
+            "text": "For He will command His angels concerning you to guard you in all your ways.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
-            "ref": "Mark 1:13",
-            "text": "And he was with the wild animals, and the angels were ministering to him.",
+            "ref": "Matthew 4:11",
+            "text": "Then the devil left Him, and angels came and ministered to Him.",
             "testament": "new",
-            "translation": "ESV"
+            "translation": "BSB"
           }
         ],
-        "connection": "christianReading",
+        "connection": "inScripture",
         "draft": true
       }
     },
@@ -338,38 +337,38 @@
       "title": "The Lion and the Serpent",
       "short": "Satan quoted Psalm 91 to Jesus. He stopped just before the verse about the lion.",
       "more": {
-        "story": "Later Jesus tells his followers they will trample snakes, an echo of the same psalm.",
+        "story": "In the picture, the lion and the serpent are already at his feet.",
         "verses": [
           {
             "ref": "Psalm 91:13",
-            "text": "You will tread on the lion and the cobra; you will trample the great lion and the serpent.",
+            "text": "You will tread on the lion and cobra; you will trample the young lion and serpent.",
             "testament": "old",
-            "translation": "NIV"
+            "translation": "BSB"
           },
           {
             "ref": "Luke 10:19",
-            "text": "I have given you authority to trample on snakes and scorpions",
+            "text": "I have given you authority to tread on snakes and scorpions",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "christianReading",
         "draft": true
       },
-      "note": "Satan quotes Psalm 91:11–12 in Matthew 4:6; verse 13 is the next line. Here the modern number (91) is used, since this beat quotes the NIV."
+      "note": "Satan quotes Psalm 91:11–12 in Matthew 4:6; verse 13 is the next line. The modern number (91) is used here."
     },
     {
       "id": "beat8",
-      "title": "The Rest of the Story",
-      "short": "This canvas was cut from a larger painting of Christ’s life.",
+      "title": "That You May Believe",
+      "short": "This canvas was cut from a larger painting of the life of Jesus Christ.",
       "more": {
-        "story": "What remains shows Jesus alone and hungry, at peace among the animals.",
+        "story": "What remains shows a hungry man who is also Lord of the wild beasts.",
         "verses": [
           {
-            "ref": "John 21:25",
-            "text": "Jesus did many other things as well.",
+            "ref": "John 20:31",
+            "text": "These are written so that you may believe that Jesus is the Christ, the Son of God",
             "testament": "new",
-            "translation": "NIV"
+            "translation": "BSB"
           }
         ],
         "connection": "inScripture",

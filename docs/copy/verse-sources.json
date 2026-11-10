@@ -1,1 +1,89 @@
-{"Deuteronomy 8:2": {"NIV": "Remember how the LORD your God led you all the way in the wilderness these forty years, to humble and test you in order to know what was in your heart, whether or not you would keep his commands."}, "Deuteronomy 8:3": {"NIV": "He humbled you, causing you to hunger and then feeding you with manna, which neither you nor your ancestors had known, to teach you that man does not live on bread alone but on every word that comes from the mouth of the LORD."}, "Matthew 4:2": {"NIV": "Then Jesus was led by the Spirit into the wilderness to be tempted by the devil. After fasting forty days and forty nights, he was hungry."}, "Matthew 4:4": {"NIV": "Jesus answered, “It is written: ‘Man shall not live on bread alone, but on every word that comes from the mouth of God.’”"}, "Matthew 4:11": {"NIV": "Then the devil left him, and angels came and attended him."}, "1 Kings 19:5": {"NIV": "Then he lay down under the bush and fell asleep. All at once an angel touched him and said, “Get up and eat.”"}, "Romans 16:20": {"NIV": "The God of peace will soon crush Satan under your feet. The grace of our Lord Jesus be with you."}, "Genesis 2:19": {"NIV": "Now the LORD God had formed out of the ground all the wild animals and all the birds in the sky. He brought them to the man to see what he would name them; and whatever the man called each living creature, that was its name."}, "Genesis 3:15": {"NIV": "And I will put enmity between you and the woman, and between your offspring and hers; he will crush your head, and you will strike his heel.”"}, "Genesis 49:9": {"NIV": "You are a lion’s cub, Judah; you return from the prey, my son. Like a lion he crouches and lies down, like a lioness—who dares to rouse him?"}, "Revelation 5:5": {"NIV": "Then one of the elders said to me, “Do not weep! See, the Lion of the tribe of Judah, the Root of David, has triumphed. He is able to open the scroll and its seven seals.”"}, "Psalm 42:1": {"NIV": "As the deer pants for streams of water, so my soul pants for you, my God."}, "John 7:37": {"NIV": "On the last and greatest day of the festival, Jesus stood and said in a loud voice, “Let anyone who is thirsty come to me and drink."}, "Psalm 84:3": {"ESV": "Even the sparrow finds a home, and the swallow a nest for herself, where she may lay her young, at your altars, O LORD of hosts, my King and my God."}, "Luke 9:58": {"NIV": "Jesus replied, “Foxes have dens and birds have nests, but the Son of Man has no place to lay his head.”"}, "Isaiah 11:6": {"NIV": "The wolf will live with the lamb, the leopard will lie down with the goat, the calf and the lion and the yearling together; and a little child will lead them."}, "Isaiah 11:7": {"NIV": "The cow will feed with the bear, their young will lie down together, and the lion will eat straw like the ox."}, "Mark 1:13": {"NIV": "and he was in the wilderness forty days, being tempted by Satan. He was with the wild animals, and angels attended him.", "ESV": "And he was in the wilderness forty days, being tempted by Satan. And he was with the wild animals, and the angels were ministering to him."}, "John 21:25": {"NIV": "Jesus did many other things as well. If every one of them were written down, I suppose that even the whole world would not have room for the books that would be written."}, "Luke 10:19": {"NIV": "I have given you authority to trample on snakes and scorpions and to overcome all the power of the enemy; nothing will harm you."}, "Psalm 90:13": {"DRA": "Thou shalt walk upon the asp and the basilisk: and thou shalt trample under foot the lion and the dragon."}, "Psalm 91:13": {"NIV": "You will tread on the lion and the cobra; you will trample the great lion and the serpent."}}
+{
+ "Genesis 1:28": {
+  "BSB": "God blessed them and said to them, “Be fruitful and multiply, and fill the earth and subdue it; rule over the fish of the sea and the birds of the air and every creature that crawls upon the earth.”"
+ },
+ "Genesis 3:15": {
+  "BSB": "And I will put enmity between you and the woman, and between your seed and her seed. He will crush your head, and you will strike his heel. ”"
+ },
+ "Galatians 4:4": {
+  "BSB": "But when the time had fully come, God sent His Son, born of a woman, born under the law,"
+ },
+ "Psalm 8:4": {
+  "BSB": "what is man that You are mindful of him, or the son of man that You care for him?"
+ },
+ "Psalm 8:5": {
+  "BSB": "You made him a little lower than the angels; You crowned him with glory and honor."
+ },
+ "Psalm 8:6": {
+  "BSB": "You made him ruler of the works of Your hands; You have placed everything under his feet:"
+ },
+ "Hebrews 2:9": {
+  "BSB": "But we see Jesus, who was made a little lower than the angels, now crowned with glory and honor because He suffered death, so that by the grace of God He might taste death for everyone."
+ },
+ "Psalm 91:11": {
+  "BSB": "For He will command His angels concerning you to guard you in all your ways."
+ },
+ "Psalm 91:13": {
+  "BSB": "You will tread on the lion and cobra; you will trample the young lion and serpent."
+ },
+ "Matthew 4:11": {
+  "BSB": "Then the devil left Him, and angels came and ministered to Him."
+ },
+ "Matthew 4:4": {
+  "BSB": "But Jesus answered, “It is written: ‘Man shall not live on bread alone, but on every word that comes from the mouth of God.’ ”"
+ },
+ "Matthew 4:2": {
+  "BSB": "After fasting forty days and forty nights, He was hungry."
+ },
+ "Luke 10:19": {
+  "BSB": "Behold, I have given you authority to tread on snakes and scorpions, and over all the power of the enemy. Nothing will harm you."
+ },
+ "Deuteronomy 8:2": {
+  "BSB": "Remember that these forty years the LORD your God led you all the way in the wilderness, so that He might humble you and test you in order to know what was in your heart, whether or not you would keep His commandments."
+ },
+ "Deuteronomy 8:3": {
+  "BSB": "He humbled you, and in your hunger He gave you manna to eat, which neither you nor your fathers had known, so that you might understand that man does not live on bread alone, but on every word that comes from the mouth of the LORD."
+ },
+ "Daniel 6:22": {
+  "BSB": "My God sent His angel and shut the mouths of the lions. They have not hurt me, for I was found innocent in His sight, and I have done no wrong against you, O king.”"
+ },
+ "Revelation 5:5": {
+  "BSB": "Then one of the elders said to me, “Do not weep! Behold, the Lion of the tribe of Judah, the Root of David, has triumphed to open the scroll and its seven seals.”"
+ },
+ "Isaiah 11:7": {
+  "BSB": "The cow will graze with the bear, their young will lie down together, and the lion will eat straw like the ox."
+ },
+ "Mark 1:13": {
+  "BSB": "and He was there for forty days, being tempted by Satan. He was with the wild animals, and the angels ministered to Him."
+ },
+ "John 1:3": {
+  "BSB": "Through Him all things were made, and without Him nothing was made that has been made."
+ },
+ "Luke 9:58": {
+  "BSB": "Jesus replied, “Foxes have dens and birds of the air have nests, but the Son of Man has no place to lay His head.”"
+ },
+ "Psalm 42:1": {
+  "BSB": "As the deer pants for streams of water, so my soul longs after You, O God."
+ },
+ "John 7:37": {
+  "BSB": "On the last and greatest day of the feast, Jesus stood up and called out in a loud voice, “If anyone is thirsty, let him come to Me and drink."
+ },
+ "Romans 16:20": {
+  "BSB": "The God of peace will soon crush Satan under your feet. The grace of our Lord Jesus Christ be with you."
+ },
+ "John 21:25": {
+  "BSB": "There are many more things that Jesus did. If all of them were written down, I suppose that not even the world itself would have space for the books that would be written."
+ },
+ "John 20:31": {
+  "BSB": "But these are written so that you may believe that Jesus is the Christ, the Son of God, and that by believing you may have life in His name."
+ },
+ "Hebrews 4:15": {
+  "BSB": "For we do not have a high priest who is unable to sympathize with our weaknesses, but we have one who was tempted in every way that we are, yet was without sin."
+ },
+ "Psalm 90:13": {
+  "DRA": "Thou shalt walk upon the asp and the basilisk: and thou shalt trample under foot the lion and the dragon."
+ },
+ "Psalm 90:11": {
+  "DRA": "For he hath given his angels charge over thee; to keep thee in all thy ways."
+ }
+}
