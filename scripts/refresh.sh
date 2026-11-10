@@ -2,6 +2,8 @@
 # Rebuilds, re-signs (free Apple ID) and reinstalls The Wilderness on the Apple TV.
 # Free provisioning expires after 7 days; launchd runs this daily so a missed night never
 # lets it lapse. Saved calibration on the Apple TV is kept across reinstalls.
+# It builds for the specific Apple TV: a free team can only make a provisioning profile for a
+# device it has registered, and building for that device is what registers it.
 #
 # Needs scripts/refresh.conf with:
 #   TEAM_ID=XXXXXXXXXX        # Xcode → Settings → Accounts → your Personal Team ID
@@ -23,7 +25,7 @@ source "$ROOT/scripts/refresh.conf"
 
 echo "$(date '+%F %T') start" >> "$LOG"
 xcodebuild -project "$ROOT/Wilderness.xcodeproj" -scheme Wilderness -configuration Release \
-  -destination 'generic/platform=tvOS' -derivedDataPath "$ROOT/build" \
+  -destination "id=$DEVICE_ID" -derivedDataPath "$ROOT/build" \
   -allowProvisioningUpdates DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic \
   build >> "$LOG" 2>&1 || notify_fail "build/sign step (see $LOG)"
 
