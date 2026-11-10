@@ -77,12 +77,28 @@ struct ExploreView: View {
     }
 }
 
+/// Everything the app reads from its bundle.
+struct AppContent {
+    let library: AnnotationLibrary
+    let script: UnfoldScript
+    let glints: GlintPoints
+}
+
 enum ContentLoader {
-    /// Loads the bundled annotations. Failure is surfaced, never replaced with placeholder content.
-    static func load() -> Result<AnnotationLibrary, Error> {
-        guard let url = Bundle.main.url(forResource: "annotations", withExtension: "json") else {
-            return .failure(AnnotationLibrary.ValidationError.invalid("annotations.json missing from app bundle"))
+    /// Loads and validates the bundled content. Failure is surfaced, never replaced with placeholders.
+    static func load() -> Result<AppContent, Error> {
+        Result {
+            let library = try AnnotationLibrary.decode(data("annotations"))
+            return AppContent(library: library,
+                              script: try UnfoldScript.decode(data("unfold"), library: library),
+                              glints: try GlintPoints.decode(data("glints")))
         }
-        return Result { try AnnotationLibrary.decode(Data(contentsOf: url)) }
+    }
+
+    private static func data(_ name: String) throws -> Data {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "json") else {
+            throw AnnotationLibrary.ValidationError.invalid("\(name).json missing from app bundle")
+        }
+        return try Data(contentsOf: url)
     }
 }

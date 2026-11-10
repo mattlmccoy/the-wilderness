@@ -42,12 +42,17 @@ struct RootView: View {
             // Visible and distinct: never a silent dark wall that looks like "working".
             Text("Content failed to load: \(String(describing: error))")
                 .font(.system(size: 18)).foregroundStyle(Palette.gold)
-        case let .success(library):
+        case let .success(content):
+            let library = content.library
             MappedCanvas(calibration: cal, screen: screen) {
                 ZStack(alignment: .topLeading) {
                     RegistrationTestPattern(strength: showPattern ? 1 : 0)
                         .animation(.easeInOut(duration: 1.2), value: showPattern)
                     ExploreView(library: library, state: explore)
+                    if explore == .idle {
+                        GlintLayer(points: content.glints, tuning: .defaults, calibration: cal,
+                                   demo: UserDefaults.standard.bool(forKey: "glintDemo"))
+                    }
                 }
             }
             .focusable()
