@@ -9,7 +9,7 @@ import WildernessCore
 @MainActor
 final class CompanionServer {
     static let serviceType = "_wilderness._tcp"
-    private static let log = Logger(subsystem: "com.mattmccoy.wilderness", category: "companion")
+    private nonisolated static let log = Logger(subsystem: "com.mattmccoy.wilderness", category: "companion")
 
     var onCommand: ((PhoneCommand) -> Void)?
     private var listener: NWListener?

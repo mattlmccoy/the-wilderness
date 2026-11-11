@@ -13,7 +13,7 @@ final class CompanionClient: ObservableObject {
     @Published private(set) var link: Link = .searching
     @Published private(set) var snapshot: WallSnapshot?
 
-    private static let log = Logger(subsystem: "com.mattmccoy.wilderness.phone", category: "companion")
+    private nonisolated static let log = Logger(subsystem: "com.mattmccoy.wilderness.phone", category: "companion")
     private var browser: NWBrowser?
     private var connection: NWConnection?
     private var framer = LineFramer()
