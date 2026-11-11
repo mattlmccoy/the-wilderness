@@ -4,6 +4,11 @@ options:
   bundleIdPrefix: com.mattmccoy
   deploymentTarget:
     tvOS: "17.0"
+settings:
+  base:
+    # Matt's free Personal Team (also in the tvOS profiles); lets Xcode sign every target.
+    DEVELOPMENT_TEAM: 8HZXZFRWC6
+    CODE_SIGN_STYLE: Automatic
 packages:
   WildernessCore:
     path: Packages/WildernessCore
