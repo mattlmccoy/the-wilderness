@@ -14,7 +14,9 @@ struct RootView: View {
     private static let painting: UIImage? = Bundle.main.path(forResource: "painting", ofType: "jpg").flatMap(UIImage.init(contentsOfFile:))
     @State private var machine: ModeMachine?
     @State private var tuningSession: TuningSession?
-    private let content = ContentLoader.load()
+    /// Decoded once per process, not on every RootView re-creation. A failure is kept too,
+    /// so the visible "Content failed to load" message still shows.
+    private static let content = ContentLoader.load()
     private let ticker = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
     /// Measures the real time between ticks; a box, so updating it never redraws the view.
     @State private var clock = TickClockBox()
@@ -61,7 +63,7 @@ struct RootView: View {
 
     @ViewBuilder
     private func artwork(_ cal: Calibration, screen: CGSize) -> some View {
-        switch content {
+        switch Self.content {
         case let .failure(error):
             // Visible and distinct: never a silent dark wall that looks like "working".
             Text("Content failed to load: \(String(describing: error))")
@@ -142,7 +144,7 @@ struct RootView: View {
     }
 
     private func tick() {
-        guard var m = machine, case let .success(c) = content else { return }
+        guard var m = machine, case let .success(c) = Self.content else { return }
         let now = Self.now
         m.tick(now: now, dt: clock.value.dt(now: now), script: c.script)
         if m != machine { machine = m }
@@ -169,7 +171,7 @@ struct RootView: View {
         case .explore, .tuning:
             return true
         case let .unfold(p):
-            guard case let .success(c) = content else { return true }
+            guard case let .success(c) = Self.content else { return true }
             return !UnfoldView.targets(c.script, p).contains(UnfoldBeat.wholeTarget)
         default:
             return false
