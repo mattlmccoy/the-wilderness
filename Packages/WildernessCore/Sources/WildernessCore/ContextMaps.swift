@@ -17,6 +17,9 @@ public struct ContextMaps: Codable, Equatable, Sendable {
         for map in m.maps {
             let b = map.bbox
             guard b.minLon < b.maxLon, b.minLat < b.maxLat else { throw Invalid.invalid("map \(map.id): empty box") }
+            guard map.lines.allSatisfy({ $0.points.allSatisfy { $0.count == 2 } }) else {
+                throw Invalid.invalid("map \(map.id): every point needs [lon, lat]")
+            }
             if let p = map.places.first(where: { !b.contains(lon: $0.lon, lat: $0.lat) }) {
                 throw Invalid.invalid("map \(map.id): \(p.name) is off the map")
             }

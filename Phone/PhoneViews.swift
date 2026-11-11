@@ -193,7 +193,10 @@ struct SettingsSheet: View {
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .onAppear { if !loaded, let t = client.snapshot?.tuning { tuning = t; loaded = true } }
+        // Always edit the wall's real values (never defaults), and follow changes made on the wall.
+        .disabled(client.snapshot == nil)
+        .onAppear { if let t = client.snapshot?.tuning { tuning = t; loaded = true } }
+        .onChange(of: client.snapshot?.tuning) { _, t in if let t { tuning = t; loaded = true } }
         .tint(PhonePalette.gold)
     }
 

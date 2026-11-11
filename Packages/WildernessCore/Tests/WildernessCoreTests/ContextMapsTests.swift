@@ -94,3 +94,8 @@ private func script(_ extra: String) -> Data {
     #expect(m.places[0].label == .above)
     #expect(m.places[1].label == nil)
 }
+
+@Test func mapsRejectAPointThatIsNotLonLat() {
+    let bad = #"{"source":"s","maps":[{"id":"m","bbox":{"minLon":0,"minLat":0,"maxLon":1,"maxLat":1},"lines":[{"kind":"coast","name":"","closed":false,"points":[[0.1,0.2],[0.3]]}],"places":[],"labels":[],"route":null}]}"#
+    #expect(throws: (any Error).self) { try ContextMaps.decode(Data(bad.utf8)) }
+}

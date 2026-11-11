@@ -111,3 +111,23 @@ private func snap(_ m: Mode) -> WallSnapshot {
     #expect(snap(.explore(id: "christ", expanded: false)).canStep && !snap(.explore(id: "christ", expanded: false)).canPause)
     #expect(!snap(.stillness).canStep && !snap(.stillness).canPause)
 }
+
+// MARK: Review fixes (2026-11-11)
+
+@Test func aLineThatNeverEndsIsDroppedNotHoarded() {
+    var f = LineFramer()
+    #expect(f.push(Data(repeating: 0x41, count: LineFramer.maxLine + 1)).isEmpty)
+    #expect(f.overflowed)
+    // After an overflow the framer is clean again and reads the next real line.
+    #expect(f.push(Data("x\n{\"hello\":{}}\n".utf8)).map { String(decoding: $0, as: UTF8.self) } == ["{\"hello\":{}}"])
+}
+
+@Test func tuningFromThePhoneIsClampedToTheWallsRanges() {
+    var t = Tuning.defaults
+    t.subjectStrength = 7; t.baseWash = -1; t.edgeLine = 2; t.breathing = 5
+    t.glintBrightness = 0; t.glintSizeInches = 9; t.glintMeanInterval = 0.1
+    let c = t.clamped
+    #expect(c.subjectStrength == 1 && c.baseWash == 0 && c.edgeLine == 1 && c.breathing == 0.3)
+    #expect(c.glintBrightness == 0.2 && c.glintSizeInches == 0.6 && c.glintMeanInterval == 4)
+    #expect(Tuning.defaults.clamped == .defaults)
+}

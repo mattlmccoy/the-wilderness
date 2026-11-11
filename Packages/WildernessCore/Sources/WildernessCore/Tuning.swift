@@ -44,6 +44,21 @@ public struct Tuning: Codable, Equatable, Sendable {
         passingLight = try c.decodeIfPresent(Bool.self, forKey: .passingLight) ?? d.passingLight
     }
 
+    /// Every value inside the range the wall's Tune screen allows (the phone sends whole Tunings).
+    public var clamped: Tuning {
+        func c(_ v: Double, _ r: ClosedRange<Double>) -> Double { min(max(v, r.lowerBound), r.upperBound) }
+        var t = self
+        t.subjectStrength = c(subjectStrength, 0...1)
+        t.baseWash = c(baseWash, 0...0.5)
+        t.exploreWashFactor = c(exploreWashFactor, 0...1)
+        t.edgeLine = c(edgeLine, 0...1)
+        t.breathing = c(breathing, 0...0.3)
+        t.glintBrightness = c(glintBrightness, 0.2...1)
+        t.glintSizeInches = c(glintSizeInches, 0.05...0.6)
+        t.glintMeanInterval = c(glintMeanInterval, 4...16)
+        return t
+    }
+
     public var glintParams: GlintParams {
         var p = GlintParams()
         p.meanInterval = glintMeanInterval

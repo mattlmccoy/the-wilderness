@@ -103,16 +103,30 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
 
 /// Splits a byte stream into newline-delimited messages, across partial reads.
 public struct LineFramer: Sendable {
+    /// Longest line accepted (a snapshot is a few kB). Longer input is dropped, so a stream
+    /// without newlines from anything on the network cannot grow memory without limit.
+    public static let maxLine = 256 * 1024
     private var pending = Data()
+    /// After an overflow, the rest of that broken line is skipped up to its newline.
+    private var skipping = false
+    public private(set) var overflowed = false
     public init() {}
 
     public mutating func push(_ data: Data) -> [Data] {
         pending.append(data)
+        if skipping {
+            guard let nl = pending.firstIndex(of: 0x0A) else { pending.removeAll(); return [] }
+            pending = Data(pending[pending.index(after: nl)...])
+            skipping = false
+        }
         var out: [Data] = []
         while let nl = pending.firstIndex(of: 0x0A) {
             let line = pending[pending.startIndex..<nl]
             if !line.isEmpty { out.append(Data(line)) }
             pending = Data(pending[pending.index(after: nl)...])
+        }
+        if pending.count > Self.maxLine {
+            pending.removeAll(); skipping = true; overflowed = true
         }
         return out
     }

@@ -16,12 +16,15 @@ struct AliveLayer: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
+            // No running animations at all while breathing is off.
+            if tuning.breathing > 0 {
             ForEach(library.annotations.filter { $0.outline != nil }) { a in
                 let period = breathing.period(for: a.id)
                 BreathingRegion(outline: a.outline!, canvas: canvas,
                                 period: period, delay: breathing.phase(for: a.id) * period)
             }
             .opacity(tuning.breathing)
+            }
             if tuning.passingLight { PassingLightView(clock: clock, canvas: canvas) }
         }
         .frame(width: canvas.width, height: canvas.height)

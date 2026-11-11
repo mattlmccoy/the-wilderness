@@ -68,7 +68,7 @@ struct RootView: View {
         // Waking the Apple TV (or dismissing its screensaver) is use, even though the press
         // never reaches the app: hold the screensaver off again for the next 6 hours.
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { machine?.noteActivity(now: Self.now); updateIdleTimer(); sound.resume() }
+            if phase == .active { machine?.noteActivity(now: Self.now); updateIdleTimer(); sound.resume(); companion.start() }
         }
     }
 
@@ -129,7 +129,7 @@ struct RootView: View {
                         SettingsView(mode: mode, tuning: tuningSession, notices: content.notices, showPainting: showPainting)
                     case .settings, .about:
                         SettingsView(mode: mode, tuning: nil, notices: content.notices, showPainting: showPainting,
-                                     credits: ["Maps: " + content.maps.source] + content.context.imageCredits.map { "Photo: " + $0 })
+                                     credits: ["Maps: " + content.maps.source] + content.context.imageCredits)
                     case .calibrating:
                         EmptyView()
                     }
@@ -179,7 +179,7 @@ struct RootView: View {
         case .hello:
             if let s = snapshot { companion.broadcast(s) }
         case let .setTuning(t):
-            tuningStore.tuning = t
+            tuningStore.tuning = t.clamped
         case let .setSound(on):
             soundOn = on
         case let .setShowPainting(on):

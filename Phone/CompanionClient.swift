@@ -22,8 +22,9 @@ final class CompanionClient: ObservableObject {
         guard browser == nil, connection == nil else { return }
         // Tests: `-companionHost 127.0.0.1:52741` connects directly instead of browsing Bonjour.
         if let direct = UserDefaults.standard.string(forKey: "companionHost"),
-           let colon = direct.lastIndex(of: ":"), let port = UInt16(direct[direct.index(after: colon)...]) {
-            connect(to: .hostPort(host: NWEndpoint.Host(String(direct[..<colon])), port: NWEndpoint.Port(rawValue: port)!))
+           let colon = direct.lastIndex(of: ":"), let n = UInt16(direct[direct.index(after: colon)...]),
+           let port = NWEndpoint.Port(rawValue: n) {
+            connect(to: .hostPort(host: NWEndpoint.Host(String(direct[..<colon])), port: port))
             return
         }
         let b = NWBrowser(for: .bonjour(type: "_wilderness._tcp", domain: nil), using: .tcp)
@@ -48,8 +49,18 @@ final class CompanionClient: ObservableObject {
     private func connect(to endpoint: NWEndpoint) {
         link = .connecting
         framer = LineFramer()
-        let c = NWConnection(to: endpoint, using: .tcp)
+        let tcp = NWProtocolTCP.Options()
+        tcp.enableKeepalive = true     // notice an Apple TV that lost power or Wi-Fi
+        tcp.keepaliveIdle = 10
+        tcp.keepaliveInterval = 5
+        tcp.keepaliveCount = 3
+        let c = NWConnection(to: endpoint, using: NWParameters(tls: nil, tcp: tcp))
         connection = c
+        // Never sit at "Connecting…": give up after 8 s and look again.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self] in
+            guard let self, self.connection === c, self.link == .connecting else { return }
+            self.drop()
+        }
         c.stateUpdateHandler = { [weak self] state in
             Task { @MainActor in
                 guard let self, self.connection === c else { return }
@@ -57,7 +68,8 @@ final class CompanionClient: ObservableObject {
                 case .ready:
                     self.link = .connected
                     self.send(.hello)
-                case .failed, .cancelled:
+                case .failed, .cancelled, .waiting:
+                    // .waiting: the Apple TV refused or is gone; drop and browse again.
                     self.drop()
                 default:
                     break

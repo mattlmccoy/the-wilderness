@@ -23,14 +23,27 @@ final class CompanionServer {
             // Tests: `-companionPort N` listens on a fixed port, so simulators (which cannot
             // advertise over Bonjour on this Mac) can be connected directly.
             let fixed = UserDefaults.standard.integer(forKey: "companionPort")
-            let l = try fixed > 0 ? NWListener(using: .tcp, on: NWEndpoint.Port(integerLiteral: UInt16(fixed)))
-                                  : NWListener(using: .tcp)
+            let params = Self.parameters()
+            let l: NWListener
+            if let n = UInt16(exactly: fixed), n > 0, let port = NWEndpoint.Port(rawValue: n) {
+                l = try NWListener(using: params, on: port)
+            } else {
+                l = try NWListener(using: params)
+            }
             l.service = NWListener.Service(name: "The Wilderness", type: Self.serviceType)
             l.newConnectionHandler = { [weak self] conn in
                 Task { @MainActor in self?.accept(conn) }
             }
-            l.stateUpdateHandler = { state in
+            l.stateUpdateHandler = { [weak self] state in
                 Self.log.notice("companion listener state: \(String(describing: state), privacy: .public)")
+                // After sleep/wake or a network change the listener can fail; start a new one.
+                if case .failed = state {
+                    Task { @MainActor in
+                        self?.listener?.cancel(); self?.listener = nil
+                        try? await Task.sleep(for: .seconds(2))
+                        self?.start()
+                    }
+                }
             }
             l.serviceRegistrationUpdateHandler = { change in
                 Self.log.notice("companion bonjour: \(String(describing: change), privacy: .public)")
@@ -40,6 +53,16 @@ final class CompanionServer {
         } catch {
             Self.log.error("could not start companion listener: \(error.localizedDescription)")
         }
+    }
+
+    /// TCP with keepalive, so a phone that vanishes (Wi-Fi off, battery) is noticed in ~25 s.
+    nonisolated static func parameters() -> NWParameters {
+        let tcp = NWProtocolTCP.Options()
+        tcp.enableKeepalive = true
+        tcp.keepaliveIdle = 10
+        tcp.keepaliveInterval = 5
+        tcp.keepaliveCount = 3
+        return NWParameters(tls: nil, tcp: tcp)
     }
 
     /// Sends the snapshot to every phone, and remembers it for phones that connect later.
@@ -72,7 +95,8 @@ final class CompanionServer {
         func start() {
             conn.stateUpdateHandler = { [weak self] state in
                 switch state {
-                case .failed, .cancelled: Task { @MainActor in self?.onClose?() }
+                case .failed: Task { @MainActor in self?.conn.cancel(); self?.onClose?() }
+                case .cancelled: Task { @MainActor in self?.onClose?() }
                 default: break
                 }
             }
