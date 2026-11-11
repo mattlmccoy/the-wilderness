@@ -11,6 +11,9 @@ struct RootView: View {
     /// Debug: project the painting under everything to check where light and text land.
     // On by default while the tapestry is not hung yet (Matt); turn off in Settings → Show painting.
     @AppStorage("debug.showPainting") private var showPainting = true
+    /// Menu → Sound: the quiet wind bed, off by default (Matt, 2026-11-10).
+    @AppStorage("sound.on") private var soundOn = false
+    @State private var sound = SoundPlayer()
     private static let painting: UIImage? = Bundle.main.path(forResource: "painting", ofType: "jpg").flatMap(UIImage.init(contentsOfFile:))
     @State private var machine: ModeMachine?
     @State private var tuningSession: TuningSession?
@@ -53,7 +56,7 @@ struct RootView: View {
         // Waking the Apple TV (or dismissing its screensaver) is use, even though the press
         // never reaches the app: hold the screensaver off again for the next 6 hours.
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { machine?.noteActivity(now: Self.now); updateIdleTimer() }
+            if phase == .active { machine?.noteActivity(now: Self.now); updateIdleTimer(); sound.resume() }
         }
     }
 
@@ -85,7 +88,7 @@ struct RootView: View {
                     case let .menu(focus):
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
-                        MenuView(focus: focus, calibration: cal)
+                        MenuView(focus: focus, calibration: cal, soundOn: soundOn, soundAvailable: sound.available)
                             .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
@@ -131,9 +134,11 @@ struct RootView: View {
 
     private func send(_ input: AppInput, _ content: AppContent) {
         guard var m = machine else { return }
-        if m.handle(input, now: Self.now, library: content.library, script: content.script,
-                    context: content.context) == .togglePainting {
-            showPainting.toggle()
+        switch m.handle(input, now: Self.now, library: content.library, script: content.script,
+                        context: content.context) {
+        case .togglePainting: showPainting.toggle()
+        case .toggleSound: soundOn.toggle()
+        default: break
         }
         if m.mode == .tuning, tuningSession == nil { tuningSession = TuningSession(tuning: tuningStore.tuning) }
         if m.mode != .tuning { tuningSession = nil }
@@ -148,6 +153,7 @@ struct RootView: View {
     private func tick() {
         guard var m = machine, case let .success(c) = content else { return }
         m.tick(now: Self.now, dt: 0.25, script: c.script)
+        sound.update(target: Soundscape.target(mode: m.mode, on: soundOn), dt: 0.25)
         if m != machine { machine = m }
         updateIdleTimer()
     }

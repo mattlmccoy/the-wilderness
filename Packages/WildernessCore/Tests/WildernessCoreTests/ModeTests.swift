@@ -243,8 +243,9 @@ private extension ModeMachine {
     m.press(.move(.up)); #expect(m.mode == .menu(focus: .explore))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .unfold))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .context))
-    m.press(.move(.down)); #expect(m.mode == .menu(focus: .context))
-    m.press(.move(.up)); #expect(m.mode == .menu(focus: .unfold))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .sound))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .sound))
+    m.press(.move(.up)); #expect(m.mode == .menu(focus: .context))
 }
 
 @Test func selectInTheMenuEntersTheFocusedMode() {
@@ -262,9 +263,9 @@ private extension ModeMachine {
 }
 
 @Test func menuReturnsToStillnessAfter45SecondsIdle() {
-    var m = machine(.menu(focus: .context))
+    var m = machine(.menu(focus: .sound))
     m.press(.move(.down), at: 0)
-    m.tick(now: 44, dt: 0.25, script: script); #expect(m.mode == .menu(focus: .context))
+    m.tick(now: 44, dt: 0.25, script: script); #expect(m.mode == .menu(focus: .sound))
     m.tick(now: 45, dt: 0.25, script: script); #expect(m.mode == .stillness)
 }
 
@@ -402,4 +403,12 @@ private extension ModeMachine {
 
 @Test func contextWayfindingCountsPages() {
     #expect(Mode.context(page: 1).wayfinding(library: lib, script: script, context: ctx) == "CONTEXT · 2 of 3")
+}
+
+
+@Test func selectOnSoundTogglesItAndStaysInTheMenu() {
+    var m = machine(.menu(focus: .sound))
+    #expect(m.press(.select, at: 3) == .toggleSound)
+    #expect(m.mode == .menu(focus: .sound))
+    #expect(!m.showsHint(now: 3.5))
 }

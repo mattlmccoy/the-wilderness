@@ -104,6 +104,21 @@ final class ExperienceFlowUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts["Its Real Size"].exists)
     }
 
+    func testSoundTogglesFromTheMenuAndTheMenuStaysOpen() {
+        let app = launch()
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Explore"].waitForExistence(timeout: 3))
+        let start = app.staticTexts["Sound · off"].exists ? "Sound · off" : "Sound · on"
+        let flipped = start == "Sound · off" ? "Sound · on" : "Sound · off"
+        for _ in 0..<3 { remote.press(.down) }
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts[flipped].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Explore"].exists, "the menu should stay open")
+        sleep(4)                                 // let the fade run while on
+        remote.press(.select)                    // restore what the viewer had
+        XCTAssertTrue(app.staticTexts[start].waitForExistence(timeout: 2))
+    }
+
     func testArrowShortcutSkipsTheHint() {
         let app = launch()
         remote.press(.right)

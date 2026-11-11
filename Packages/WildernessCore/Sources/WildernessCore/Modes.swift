@@ -2,7 +2,7 @@ import Foundation
 
 public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, painting, about }
 /// The guest-facing front door: a short list beside the tapestry (Select at rest).
-public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold, context }
+public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold, context, sound }
 
 /// Everything the app can be showing (spec §5).
 public enum Mode: Equatable, Sendable {
@@ -24,6 +24,8 @@ public enum ModeEffect: Equatable, Sendable {
     case exitApp
     /// Debug: show or hide the painting projected under everything (Settings → Show painting).
     case togglePainting
+    /// Menu → Sound: switch the quiet wind bed on or off (the menu stays open).
+    case toggleSound
 }
 
 /// The remote map of spec §5.5 as a pure state machine. Calibration and tuning presses are
@@ -70,6 +72,8 @@ public struct ModeMachine: Equatable, Sendable {
             var e = ExploreState.idle
             e.handle(.move(.right), library: library)
             if case let .exploring(id, expanded) = e { mode = .explore(id: id, expanded: expanded); fromMenu = true }
+        case (.menu(.sound), .select):
+            return .toggleSound
         case (.menu(.context), .select) where !context.pages.isEmpty:
             mode = .context(page: 0); fromMenu = true
         case (.context(let page), .move(.right)):
