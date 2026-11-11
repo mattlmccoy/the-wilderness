@@ -3435,6 +3435,354 @@
         "connection": "christianReading",
         "draft": true
       }
+    },
+    {
+      "id": "raven",
+      "title": "The Raven",
+      "short": "A black bird, perhaps a raven, pecks at the top of the rock.",
+      "extended": "No source names this bird; it looks like a raven or a crow. In Scripture ravens are the wilderness’s providers: God sent them to feed Elijah, and legend says a raven brought the hermit Paul his bread. Whether Moretto meant that here is unknown.",
+      "references": [
+        "1 Kings 17:4–6",
+        "Luke 12:24"
+      ],
+      "evidence": "plausible",
+      "anchor": {
+        "x": 0.219,
+        "y": 0.212
+      },
+      "outline": [
+        {
+          "x": 0.1994,
+          "y": 0.2181
+        },
+        {
+          "x": 0.2006,
+          "y": 0.2296
+        },
+        {
+          "x": 0.2046,
+          "y": 0.2324
+        },
+        {
+          "x": 0.2034,
+          "y": 0.2401
+        },
+        {
+          "x": 0.2095,
+          "y": 0.2401
+        },
+        {
+          "x": 0.2195,
+          "y": 0.2368
+        },
+        {
+          "x": 0.2179,
+          "y": 0.2296
+        },
+        {
+          "x": 0.2107,
+          "y": 0.231
+        },
+        {
+          "x": 0.2111,
+          "y": 0.2238
+        },
+        {
+          "x": 0.2195,
+          "y": 0.219
+        },
+        {
+          "x": 0.2243,
+          "y": 0.219
+        },
+        {
+          "x": 0.2327,
+          "y": 0.2157
+        },
+        {
+          "x": 0.2415,
+          "y": 0.208
+        },
+        {
+          "x": 0.2491,
+          "y": 0.2041
+        },
+        {
+          "x": 0.2535,
+          "y": 0.2118
+        },
+        {
+          "x": 0.2547,
+          "y": 0.2195
+        },
+        {
+          "x": 0.2563,
+          "y": 0.2281
+        },
+        {
+          "x": 0.2595,
+          "y": 0.2348
+        },
+        {
+          "x": 0.2707,
+          "y": 0.2281
+        },
+        {
+          "x": 0.2707,
+          "y": 0.2137
+        },
+        {
+          "x": 0.2707,
+          "y": 0.2017
+        },
+        {
+          "x": 0.2623,
+          "y": 0.1854
+        },
+        {
+          "x": 0.2491,
+          "y": 0.1739
+        },
+        {
+          "x": 0.2331,
+          "y": 0.172
+        },
+        {
+          "x": 0.2247,
+          "y": 0.1715
+        },
+        {
+          "x": 0.2107,
+          "y": 0.1744
+        },
+        {
+          "x": 0.1966,
+          "y": 0.184
+        },
+        {
+          "x": 0.1818,
+          "y": 0.1936
+        },
+        {
+          "x": 0.1658,
+          "y": 0.2022
+        },
+        {
+          "x": 0.1586,
+          "y": 0.2085
+        },
+        {
+          "x": 0.1614,
+          "y": 0.2147
+        },
+        {
+          "x": 0.1714,
+          "y": 0.2171
+        },
+        {
+          "x": 0.189,
+          "y": 0.2147
+        },
+        {
+          "x": 0.1958,
+          "y": 0.2147
+        },
+        {
+          "x": 0.1962,
+          "y": 0.2157
+        }
+      ],
+      "textSide": "left",
+      "geometrySource": "traced-by-matt",
+      "more": {
+        "story": "God fed Elijah in the wilderness by ravens, morning and evening. The One who feeds the ravens sits here hungry, and trusts His Father.",
+        "verses": [
+          {
+            "ref": "1 Kings 17:6",
+            "text": "The ravens would bring him bread and meat in the morning and evening",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Luke 12:24",
+            "text": "Consider the ravens: They do not sow or reap… yet God feeds them.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      }
+    },
+    {
+      "id": "beast",
+      "title": "The Animal on the Rocks",
+      "short": "An animal comes down the rocks with its head lowered, perhaps a second bear.",
+      "extended": "No source names this animal. Large and brown, with a rounded back and heavy legs, it may be a second bear, or a wolf. It belongs to the wild beasts Mark says were with Christ in the wilderness.",
+      "references": [
+        "Mark 1:13",
+        "Psalm 50:10"
+      ],
+      "evidence": "speculative",
+      "anchor": {
+        "x": 0.459,
+        "y": 0.451
+      },
+      "outline": [
+        {
+          "x": 0.4285,
+          "y": 0.4547
+        },
+        {
+          "x": 0.429,
+          "y": 0.4898
+        },
+        {
+          "x": 0.4361,
+          "y": 0.5215
+        },
+        {
+          "x": 0.4427,
+          "y": 0.5334
+        },
+        {
+          "x": 0.4469,
+          "y": 0.5322
+        },
+        {
+          "x": 0.4531,
+          "y": 0.5311
+        },
+        {
+          "x": 0.4635,
+          "y": 0.5277
+        },
+        {
+          "x": 0.4611,
+          "y": 0.5158
+        },
+        {
+          "x": 0.4592,
+          "y": 0.4864
+        },
+        {
+          "x": 0.4663,
+          "y": 0.5
+        },
+        {
+          "x": 0.4729,
+          "y": 0.4938
+        },
+        {
+          "x": 0.4653,
+          "y": 0.4627
+        },
+        {
+          "x": 0.4677,
+          "y": 0.4366
+        },
+        {
+          "x": 0.4687,
+          "y": 0.4202
+        },
+        {
+          "x": 0.4748,
+          "y": 0.4219
+        },
+        {
+          "x": 0.479,
+          "y": 0.4287
+        },
+        {
+          "x": 0.4757,
+          "y": 0.4508
+        },
+        {
+          "x": 0.4776,
+          "y": 0.4655
+        },
+        {
+          "x": 0.4904,
+          "y": 0.4672
+        },
+        {
+          "x": 0.504,
+          "y": 0.4666
+        },
+        {
+          "x": 0.5064,
+          "y": 0.4451
+        },
+        {
+          "x": 0.5092,
+          "y": 0.4332
+        },
+        {
+          "x": 0.505,
+          "y": 0.4185
+        },
+        {
+          "x": 0.4989,
+          "y": 0.4027
+        },
+        {
+          "x": 0.4819,
+          "y": 0.3761
+        },
+        {
+          "x": 0.4696,
+          "y": 0.3597
+        },
+        {
+          "x": 0.4418,
+          "y": 0.3558
+        },
+        {
+          "x": 0.4219,
+          "y": 0.3626
+        },
+        {
+          "x": 0.4116,
+          "y": 0.3778
+        },
+        {
+          "x": 0.4101,
+          "y": 0.4044
+        },
+        {
+          "x": 0.4087,
+          "y": 0.4366
+        },
+        {
+          "x": 0.4097,
+          "y": 0.4525
+        },
+        {
+          "x": 0.4196,
+          "y": 0.4525
+        }
+      ],
+      "textSide": "left",
+      "geometrySource": "traced-by-matt",
+      "more": {
+        "story": "Every beast of the forest belongs to God. This one comes down the rocks toward its Maker, and is not afraid.",
+        "verses": [
+          {
+            "ref": "Psalm 50:10",
+            "text": "For every beast of the forest is Mine—the cattle on a thousand hills.",
+            "testament": "old",
+            "translation": "BSB"
+          },
+          {
+            "ref": "Mark 1:13",
+            "text": "He was with the wild animals, and the angels ministered to Him.",
+            "testament": "new",
+            "translation": "BSB"
+          }
+        ],
+        "connection": "christianReading",
+        "draft": true
+      }
     }
   ]
 }

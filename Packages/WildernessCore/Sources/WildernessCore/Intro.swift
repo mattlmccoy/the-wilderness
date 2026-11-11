@@ -17,7 +17,7 @@ public enum IntroOrder {
         // Christ, the wild is at peace"). The pelican "bends low beside Him", the bear "lies in
         // the grass", the fox "rests a few steps from Him", the stag's longing "has found Him".
         // Nearest to Christ first.
-        ["pelican", "bear", "fox", "stag"],
+        ["pelican", "raven", "beast", "bear", "fox", "stag"],
         // The angels who come to serve Him.
         ["angels"],
         // Not traced: the tree and the missing picture (cut-away cherubs at the edge) are not
