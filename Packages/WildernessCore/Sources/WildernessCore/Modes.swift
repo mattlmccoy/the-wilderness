@@ -19,7 +19,18 @@ public enum Mode: Equatable, Sendable {
     case calibrating, tuning, pattern, about
 }
 
-public enum AppInput: Sendable { case move(NudgeDirection), select, holdSelect, playPause, back }
+public enum AppInput: Sendable {
+    case move(NudgeDirection), select, holdSelect, playPause, back
+    /// The phone companion: jump straight to a figure or mode.
+    case go(Destination)
+}
+
+/// Where the phone can send the wall directly (no stepping through the menu).
+public enum Destination: Codable, Equatable, Sendable {
+    case explore(String)
+    case unfold
+    case context
+}
 public enum ModeEffect: Equatable, Sendable {
     case exitApp
     /// Debug: show or hide the painting projected under everything (Settings → Show painting).
@@ -57,6 +68,21 @@ public struct ModeMachine: Equatable, Sendable {
             else if before.kind != mode.kind { hintUntil = nil }
         }
         switch (mode, input) {
+        case (.calibrating, .go), (.tuning, .go), (.pattern, .go):
+            break   // never yank the wall away while it is being aligned or tuned
+        case (_, .go(let destination)):
+            switch destination {
+            case let .explore(id) where library.annotations.contains(where: { $0.id == id }):
+                var keepOpen = false
+                if case let .explore(_, expanded) = mode { keepOpen = expanded }
+                mode = .explore(id: id, expanded: keepOpen)
+            case .unfold:
+                mode = .unfold(.start)
+            case .context where !context.pages.isEmpty:
+                mode = .context(page: 0)
+            default:
+                break
+            }
         case (.intro, _):
             // Any button skips the intro, and the press is used up: it opens nothing else.
             mode = .stillness

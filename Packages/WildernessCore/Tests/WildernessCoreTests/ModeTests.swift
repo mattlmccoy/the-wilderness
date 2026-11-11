@@ -421,3 +421,33 @@ private extension ModeMachine {
     #expect(!Mode.context(page: 0).dimsWash(script: script, context: lit))
     #expect(Mode.context(page: 1).dimsWash(script: script, context: lit))
 }
+
+// MARK: - Phone companion: jump straight to a destination (2026-11-11)
+
+@Test func phoneGoReachesItsTargetFromRestMenuAndOtherModes() {
+    for start: Mode in [.stillness, .menu(focus: .unfold), .explore(id: "stag", expanded: false),
+                        .unfold(.start), .context(page: 1), .intro(startedAt: 0)] {
+        var m = machine(start)
+        m.pressCtx(.go(.explore("angels")))
+        #expect(m.mode == .explore(id: "angels", expanded: false), "from \(start)")
+    }
+    var u = machine(.explore(id: "stag", expanded: false)); u.pressCtx(.go(.unfold))
+    #expect(u.mode == .unfold(.start))
+    var c = machine(.stillness); c.pressCtx(.go(.context))
+    #expect(c.mode == .context(page: 0))
+}
+
+@Test func phoneGoKeepsTheStoryOpenWhenMovingBetweenFigures() {
+    var m = machine(.explore(id: "stag", expanded: true))
+    m.pressCtx(.go(.explore("christ")))
+    #expect(m.mode == .explore(id: "christ", expanded: true))
+}
+
+@Test func phoneGoIsIgnoredForUnknownFiguresAndWhileCalibratingOrTuning() {
+    var m = machine(.stillness); m.pressCtx(.go(.explore("unicorn")))
+    #expect(m.mode == .stillness)
+    for start: Mode in [.calibrating, .tuning, .pattern] {
+        var k = machine(start); k.pressCtx(.go(.explore("christ")))
+        #expect(k.mode == start, "\(start)")
+    }
+}
