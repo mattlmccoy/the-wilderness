@@ -97,3 +97,17 @@ private func snap(_ m: Mode) -> WallSnapshot {
     var small = ann("stag"); small.outline = [.init(x: 0.4, y: 0.4), .init(x: 0.6, y: 0.4), .init(x: 0.6, y: 0.6), .init(x: 0.4, y: 0.6)]
     #expect(FigureHitTest.figure(at: .init(x: 0.5, y: 0.5), in: AnnotationLibrary(artworkAspect: 1.2, annotations: [big, small])) == "stag")
 }
+
+@Test func thePhoneCanStepLikeTheRemoteArrows() throws {
+    #expect(PhoneCommand.move(.right).input == .move(.right))
+    #expect(PhoneCommand.move(.left).input == .move(.left))
+    let back = try JSONDecoder().decode(PhoneCommand.self, from: LineFramer.frame(PhoneCommand.move(.left)).dropLast())
+    #expect(back == .move(.left))
+}
+
+@Test func theSnapshotSaysWhenStepsAndPauseMakeSense() {
+    #expect(snap(.unfold(.start)).canStep && snap(.unfold(.start)).canPause)
+    #expect(snap(.context(page: 0)).canStep && !snap(.context(page: 0)).canPause)
+    #expect(snap(.explore(id: "christ", expanded: false)).canStep && !snap(.explore(id: "christ", expanded: false)).canPause)
+    #expect(!snap(.stillness).canStep && !snap(.stillness).canPause)
+}

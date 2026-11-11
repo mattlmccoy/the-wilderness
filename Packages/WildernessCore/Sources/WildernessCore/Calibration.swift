@@ -67,7 +67,7 @@ extension Homography {
 }
 
 public enum Corner: Int, CaseIterable, Codable, Sendable { case topLeft, topRight, bottomRight, bottomLeft }
-public enum NudgeDirection: Sendable { case up, down, left, right }
+public enum NudgeDirection: String, Codable, Sendable { case up, down, left, right }
 public enum NudgeStep: Sendable {
     case coarse, fine
     public var pixels: Double { self == .coarse ? 10 : 1 }

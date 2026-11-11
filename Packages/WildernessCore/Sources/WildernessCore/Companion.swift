@@ -8,6 +8,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     /// Sent on connect; the TV answers with a snapshot.
     case hello
     case go(Destination)
+    /// The remote's arrows: next/previous page, beat or figure.
+    case move(NudgeDirection)
     case playPause
     case back
     case setTuning(Tuning)
@@ -18,6 +20,7 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     public var input: AppInput? {
         switch self {
         case let .go(d): .go(d)
+        case let .move(d): .move(d)
         case .playPause: .playPause
         case .back: .back
         default: nil
@@ -27,6 +30,12 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
 
 /// Apple TV → phone: what the wall is showing now, plus the settings the phone edits.
 public struct WallSnapshot: Codable, Equatable, Sendable {
+    /// Left/right step through something here (Unfold beats, Context pages, Explore figures).
+    public var canStep: Bool { ["unfold", "context", "explore"].contains(mode) }
+    /// Pause only means something in Unfold. (On the remote, Play/Pause elsewhere starts
+    /// Unfold; the phone shows the button only where it pauses.)
+    public var canPause: Bool { mode == "unfold" }
+
     public struct ShownVerse: Codable, Equatable, Sendable {
         public var text: String
         public var citation: String

@@ -17,6 +17,12 @@ struct PhoneRootView: View {
             .padding(.horizontal, 12)
             .opacity(client.link == .connected ? 1 : 0.5)
             ReadAlongView(snapshot: client.snapshot, link: client.link)
+                // Swipe like turning a page: left for next, right for previous.
+                .gesture(DragGesture(minimumDistance: 30).onEnded { g in
+                    guard client.snapshot?.canStep == true,
+                          abs(g.translation.width) > abs(g.translation.height) * 1.5 else { return }
+                    client.send(.move(g.translation.width < 0 ? .right : .left))
+                })
             controls
         }
         .background(Color.black.ignoresSafeArea())
@@ -47,8 +53,18 @@ struct PhoneRootView: View {
             Button("Unfold") { client.send(.go(.unfold)) }
             Button("Context") { client.send(.go(.context)) }
             Spacer()
-            Button { client.send(.playPause) } label: { Image(systemName: "playpause") }
-                .accessibilityLabel("Play or pause")
+            if client.snapshot?.canStep == true {
+                Button { client.send(.move(.left)) } label: { Image(systemName: "chevron.left") }
+                    .accessibilityLabel("Previous")
+                Button { client.send(.move(.right)) } label: { Image(systemName: "chevron.right") }
+                    .accessibilityLabel("Next")
+            }
+            if client.snapshot?.canPause == true {
+                Button { client.send(.playPause) } label: {
+                    Image(systemName: client.snapshot?.paused == true ? "play" : "pause")
+                }
+                .accessibilityLabel(client.snapshot?.paused == true ? "Resume" : "Pause")
+            }
             Button { client.send(.back) } label: { Image(systemName: "arrow.uturn.backward") }
                 .accessibilityLabel("Back")
         }
