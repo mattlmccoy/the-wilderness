@@ -3616,14 +3616,16 @@
     },
     {
       "id": "beast",
-      "title": "The Animal on the Rocks",
-      "short": "An animal comes down the rocks with its head lowered, perhaps a second bear.",
-      "extended": "No source names this animal. Large and brown, with a rounded back and heavy legs, it may be a second bear, or a wolf. It belongs to the wild beasts Mark says were with Christ in the wilderness.",
+      "title": "The Bowing Animal",
+      "short": "An animal comes down the rocks toward Him, its head bowed low.",
+      "extended": "No source names this animal, and it is too thinly painted to say for certain what it is; one devotional writer sees a bear “stooping before Jesus.” Whatever it is, it comes down the rocks with its head bowed toward Christ, one of the wild beasts Mark says were with Him.",
       "references": [
         "Mark 1:13",
-        "Psalm 50:10"
+        "Philippians 2:10",
+        "Psalm 50:10",
+        "https://www.indiancatholicmatters.org/animals-allegories-and-art-christ-in-the-wilderness/"
       ],
-      "evidence": "speculative",
+      "evidence": "plausible",
       "anchor": {
         "x": 0.459,
         "y": 0.451
@@ -3765,7 +3767,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "Every beast of the forest belongs to God. This one comes down the rocks toward its Maker, and is not afraid.",
+        "story": "Every beast of the forest belongs to God. Here one comes down the rocks and bows its head before its Maker, as one day every knee will bow.",
         "verses": [
           {
             "ref": "Psalm 50:10",
@@ -3774,8 +3776,8 @@
             "translation": "BSB"
           },
           {
-            "ref": "Mark 1:13",
-            "text": "He was with the wild animals, and the angels ministered to Him.",
+            "ref": "Philippians 2:10",
+            "text": "that at the name of Jesus every knee should bow, in heaven and on earth and under the earth",
             "testament": "new",
             "translation": "BSB"
           }
