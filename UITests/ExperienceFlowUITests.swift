@@ -56,6 +56,18 @@ final class ExperienceFlowUITests: XCTestCase {
         XCTAssertEqual(app.state, .runningForeground)
     }
 
+    /// Licensed verses replace the BSB placeholders. Checks citations only ("ref · NIV"), so the
+    /// licensed wording itself is never read or printed by the test.
+    func testExpandedVersesCiteTheLicensedTranslation() {
+        let app = launch()
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
+        remote.press(.select)
+        XCTAssertTrue(text(app, containing: " · NIV").waitForExistence(timeout: 3), "no NIV citation shown")
+        XCTAssertFalse(text(app, containing: " · BSB").exists, "a BSB placeholder is still shown")
+        remote.press(.select)   // leave the text collapsed for the next test
+    }
+
     func testPausedLineSitsUnderTheBeatTextOnScreen() {
         let app = launch()
         remote.press(.playPause)
