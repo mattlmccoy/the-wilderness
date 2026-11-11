@@ -12,3 +12,6 @@ __pycache__/
 
 # Staging for downloaded Context-mode images (licences in manifest.json); never commit.
 assets-staging/
+
+# Per-user Xcode state anywhere (e.g. the Swift package)
+**/xcuserdata/
