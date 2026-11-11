@@ -69,3 +69,12 @@ private func scriptJSON(_ beats: [(String, Double, String)]) -> Data {
         try UnfoldScript.decode(scriptJSON([("a", 0, #"[["whole"]]"#), ("b", 300, #"[["whole"]]"#)]), library: lib)
     }
 }
+
+@Test func duplicateBeatIDsAreRejected() {
+    let data = scriptJSON([("a", 150, #"[["whole"]]"#), ("a", 150, #"[["christ"]]"#)])
+    #expect {
+        try UnfoldScript.decode(data, library: lib)
+    } throws: { error in
+        String(describing: error) == "duplicate beat id a"
+    }
+}

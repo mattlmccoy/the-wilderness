@@ -39,7 +39,9 @@ public struct UnfoldScript: Codable, Equatable, Sendable {
         let script = try JSONDecoder().decode(UnfoldScript.self, from: data)
         let ids = Set(library.annotations.map(\.id)).union([UnfoldBeat.wholeTarget])
         guard !script.beats.isEmpty else { throw Invalid.invalid("unfold has no beats") }
+        var seen = Set<String>()
         for b in script.beats {
+            guard seen.insert(b.id).inserted else { throw Invalid.invalid("duplicate beat id \(b.id)") }
             guard b.duration > 0 else { throw Invalid.invalid("\(b.id): duration must be positive") }
             guard !b.light.isEmpty, b.light.allSatisfy({ !$0.isEmpty }) else {
                 throw Invalid.invalid("\(b.id): every light step needs a target")
