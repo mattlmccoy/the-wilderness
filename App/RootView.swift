@@ -16,6 +16,8 @@ struct RootView: View {
     @State private var tuningSession: TuningSession?
     private let content = ContentLoader.load()
     private let ticker = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
+    /// Measures the real time between ticks; a box, so updating it never redraws the view.
+    @State private var clock = TickClockBox()
 
     private static var now: Double { Date().timeIntervalSinceReferenceDate }
     /// UI tests launch with `-skipIntro YES` so their first press acts at rest, as before.
@@ -141,7 +143,8 @@ struct RootView: View {
 
     private func tick() {
         guard var m = machine, case let .success(c) = content else { return }
-        m.tick(now: Self.now, dt: 0.25, script: c.script)
+        let now = Self.now
+        m.tick(now: now, dt: clock.value.dt(now: now), script: c.script)
         if m != machine { machine = m }
         updateIdleTimer()
     }
@@ -177,6 +180,11 @@ struct RootView: View {
         if let saved = store.saved, saved.matches(output: screen) { return saved }
         return .defaultFor(artworkAspect: Artwork.aspect, output: screen)
     }
+}
+
+/// Holds the tick clock outside SwiftUI's change tracking.
+final class TickClockBox {
+    var value = TickClock()
 }
 
 extension MoveCommandDirection {
