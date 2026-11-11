@@ -1477,13 +1477,14 @@
     {
       "id": "basilisk",
       "title": "The Basilisk",
-      "short": "A small winged serpent lies low near Him. It may be a basilisk.",
-      "extended": "The creature is not named in the Met’s record; reading it as a basilisk is an interpretation. If it is one, it points to Psalm 91, which Satan quotes to Christ during the temptation. The next verse in the Latin Bible of Moretto’s day reads, in an early English translation: “Thou shalt walk upon the asp and the basilisk: and thou shalt trample under foot the lion and the dragon.”",
+      "short": "A small dragon lies low near Him: a basilisk, the Met says.",
+      "extended": "The Met calls it a small dragon or basilisk, and links it, with the lion and the serpent, to Psalm 91, the psalm Satan quotes to Christ during the temptation. The next verse in the Latin Bible of Moretto’s day reads, in an early English translation: “Thou shalt walk upon the asp and the basilisk: and thou shalt trample under foot the lion and the dragon.”",
       "references": [
         "Psalm 91:11–13 (Vulgate 90:11–13)",
-        "Matthew 4:6"
+        "Matthew 4:6",
+        "The Met, 11.53"
       ],
-      "evidence": "plausible",
+      "evidence": "documented",
       "anchor": {
         "x": 0.41,
         "y": 0.64
@@ -1704,12 +1705,13 @@
       "id": "lion",
       "title": "The Lion",
       "short": "The lion, king of beasts, lies at the feet of the King of kings.",
-      "extended": "Lions are among the wild beasts the Met identifies in the painting. In Christian art the lion can stand for strength and kingship, and the same verse of Psalm 91 that names the basilisk promises that the lion will be trampled. Here it is calm, which suits a reading of the wilderness as a place where creation is at peace with Christ.",
+      "extended": "Lions are among the wild beasts the Met identifies in the painting, and the Met links this one, with the serpent and the small dragon, to Psalm 91, which promises that the lion will be trampled. In Christian art the lion can stand for strength and kingship. Here it is calm, which suits a reading of the wilderness as a place where creation is at peace with Christ.",
       "references": [
         "Mark 1:13",
-        "Psalm 91:13"
+        "Psalm 91:13",
+        "The Met, 11.53"
       ],
-      "evidence": "iconographicTradition",
+      "evidence": "documented",
       "anchor": {
         "x": 0.91,
         "y": 0.75
@@ -2207,7 +2209,7 @@
       "id": "fox",
       "title": "The Fox",
       "short": "A fox rests a few steps from Him.",
-      "extended": "The Met’s catalogue lists foxes among the painting’s animals. No single symbolic meaning fits them securely here; they belong, with the bear and the deer, to the wild beasts Mark says were with Christ.",
+      "extended": "The Met’s subject tags list foxes among the painting’s animals. No single symbolic meaning fits them securely here; they belong, with the bear and the deer, to the wild beasts Mark says were with Christ.",
       "references": [
         "Mark 1:13"
       ],
@@ -2412,7 +2414,7 @@
       "id": "bear",
       "title": "The Bear",
       "short": "A bear lies in the grass with its head bowed.",
-      "extended": "The Met’s catalogue lists a bear among the painting’s animals. Predators lying at rest near grazing animals recall Isaiah’s peaceable kingdom, where the wolf lives with the lamb and the bear feeds beside the cow. That echo is a reading, not something the painting states.",
+      "extended": "The Met’s subject tags list bears among the painting’s animals, without saying which animal is meant; this one could also be read as a wild boar. Predators lying at rest near grazing animals recall Isaiah’s peaceable kingdom, where the wolf lives with the lamb and the bear feeds beside the cow. That echo is a reading, not something the painting states.",
       "references": [
         "Isaiah 11:6–7",
         "Mark 1:13"
@@ -2712,11 +2714,11 @@
     },
     {
       "id": "pelican",
-      "title": "The Pelican",
-      "short": "A white bird bends low beside Him.",
-      "extended": "A white bird beside Christ's head. Reading it as a pelican, the Christian symbol of self-sacrifice, is an interpretation.",
+      "title": "The White Bird",
+      "short": "A long-necked white bird bends low beside Him.",
+      "extended": "No source names this bird, and with its long neck, dagger bill and long legs it looks more like a heron or egret than a pelican. Christians long took the pelican as a sign of Christ’s sacrifice; whether Moretto meant anything of the kind here is unknown.",
       "references": [],
-      "evidence": "iconographicTradition",
+      "evidence": "plausible",
       "anchor": {
         "x": 0.56,
         "y": 0.32
@@ -2906,7 +2908,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "Christians once believed the pelican fed its young with its own blood. It became a picture of Christ, who gave His life for us.",
+        "story": "The psalmist, alone in his grief, called himself a bird of the wilderness. Christians later saw in the pelican, said to feed its young with its own blood, a picture of Christ, who gave His life for us.",
         "verses": [
           {
             "ref": "Psalm 101:7",
@@ -2929,9 +2931,13 @@
       "id": "snake",
       "title": "The Serpent at His Feet",
       "short": "A thin serpent slips beneath His bare foot.",
-      "extended": "A thin serpent on the rock below Christ's foot, recalling Genesis 3:15.",
-      "references": [],
-      "evidence": "plausible",
+      "extended": "A thin serpent on the rock below Christ’s foot. The Met links it, with the lion, to Psalm 91:13, where the faithful tread on lion and serpent. It also recalls God’s promise in Genesis 3:15.",
+      "references": [
+        "Psalm 91:13",
+        "Genesis 3:15",
+        "The Met, 11.53"
+      ],
+      "evidence": "documented",
       "anchor": {
         "x": 0.685,
         "y": 0.765
@@ -3090,11 +3096,14 @@
     },
     {
       "id": "tree",
-      "title": "The Tree",
-      "short": "A tree rises over Him, green and red against the sky.",
-      "extended": "The leafy tree above Christ. Reading it as the tree of the cross is an interpretation.",
-      "references": [],
-      "evidence": "plausible",
+      "title": "The Beech",
+      "short": "A beech rises over Him, green and red against the sky.",
+      "extended": "The Met identifies the tree as a beech: an attribute of Christ, and a sign of abstinence, because hermits were said to live on its nuts. Seeing it also as the tree of the cross is a reading, not something the Met states.",
+      "references": [
+        "The Met, “Botanical Imagery in European Painting”",
+        "The Met, 11.53"
+      ],
+      "evidence": "documented",
       "anchor": {
         "x": 0.57,
         "y": 0.12
