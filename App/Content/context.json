@@ -3,9 +3,17 @@
     {
       "id": "wilderness",
       "title": "Into the Wilderness",
-      "text": "Mark says that after His baptism in the Jordan, the Spirit drove Him at once into the wilderness. He stayed forty days, with the wild animals, and angels served Him.",
+      "text": "Mark says that after His baptism in the Jordan, the Spirit sent Him out into the wilderness. He was there forty days, with the wild animals, and angels served Him.",
       "light": [
-        "christ"
+        "christ",
+        "angels",
+        "stag",
+        "fox",
+        "bear",
+        "lion",
+        "beast",
+        "raven",
+        "pelican"
       ],
       "visual": null,
       "textSide": "left",
@@ -25,7 +33,7 @@
     {
       "id": "desert",
       "title": "The Judean Desert",
-      "text": "The wilderness is the dry, broken country between Jerusalem and Jericho, falling east to the Dead Sea, more than a thousand feet below sea level.",
+      "text": "The traditional wilderness is the dry country between Jerusalem and Jericho. It drops east to the Dead Sea, about 1,400 feet below sea level.",
       "light": [],
       "visual": null,
       "textSide": "left",
@@ -44,7 +52,7 @@
     {
       "id": "mountain",
       "title": "The Mount of Temptation",
-      "text": "Above Jericho rises a mountain named for the forty days: Quarantania. Since the twelfth century, tradition has placed two of the temptations there, and a Greek monastery still clings to its cliff.",
+      "text": "Above Jericho is a mountain named for the forty days, Quarantania. Since the twelfth century, tradition has placed two of the temptations there. A Greek Orthodox monastery is built into its cliff.",
       "light": [],
       "visual": null,
       "textSide": "left",
@@ -62,7 +70,7 @@
     {
       "id": "painter",
       "title": "The Painter",
-      "text": "Moretto da Brescia was born Alessandro Bonvicino around 1498; the nickname came from his grandfather. He lived and worked in Brescia, between Milan and Venice, and there is no record that he ever saw the Holy Land.",
+      "text": "Moretto da Brescia was born Alessandro Bonvicino around 1498. The nickname came from his grandfather. He lived and worked in Brescia, between Milan and Venice, and there is no record that he went to the Holy Land.",
       "light": [],
       "visual": null,
       "textSide": "left",
@@ -82,7 +90,7 @@
     {
       "id": "sack",
       "title": "A City Sacked",
-      "text": "In 1512, when Moretto was about fourteen, French troops under Gaston de Foix sacked Brescia, then one of the richest cities in Lombardy. It never fully recovered. A few years later, the young painter made this quiet picture.",
+      "text": "In 1512, when Moretto was about fourteen, French troops under Gaston de Foix sacked Brescia, then one of the richest cities in Lombardy. Britannica says it never recovered. He painted this picture a few years later.",
       "light": [],
       "visual": null,
       "textSide": "left",
@@ -100,8 +108,8 @@
     },
     {
       "id": "far",
-      "title": "Far From Home",
-      "text": "Brescia lies about 1,600 miles from Jerusalem. Moretto’s wilderness grows a beech, a tree of Europe’s woods. The Met reads it as a sign of Christ and of fasting: hermits were said to live on its nuts.",
+      "title": "Brescia to Jerusalem",
+      "text": "Brescia is about 1,600 miles from Jerusalem. The tree in Moretto’s wilderness is a beech, which grows in European woods, not in the Judean desert. The Met reads it as a sign of Christ and of fasting, because hermits were said to live on its nuts.",
       "light": [
         "tree"
       ],
@@ -117,7 +125,7 @@
     {
       "id": "size",
       "title": "Its Real Size",
-      "text": "The canvas itself is small: eighteen inches high and not quite twenty-two wide. At its own size, the whole scene would fill only this frame of light.",
+      "text": "The canvas is 18 inches high and 21¾ inches wide. The frame of light shows that size.",
       "light": [],
       "visual": "trueSize",
       "textSide": "left",
@@ -129,7 +137,7 @@
     {
       "id": "angels",
       "title": "Hidden Angels",
-      "text": "For a long time the angels and cherubs were painted over, to hide that the canvas had been cut down. A restoration in 1988 uncovered them. The cherubs probably once surrounded God the Father, sending the angels to serve His Son.",
+      "text": "The angels and cherubs were painted over at some point, to hide that the canvas had been cut down. A restoration in 1988 uncovered them. The cherubs probably surrounded a figure of God the Father, sending the angels to serve Christ.",
       "light": [
         "angels",
         "fragment"
@@ -159,7 +167,7 @@
     {
       "id": "subject",
       "title": "A Rare Subject",
-      "text": "Few painters chose the forty days in the wilderness. Mark tells it in two short verses and says He was with the wild animals. Moretto took that line and filled the hills with them.",
+      "text": "Few painters chose the forty days in the wilderness. Mark gives the scene two verses and says He was with the wild animals. Moretto filled the hills with them.",
       "light": [
         "lion",
         "bear",
@@ -181,8 +189,8 @@
     },
     {
       "id": "home-devotion",
-      "title": "Made for a Home",
-      "text": "One scholar thinks it was painted for private prayer in a house, not a church. Five centuries later, a copy of it hangs in a home again.",
+      "title": "Made for Private Prayer",
+      "text": "The scholar Guazzoni groups it with three related pictures that were probably made for private prayer at home rather than for a church.",
       "light": [
         "christ"
       ],
@@ -196,15 +204,14 @@
     {
       "id": "home",
       "title": "Where It Hangs",
-      "text": "The painting belongs to The Metropolitan Museum of Art in New York. What hangs here is a copy, nearly three times its size.",
+      "text": "The Metropolitan Museum of Art in New York bought the painting in 1911. It is on view on Fifth Avenue.",
       "light": [
         "christ"
       ],
       "visual": null,
       "textSide": "left",
       "sources": [
-        "https://www.metmuseum.org/art/collection/search/437157 (Metropolitan Museum of Art, accession 11.53)",
-        "Tapestry 60 x 50 in. against the original 21 3/4 x 18 in.: about 2.8 times"
+        "https://www.metmuseum.org/art/collection/search/437157 (Rogers Fund, 1911; on view in Gallery 611 as of 2026-11-11)"
       ],
       "draft": true
     }

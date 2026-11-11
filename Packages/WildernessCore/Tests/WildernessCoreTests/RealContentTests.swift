@@ -118,3 +118,25 @@ private let contentDir = contentURL.deletingLastPathComponent()
         }
     }
 }
+
+/// Context: each page lights what it names; and no page talks about the copy or "here"
+/// (Matt: "no self referencing").
+@Test func everyContextPageLightsWhatItNamesAndNeverTalksAboutThisCopy() throws {
+    let content = contentURL.deletingLastPathComponent()
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let maps = try ContextMaps.decode(Data(contentsOf: content.appendingPathComponent("maps.json")))
+    let s = try ContextScript.decode(Data(contentsOf: content.appendingPathComponent("context.json")), library: lib, maps: maps)
+    let animals: Set<String> = ["stag", "fox", "bear", "lion", "beast", "raven", "pelican"]
+    let named: [(words: [String], any: Set<String>)] = [
+        (["angel"], ["angels"]), (["cherub"], ["fragment"]), (["beech"], ["tree"]),
+        (["serpent"], ["snake", "basilisk"]), (["wild animals", "wild beasts"], animals),
+    ]
+    let banned = ["hangs here", "a copy", "home again", "this copy", "in this house"]
+    for p in s.pages {
+        let text = (p.title + " " + p.text).lowercased()
+        for n in named where n.words.contains(where: text.contains) {
+            #expect(!Set(p.light).isDisjoint(with: n.any), "\(p.id) names \(n.words[0]) but lights \(p.light)")
+        }
+        for b in banned { #expect(!text.contains(b), "\(p.id) talks about the copy: “\(b)”") }
+    }
+}
