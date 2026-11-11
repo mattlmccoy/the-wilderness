@@ -135,17 +135,25 @@ TEST_RUNNER_SCREENSHOT_DIR=/path/to/folder xcodebuild test -project Wilderness.x
 
 ## Licensed Bible translations
 
-Verses start as the public-domain Berean Standard Bible (BSB), with the Douay-Rheims for the Latin-Bible
-references. To use NIV, ESV or NLT instead, paste the wording from your own licensed Bible:
+Verses are written against the public-domain Berean Standard Bible (BSB), with the Douay-Rheims for
+the Latin-Bible references. The wall shows the NIV (or the NLT for chosen verses), fetched from
+API.Bible before every build by `scripts/refresh.sh`:
 
 ```bash
-python3 -I scripts/paste_verses.py
+/usr/bin/python3 -I scripts/fetch_verses.py          # fetch now; prints counts only
+/usr/bin/python3 -I scripts/fetch_verses.py --show   # print what each verse now says
 ```
 
-It walks through each verse, asks for NIV/ESV/NLT and the matching phrase, then asks once for each
-translation's copyright notice (shown in Settings → About). Text goes only into
-`App/Content/licensed-verses.json` and `App/Content/notices.json`; the app swaps it in when it builds.
-A test fails if a quoted translation has no notice. Rebuild with the refresh command afterwards.
+It needs `APIBIBLE_KEY`, `NIV_BIBLE_ID` and `NLT_BIBLE_ID` in `scripts/refresh.conf`. For each verse it
+keeps the clause that matches the wall's BSB excerpt (`scripts/verse_align.py`); if the match is unsure
+it shows the whole verse and names it in the summary. To switch a verse to the NLT, or to always show it
+whole, edit `scripts/verse-choices.json`, e.g. `{"Psalm 91:11": {"translation": "NLT"}}` or
+`{"Genesis 2:9": {"full": true}}`. The fetched text goes to `App/Content/licensed-verses.json`, which git
+ignores (a fresh clone must run the fetch once before building), and the publisher's copyright line
+goes to `App/Content/notices.json`, shown in Settings → About. API.Bible requires cached text to be
+refreshed at least every 30 days; if fetching fails, the last good copy is kept for up to 30 days, then
+the BSB placeholders show. Native apps are exempt from API.Bible's FUMS usage reporting.
+`scripts/paste_verses.py` (paste wording by hand) still works, but the nightly fetch replaces its output.
 
 Publisher terms checked 10 November 2026: Biblica (NIV) and Crossway (ESV) both allow up to 500 verses,
 never a whole book and under 25% of the work, without written permission, as long as the copyright

@@ -14,6 +14,8 @@ The publisher's wording is never altered: the result is an exact run of their te
 edge punctuation, with only the first letter capitalised. Pieces of an excerpt split by "…" are
 matched separately and rejoined with "… " unless they turn out to be next to each other.
 """
+from __future__ import annotations
+
 import re
 
 CONFIDENT = 0.5  # share of the excerpt's key words that the picked clause must contain

@@ -8,6 +8,8 @@
 # Needs scripts/refresh.conf with:
 #   TEAM_ID=XXXXXXXXXX        # Xcode → Settings → Accounts → your Personal Team ID
 #   DEVICE_ID=XXXXXXXX-...    # from: xcrun devicectl list devices
+#   APIBIBLE_KEY=...          # api.bible key; with NIV_BIBLE_ID and NLT_BIBLE_ID, the licensed
+#                             # verses are re-fetched before each build (scripts/fetch_verses.py)
 set -u
 ROOT="${0:A:h:h}"
 LOG="$HOME/Library/Logs/Wilderness-refresh.log"
@@ -24,6 +26,10 @@ source "$ROOT/scripts/refresh.conf"
 [[ -n "${TEAM_ID:-}" && -n "${DEVICE_ID:-}" ]] || notify_fail "TEAM_ID or DEVICE_ID not set"
 
 echo "$(date '+%F %T') start" >> "$LOG"
+# Licensed verse text must be re-fetched at least every 30 days (API.Bible); a failure keeps
+# the last good copy for up to 30 days, so it warns but never stops the build.
+/usr/bin/python3 -I "$ROOT/scripts/fetch_verses.py" >> "$LOG" 2>&1 \
+  || osascript -e 'display notification "Verse fetch failed; see the refresh log" with title "Wilderness refresh"' 2>/dev/null
 xcodebuild -project "$ROOT/Wilderness.xcodeproj" -scheme Wilderness -configuration Release \
   -destination "id=$DEVICE_ID" -derivedDataPath "$ROOT/build" \
   -allowProvisioningUpdates DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic \

@@ -5,3 +5,7 @@ DerivedData/
 .DS_Store
 refresh.conf
 build/
+
+# Licensed Bible text (NIV/NLT) fetched nightly by scripts/fetch_verses.py; never commit it.
+App/Content/licensed-verses.json
+__pycache__/
