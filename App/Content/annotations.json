@@ -2714,11 +2714,11 @@
     },
     {
       "id": "pelican",
-      "title": "The White Bird",
-      "short": "A long-necked white bird bends low beside Him.",
-      "extended": "No source names this bird, and with its long neck, dagger bill and long legs it looks more like a heron or egret than a pelican. Christians long took the pelican as a sign of Christ’s sacrifice; whether Moretto meant anything of the kind here is unknown.",
+      "title": "The Pelican",
+      "short": "A white bird bends low beside Him.",
+      "extended": "A white bird beside Christ’s head, read here as a pelican. Medieval Christians believed the pelican pierced its own breast to feed its young with its blood, and took it as a sign of Christ’s sacrifice. No source names this bird, so the reading is tradition, not the Met’s identification.",
       "references": [],
-      "evidence": "plausible",
+      "evidence": "iconographicTradition",
       "anchor": {
         "x": 0.56,
         "y": 0.32
@@ -2908,7 +2908,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "The psalmist, alone in his grief, called himself a bird of the wilderness. Christians later saw in the pelican, said to feed its young with its own blood, a picture of Christ, who gave His life for us.",
+        "story": "Christians once believed the pelican fed its young with its own blood. It became a picture of Christ, who gave His life for us.",
         "verses": [
           {
             "ref": "Psalm 101:7",
