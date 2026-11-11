@@ -23,6 +23,7 @@
 		3112350BA2ADE9C0DD2AB7BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63272EBAD19DCC2048941CE0 /* Assets.xcassets */; };
 		3576D09A2B2003A03D056D30 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06B70493ADCF9380EB26B7 /* Typography.swift */; };
 		36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393AF73F60A0DEC4D2325EBB /* MenuView.swift */; };
+		3D9872B60E300B60885C3D00 /* context-brescia-and-monte-guglielmo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9CB09035172BE7CF4119EDD /* context-brescia-and-monte-guglielmo.jpg */; };
 		45F67052610914C12403E339 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		4D82EBC476E49CB3071E006B /* ExperienceFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */; };
 		4EC4A7D42FF434BECCF8E6CB /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
@@ -39,10 +40,12 @@
 		697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */; };
 		698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10055DBD8B0259D70A5114C9 /* ExploreView.swift */; };
 		6ADF519634EEB1ECF0280B98 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
+		6C24D3E98340031D4B050A69 /* context-wadi-qelt.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96CF398BB97A76EB16E643A2 /* context-wadi-qelt.jpg */; };
 		719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E899EF5E0A146751A13B832 /* CalibrationView.swift */; };
 		7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5575DEF51153E5584DC61376 /* UnfoldView.swift */; };
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		88052D5A91DBAE1B9FC9BEE3 /* AliveLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B6A942754A14FEB94BB43E /* AliveLayer.swift */; };
+		8C3FD557B708F4DE76F945D8 /* context-monastery-of-the-temptation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E1732656C7709B1DB01DC8F7 /* context-monastery-of-the-temptation.jpg */; };
 		9BA4BD9DB0933ECA033F0AD8 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
@@ -67,7 +70,9 @@
 		EBF7A280A6A7B4A9BDC8A5A1 /* PhoneScreenshotTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */; };
 		F521A9BA1D56D0D09CFCAFA7 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2573921B243044A441868503 /* WildernessCore */; };
 		F55E0385F25B73F4A6CA82D3 /* WallColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */; };
+		F9A3F21AD7E3FC1488A1CA1E /* context-jordan-river-qasr-al-yahud-wide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
+		FECFDF91ECCC9166DAA6EFE5 /* context-brescia-17th-century-view.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DC561E73F08668C4B22C6C78 /* context-brescia-17th-century-view.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +95,7 @@
 /* Begin PBXFileReference section */
 		00541C4509425B1002EE55BF /* CompanionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionClient.swift; sourceTree = "<group>"; };
 		00CD53A38F289ADB465D2F63 /* WildernessPhone.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WildernessPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-jordan-river-qasr-al-yahud-wide.jpg"; sourceTree = "<group>"; };
 		06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessPhoneApp.swift; sourceTree = "<group>"; };
 		0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
@@ -125,6 +131,7 @@
 		9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFlowUITests.swift; sourceTree = "<group>"; };
 		949D7018FF5ACDAE3CF94E43 /* painting.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = painting.jpg; sourceTree = "<group>"; };
 		96443CC736D66435C0FEE8F1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		96CF398BB97A76EB16E643A2 /* context-wadi-qelt.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-wadi-qelt.jpg"; sourceTree = "<group>"; };
 		A1D42FB33D87953C764C407B /* WildernessPhoneUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallColumn.swift; sourceTree = "<group>"; };
 		A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Variable.ttf"; sourceTree = "<group>"; };
@@ -139,8 +146,11 @@
 		C9B6A942754A14FEB94BB43E /* AliveLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliveLayer.swift; sourceTree = "<group>"; };
 		D48359873878EEE55C08BC20 /* ContextVisuals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextVisuals.swift; sourceTree = "<group>"; };
 		D5C5982E11F5F02CA3E2E12B /* Wilderness.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wilderness.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9CB09035172BE7CF4119EDD /* context-brescia-and-monte-guglielmo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-brescia-and-monte-guglielmo.jpg"; sourceTree = "<group>"; };
+		DC561E73F08668C4B22C6C78 /* context-brescia-17th-century-view.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-brescia-17th-century-view.jpg"; sourceTree = "<group>"; };
 		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		E10720E4193012A37B12219F /* CompanionServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionServer.swift; sourceTree = "<group>"; };
+		E1732656C7709B1DB01DC8F7 /* context-monastery-of-the-temptation.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-monastery-of-the-temptation.jpg"; sourceTree = "<group>"; };
 		EAE8658D36AD63360176932D /* SelectHoldDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectHoldDetector.swift; sourceTree = "<group>"; };
 		EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessApp.swift; sourceTree = "<group>"; };
 		F6BDD2885BEE47A41C152161 /* WallText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallText.swift; sourceTree = "<group>"; };
@@ -257,6 +267,7 @@
 				4685DA18E56C3A97752987DC /* notices.json */,
 				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
+				EF96BD29AD8FCC6E195AB420 /* context-images */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -302,6 +313,18 @@
 				2BEF54A7E360DF2A05EDE79A /* wind.m4a */,
 			);
 			path = Sound;
+			sourceTree = "<group>";
+		};
+		EF96BD29AD8FCC6E195AB420 /* context-images */ = {
+			isa = PBXGroup;
+			children = (
+				DC561E73F08668C4B22C6C78 /* context-brescia-17th-century-view.jpg */,
+				D9CB09035172BE7CF4119EDD /* context-brescia-and-monte-guglielmo.jpg */,
+				02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */,
+				E1732656C7709B1DB01DC8F7 /* context-monastery-of-the-temptation.jpg */,
+				96CF398BB97A76EB16E643A2 /* context-wadi-qelt.jpg */,
+			);
+			path = "context-images";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -455,6 +478,11 @@
 				60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */,
 				AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */,
 				0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */,
+				FECFDF91ECCC9166DAA6EFE5 /* context-brescia-17th-century-view.jpg in Resources */,
+				3D9872B60E300B60885C3D00 /* context-brescia-and-monte-guglielmo.jpg in Resources */,
+				F9A3F21AD7E3FC1488A1CA1E /* context-jordan-river-qasr-al-yahud-wide.jpg in Resources */,
+				8C3FD557B708F4DE76F945D8 /* context-monastery-of-the-temptation.jpg in Resources */,
+				6C24D3E98340031D4B050A69 /* context-wadi-qelt.jpg in Resources */,
 				604586D0FA971FF7C46A774C /* context.json in Resources */,
 				563576B5C812D60693833113 /* glints.json in Resources */,
 				DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */,

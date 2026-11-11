@@ -59,7 +59,7 @@ final class ScreenshotTour: XCTestCase {
         let r = XCUIRemote.shared
         r.press(.select); sleep(1)
         r.press(.down); r.press(.down); r.press(.select); sleep(4); shot("context-1")
-        for i in 2...5 { r.press(.right); sleep(i == 2 ? 5 : 4); shot("context-\(i)") }
+        for i in 2...12 { r.press(.right); sleep(5); shot("context-\(i)") }
     }
 
     func testLight() {

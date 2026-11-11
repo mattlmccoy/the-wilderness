@@ -45,3 +45,17 @@ private func page(_ id: String, light: String = "", visual: String = "null", tex
     #expect(f.width == 435 && f.height == 360)
     #expect(f.x == 382.5 && f.y == 320)
 }
+
+@Test func everyContextPhotoShipsInTheApp() throws {
+    let content = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .appendingPathComponent("../../../../App/Content").standardized
+    let library = try AnnotationLibrary.decode(Data(contentsOf: content.appendingPathComponent("annotations.json")))
+    let maps = try ContextMaps.decode(Data(contentsOf: content.appendingPathComponent("maps.json")))
+    let s = try ContextScript.decode(Data(contentsOf: content.appendingPathComponent("context.json")), library: library, maps: maps)
+    let images = s.pages.compactMap(\.image)
+    #expect(!images.isEmpty)
+    for img in images {
+        let path = content.appendingPathComponent("context-images").appendingPathComponent(img.file).path
+        #expect(FileManager.default.fileExists(atPath: path), "\(img.file) is named by a page but not in context-images/")
+    }
+}

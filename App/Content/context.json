@@ -1,17 +1,118 @@
 {
   "pages": [
     {
-      "id": "painter",
-      "title": "The Painter",
-      "text": "Moretto da Brescia was born in Brescia around 1498 and died there in 1554. He painted this when he was about twenty, in a city that lies between Milan and Venice.",
+      "id": "wilderness",
+      "title": "Into the Wilderness",
+      "text": "Mark says that after His baptism in the Jordan, the Spirit drove Him at once into the wilderness. He stayed forty days, with the wild animals, and angels served Him.",
+      "light": [
+        "christ"
+      ],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "Mark 1:9–13 (parallels Matthew 4:1–11; Luke 4:1–13)",
+        "https://www.nationalgallery.org.uk/paintings/moretto-da-brescia-christ-blessing-saint-john-the-baptist (the London companion: Christ just baptised, about to go into the wilderness)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Jordan_River_at_Qasr_al-Yahud,_2019_(04).jpg (CC BY-SA 4.0)"
+      ],
+      "draft": true,
+      "map": "judea",
+      "image": {
+        "file": "context-jordan-river-qasr-al-yahud-wide.jpg",
+        "caption": "The Jordan at Qasr al-Yahud, where tradition places His baptism",
+        "credit": "Photo: Bahnfrend, CC BY-SA 4.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "id": "desert",
+      "title": "The Judean Desert",
+      "text": "The wilderness is the dry, broken country between Jerusalem and Jericho, falling east to the Dead Sea, more than a thousand feet below sea level.",
       "light": [],
       "visual": null,
       "textSide": "left",
       "sources": [
-        "https://www.metmuseum.org/art/collection/search/437157 (artist Brescia ca. 1498–1554 Brescia; dated ca. 1515–20)"
+        "https://www.britannica.com/place/Jericho-West-Bank (Dead Sea about 1,410 ft / 430 m below sea level; the hills of Judaea to its west)",
+        "UNESCO Tentative List, El-Bariyah: wilderness with monasteries (2012) — read via search index only",
+        "Photo: https://commons.wikimedia.org/wiki/File:Palestine,_Wadi_Qelt,_(Landscape_22).jpg (CC BY-SA 4.0)"
       ],
       "draft": true,
-      "map": "lombardy"
+      "image": {
+        "file": "context-wadi-qelt.jpg",
+        "caption": "Wadi Qelt, a gorge running down toward Jericho",
+        "credit": "Photo: Britchi Mirela, CC BY-SA 4.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "id": "mountain",
+      "title": "The Mount of Temptation",
+      "text": "Above Jericho rises a mountain named for the forty days: Quarantania. Since the twelfth century, tradition has placed two of the temptations there, and a Greek monastery still clings to its cliff.",
+      "light": [],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.seetheholyland.net/mount-of-temptation/ (about 5 km north-west of Jericho; 'Mount Quarantania'; tradition from the 12th century; monastery rebuilt late 19th century)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Monastery_of_the_Temptation_(Jeriho).jpg (CC BY-SA 3.0)"
+      ],
+      "draft": true,
+      "image": {
+        "file": "context-monastery-of-the-temptation.jpg",
+        "caption": "The Monastery of the Temptation, built into the cliff",
+        "credit": "Photo: Dmitrij Rodionov, CC BY-SA 3.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "id": "painter",
+      "title": "The Painter",
+      "text": "Moretto da Brescia was born Alessandro Bonvicino around 1498; the nickname came from his grandfather. He lived and worked in Brescia, between Milan and Venice, and there is no record that he ever saw the Holy Land.",
+      "light": [],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/art/collection/search/437157 (Brescia ca. 1498–1554 Brescia)",
+        "https://www.treccani.it/enciclopedia/bonvicino-alessandro-detto-il-moretto-da-brescia_(Dizionario-Biografico)/ ('anni circa cinquanta' in 1548; 'figlio di Moretto, donde il soprannome'; documented trips only to Milan, Bergamo, Solarolo)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Brescia_e_Monte_Guglielmo_dal_Castello.jpg (CC BY-SA 3.0)"
+      ],
+      "draft": true,
+      "map": "lombardy",
+      "image": {
+        "file": "context-brescia-and-monte-guglielmo.jpg",
+        "caption": "Brescia today, below the foothills of the Alps",
+        "credit": "Photo by Wolfgang Moroder, CC BY-SA 3.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "id": "sack",
+      "title": "A City Sacked",
+      "text": "In 1512, when Moretto was about fourteen, French troops under Gaston de Foix sacked Brescia, then one of the richest cities in Lombardy. It never fully recovered. A few years later, the young painter made this quiet picture.",
+      "light": [],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.britannica.com/place/Brescia-Italy ('one of the wealthiest cities in Lombardy'; 'never recovered from its sack by the French under Gaston II, comte de Foix, in 1512')",
+        "https://www.metmuseum.org/art/collection/search/437157 (dated ca. 1515–20)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Brescia_illustration_XVII.png (Public domain (PD-old))"
+      ],
+      "draft": true,
+      "image": {
+        "file": "context-brescia-17th-century-view.jpg",
+        "caption": "Brescia in an old engraving",
+        "credit": "From Margaret L. Huggins, Gio. Paolo Maggini: His Life and Works (1894). Public domain."
+      }
+    },
+    {
+      "id": "far",
+      "title": "Far From Home",
+      "text": "Brescia lies about 1,600 miles from Jerusalem. Moretto’s wilderness grows a beech, a tree of Europe’s woods. The Met reads it as a sign of Christ and of fasting: hermits were said to live on its nuts.",
+      "light": [
+        "tree"
+      ],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "Great-circle distance Brescia (45.54, 10.22) – Jerusalem (31.78, 35.23): 2,638 km / 1,639 mi (Wikipedia coordinates)",
+        "https://www.metmuseum.org/essays/botanical-imagery-in-european-painting (beech: 'an attribute of Christ, and a symbol of abstinence'; nuts fed hermits)"
+      ],
+      "draft": true,
+      "map": "mediterranean"
     },
     {
       "id": "size",
@@ -22,6 +123,21 @@
       "textSide": "left",
       "sources": [
         "https://www.metmuseum.org/art/collection/search/437157 (oil on canvas, 18 x 21 3/4 in.)"
+      ],
+      "draft": true
+    },
+    {
+      "id": "angels",
+      "title": "Hidden Angels",
+      "text": "For a long time the angels and cherubs were painted over, to hide that the canvas had been cut down. A restoration in 1988 uncovered them. The cherubs probably once surrounded God the Father, sending the angels to serve His Son.",
+      "light": [
+        "angels",
+        "fragment"
+      ],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/art/collection/search/437157 (Catalogue Entry: angels and cherubim painted out, uncovered in the 1988 restoration; 'a radiance surrounding a figure of God the Father')"
       ],
       "draft": true
     },
@@ -60,6 +176,20 @@
       "sources": [
         "https://www.metmuseum.org/en/essays/painting-the-life-of-christ-in-medieval-and-renaissance-italy (the unusual theme let Moretto fill the landscape with birds and animals)",
         "Mark 1:12–13"
+      ],
+      "draft": true
+    },
+    {
+      "id": "home-devotion",
+      "title": "Made for a Home",
+      "text": "One scholar thinks it was painted for private prayer in a house, not a church. Five centuries later, a copy of it hangs in a home again.",
+      "light": [
+        "christ"
+      ],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/art/collection/search/437157 (References: Guazzoni 1981 groups it with works 'meant for private, domestic devotions')"
       ],
       "draft": true
     },
