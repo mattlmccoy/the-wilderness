@@ -8,12 +8,12 @@
   :root {
     --bg: #0d0c0b; --panel: #171513; --line: #2a2622; --text: #e9e2d6; --muted: #9a9083;
     --gold: #e0b45c; --gold-soft: rgba(224, 180, 92, 0.18); --other: rgba(233, 226, 214, 0.35);
-    --ok: #8fc79a; --warn: #e7a35a;
+    --ok: #8fc79a; --warn: #e7a35a; --teal: #4fd1c5; --teal-soft: rgba(79, 209, 197, 0.16);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
     font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
-  body { display: grid; grid-template-columns: 230px 1fr; grid-template-rows: auto 1fr; height: 100vh; }
+  body { display: grid; grid-template-columns: 270px 1fr; grid-template-rows: auto 1fr; height: 100vh; }
   header { grid-column: 1 / 3; display: flex; gap: 10px; align-items: center; padding: 8px 12px;
     border-bottom: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
   header h1 { font-size: 15px; font-weight: 600; margin: 0 8px 0 0; }
@@ -33,6 +33,22 @@
   nav .tag { font-size: 11px; color: var(--muted); }
   nav .tag.traced { color: var(--ok); }
   nav .dirty::after { content: " ●"; color: var(--warn); }
+  nav h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+    margin: 12px 4px 4px; font-weight: 600; }
+  nav h2:first-child { margin-top: 2px; }
+  nav .item.region.on { background: var(--teal-soft); outline-color: var(--teal); }
+  nav .tag.region { color: var(--teal); }
+  nav .tag.noted::before { content: "✎ "; }
+  #details { margin-top: 12px; padding: 10px 6px 4px; border-top: 1px solid var(--line); display: grid; gap: 6px; }
+  #details input, #details textarea { width: 100%; background: #0f0e0c; color: var(--text); border: 1px solid #3a352f;
+    border-radius: 6px; padding: 6px 8px; font: inherit; }
+  #details textarea { min-height: 150px; resize: vertical; }
+  #details input:focus, #details textarea:focus { outline: none; border-color: var(--gold); }
+  #details input:disabled { color: var(--muted); }
+  #details .row { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
+  #details .row.over { color: var(--warn); }
+  button#newregion { border-color: var(--teal); color: var(--teal); }
+  button#delete { border-color: #6b3b2f; }
   nav .help { color: var(--muted); font-size: 12px; margin-top: 14px; padding: 0 4px; }
   nav .help b { color: var(--text); font-weight: 600; }
   main { position: relative; overflow: hidden; }
@@ -43,25 +59,36 @@
 <body>
 <header>
   <h1>Outline Tracer</h1>
-  <button id="save" class="primary" title="⌘S">Save figure</button>
+  <button id="save" class="primary" title="⌘S">Save</button>
   <button id="undo" title="⌘Z">Undo</button>
   <button id="redo" title="⇧⌘Z">Redo</button>
   <button id="redraw" title="Clear and click new points">Redraw from scratch</button>
   <button id="revert">Revert to saved</button>
+  <button id="newregion" title="Click points on the painting to outline a new region">New region</button>
+  <button id="delete">Delete region</button>
   <button id="fit" title="F">Fit</button>
   <label><input type="checkbox" id="smooth" checked> Show the app's smoothed curve</label>
-  <label><input type="checkbox" id="others" checked> Show other figures</label>
+  <label><input type="checkbox" id="others" checked> Show other outlines</label>
   <span id="status">Loading…</span>
 </header>
 <nav>
   <div id="list"></div>
+  <div id="details">
+    <label for="name">Name</label>
+    <input id="name" autocomplete="off" placeholder="Name this region">
+    <label for="notes">Notes for the developer (never shown in the app)</label>
+    <textarea id="notes" placeholder="What should this region do or say?"></textarea>
+    <div class="row" id="count"><span></span><span>0 / 4000</span></div>
+  </div>
   <div class="help">
     <b>Drag</b> a point to move it.<br>
     <b>Click an edge</b> to add a point.<br>
     <b>⌥-click</b> a point to remove it.<br>
     <b>Drag empty space</b> to pan; <b>scroll or pinch</b> to zoom.<br>
     <b>Redraw:</b> click points in order; click the first point or press Return to close.<br>
-    <b>↑ ↓</b> switch figure · <b>⌘S</b> save · <b>⌘Z</b> undo.<br><br>
+    <b>New region:</b> click points around it, close the shape, then name it.<br>
+    <b>↑ ↓</b> switch item · <b>⌘S</b> save · <b>⌘Z</b> undo.<br>
+    Gold = figures in the app. Teal dashed = your regions (notes only, never shipped).<br><br>
     Trace the edge you would want lit: just outside the figure is better than cutting into it.
   </div>
 </nav>
@@ -70,43 +97,93 @@
 "use strict";
 const cv = document.getElementById("c"), ctx = cv.getContext("2d");
 const img = new Image();
-let subjects = [], sel = 0;
-const work = {};      // id -> {points, saved, undo:[], redo:[], drawing}
+// items: figures from annotations.json (kind "figure") and Matt's own regions (kind "new").
+// uid is local and stable; id is the server id (null for a region not saved yet).
+let items = [], sel = 0, nextUid = 1;
+const work = {};      // uid -> {points, saved, undo:[], redo:[], drawing, name, savedName, notes, savedNotes}
 let view = { s: 1, x: 0, y: 0 };
 let drag = null, hover = null;
-const HANDLE = 6, EDGE_HIT = 8;
+const HANDLE = 6, EDGE_HIT = 8, MAX_NOTES = 4000;
+const GOLD = "#e0b45c", TEAL = "#4fd1c5";
 
 const $ = id => document.getElementById(id);
 function status(msg, kind) { const s = $("status"); s.textContent = msg; s.className = kind || ""; }
 const clone = pts => pts.map(p => ({ x: p.x, y: p.y }));
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-const cur = () => work[subjects[sel].id];
+const item = () => items[sel];
+const cur = () => work[item().uid];
+const isRegion = it => it.kind === "new";
+function dirty(it) {
+  const w = work[it.uid];
+  return !same(w.points, w.saved) || w.notes !== w.savedNotes || (isRegion(it) && (w.name !== w.savedName || it.id === null));
+}
+
+function addItem(it, points, notes) {
+  it.uid = nextUid++; items.push(it);
+  work[it.uid] = { points: clone(points), saved: clone(points), undo: [], redo: [], drawing: false,
+                   name: it.title, savedName: it.title, notes, savedNotes: notes };
+  return it;
+}
 
 async function load() {
-  const res = await fetch("/subjects");
-  subjects = await res.json();
-  for (const s of subjects) work[s.id] = { points: clone(s.outline), saved: clone(s.outline), undo: [], redo: [], drawing: false };
-  img.onload = () => { fit(); renderList(); draw(); status("Pick a figure on the left."); };
+  const [subjects, notesDoc] = await Promise.all([fetch("/subjects").then(r => r.json()), fetch("/regions").then(r => r.json())]);
+  const figNotes = {};
+  for (const r of notesDoc.regions || []) if (r.kind === "figure") figNotes[r.id] = r.notes || "";
+  for (const s of subjects) addItem({ kind: "figure", id: s.id, title: s.title, source: s.source }, s.outline, figNotes[s.id] || "");
+  for (const r of notesDoc.regions || []) if (r.kind === "new") addItem({ kind: "new", id: r.id, title: r.name }, r.outline || [], r.notes || "");
+  img.onload = () => { fit(); renderList(); showDetails(); draw(); status("Pick a figure or region on the left, or press New region."); };
   img.src = "/painting.jpg";
 }
 
 function renderList() {
   const list = $("list"); list.innerHTML = "";
-  subjects.forEach((s, i) => {
-    const w = work[s.id], div = document.createElement("div");
-    div.className = "item" + (i === sel ? " on" : "");
-    const name = document.createElement("span");
-    name.textContent = s.title;
-    if (!same(w.points, w.saved)) name.className = "dirty";
-    const tag = document.createElement("span");
-    const traced = s.source === "traced-by-matt";
-    tag.className = "tag" + (traced ? " traced" : "");
-    tag.textContent = traced ? "traced" : "estimate";
-    div.append(name, tag);
-    div.onclick = () => { sel = i; renderList(); draw(); };
-    list.appendChild(div);
-  });
+  const section = (title, kind) => {
+    const h = document.createElement("h2"); h.textContent = title; list.appendChild(h);
+    let any = false;
+    items.forEach((it, i) => {
+      if (it.kind !== kind) return;
+      any = true;
+      const w = work[it.uid], div = document.createElement("div");
+      div.className = "item" + (isRegion(it) ? " region" : "") + (i === sel ? " on" : "");
+      const name = document.createElement("span");
+      name.textContent = (isRegion(it) ? w.name : it.title) || "(unnamed region)";
+      if (dirty(it)) name.className = "dirty";
+      const tag = document.createElement("span");
+      if (isRegion(it)) { tag.className = "tag region"; tag.textContent = it.id === null ? "unsaved" : "region"; }
+      else {
+        const traced = it.source === "traced-by-matt";
+        tag.className = "tag" + (traced ? " traced" : "");
+        tag.textContent = traced ? "traced" : "estimate";
+      }
+      if (w.savedNotes.trim()) tag.classList.add("noted");
+      div.append(name, tag);
+      div.onclick = () => select(i);
+      list.appendChild(div);
+    });
+    if (!any) { const e = document.createElement("div"); e.className = "tag"; e.style.padding = "2px 9px"; e.textContent = "None yet."; list.appendChild(e); }
+  };
+  section("Figures", "figure");
+  section("My regions", "new");
 }
+
+function select(i) { sel = i; renderList(); showDetails(); draw(); }
+
+function showDetails() {
+  const it = item(), w = cur();
+  $("name").value = isRegion(it) ? w.name : it.title;
+  $("name").disabled = !isRegion(it);
+  $("notes").value = w.notes;
+  $("delete").disabled = !isRegion(it);
+  $("save").textContent = isRegion(it) ? "Save region" : "Save figure";
+  updateCount();
+}
+function updateCount() {
+  const n = $("notes").value.length, row = $("count");
+  row.lastElementChild.textContent = `${n} / ${MAX_NOTES}`;
+  row.className = "row" + (n > MAX_NOTES ? " over" : "");
+}
+$("name").addEventListener("input", () => { if (isRegion(item())) { cur().name = $("name").value; renderList(); draw(); } });
+$("notes").addEventListener("input", () => { cur().notes = $("notes").value; updateCount(); renderList(); draw(); });
 
 // --- geometry: painting fractions <-> screen pixels
 let fitted = false;
@@ -152,36 +229,46 @@ function draw() {
   ctx.clearRect(0, 0, r.width, r.height);
   if (!img.width) return;
   ctx.drawImage(img, view.x, view.y, img.width * view.s, img.height * view.s);
-  if (!subjects.length) return;
+  if (!items.length) return;
   const smooth = $("smooth").checked;
   if ($("others").checked) {
-    subjects.forEach((s, i) => {
-      if (i === sel || work[s.id].points.length < 3) return;
-      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--other");
-      ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
-      ctx.stroke(smooth ? smoothPath(work[s.id].points) : polyPath(work[s.id].points, true));
+    const other = getComputedStyle(document.body).getPropertyValue("--other");
+    items.forEach((it, i) => {
+      const pts = work[it.uid].points;
+      if (i === sel || pts.length < 3) return;
+      ctx.strokeStyle = isRegion(it) ? "rgba(79,209,197,0.7)" : other;
+      ctx.lineWidth = 1.5; ctx.setLineDash(isRegion(it) ? [3, 4] : [5, 4]);
+      ctx.stroke(smooth ? smoothPath(pts) : polyPath(pts, true));
     });
     ctx.setLineDash([]);
   }
-  const w = cur(), pts = w.points;
+  const it = item(), w = cur(), pts = w.points, region = isRegion(it);
+  const main = region ? TEAL : GOLD;
   if (pts.length >= 3 && !w.drawing) {
-    ctx.fillStyle = "rgba(224,180,92,0.16)"; ctx.fill(smooth ? smoothPath(pts) : polyPath(pts, true));
-    if (smooth) { ctx.strokeStyle = "#e0b45c"; ctx.lineWidth = 2.5; ctx.stroke(smoothPath(pts)); }
+    ctx.fillStyle = region ? "rgba(79,209,197,0.16)" : "rgba(224,180,92,0.16)";
+    ctx.fill(smooth ? smoothPath(pts) : polyPath(pts, true));
+    if (smooth) {
+      ctx.strokeStyle = main; ctx.lineWidth = 2.5; ctx.setLineDash(region ? [8, 5] : []);
+      ctx.stroke(smoothPath(pts)); ctx.setLineDash([]);
+    }
   }
-  ctx.strokeStyle = smooth ? "rgba(255,240,210,0.55)" : "#e0b45c";
+  ctx.strokeStyle = smooth ? "rgba(255,240,210,0.55)" : main;
   ctx.lineWidth = smooth ? 1 : 2.5;
+  ctx.setLineDash(region && !smooth ? [8, 5] : []);
   ctx.stroke(polyPath(pts, !w.drawing));
+  ctx.setLineDash([]);
   pts.forEach((p, i) => {
     const s = toScreen(p), on = hover && hover.kind === "point" && hover.i === i;
     ctx.beginPath(); ctx.arc(s.x, s.y, on ? HANDLE + 2 : HANDLE, 0, Math.PI * 2);
-    ctx.fillStyle = i === 0 && w.drawing ? "#8fc79a" : "#fff7e6"; ctx.fill();
+    ctx.fillStyle = i === 0 && w.drawing ? "#8fc79a" : (region ? "#e6fffb" : "#fff7e6"); ctx.fill();
     ctx.lineWidth = 2; ctx.strokeStyle = "#1a1408"; ctx.stroke();
   });
   if (hover && hover.kind === "edge") {
     ctx.beginPath(); ctx.arc(hover.at.x, hover.at.y, 4, 0, Math.PI * 2);
     ctx.fillStyle = "#8fc79a"; ctx.fill();
   }
-  $("save").disabled = same(pts, w.saved) || pts.length < 3 || w.drawing;
+  const tooLong = w.notes.length > MAX_NOTES, unnamed = region && !w.name.trim();
+  $("save").disabled = !dirty(it) || pts.length < 3 || w.drawing || tooLong || unnamed;
   $("undo").disabled = !w.undo.length; $("redo").disabled = !w.redo.length;
 }
 
@@ -207,10 +294,17 @@ function remember() { const w = cur(); w.undo.push(clone(w.points)); w.redo = []
 function undo() { const w = cur(); if (!w.undo.length) return; w.redo.push(clone(w.points)); w.points = w.undo.pop(); w.drawing = false; renderList(); draw(); }
 function redo() { const w = cur(); if (!w.redo.length) return; w.undo.push(clone(w.points)); w.points = w.redo.pop(); renderList(); draw(); }
 
+function closeShape() {
+  cur().drawing = false;
+  if (isRegion(item()) && !cur().name.trim()) { status("Shape closed. Name it, add notes, then Save."); $("name").focus(); }
+  else status("Shape closed. Adjust, then Save.");
+  draw();
+}
+
 cv.addEventListener("mousedown", e => {
   const m = mouse(e), w = cur(), h = hit(m);
   if (w.drawing) {
-    if (h && h.kind === "point" && h.i === 0 && w.points.length >= 3) { w.drawing = false; status("Shape closed. Adjust, then Save."); }
+    if (h && h.kind === "point" && h.i === 0 && w.points.length >= 3) closeShape();
     else { remember(); const f = toFrac(m.x, m.y); w.points.push({ x: clamp01(f.x), y: clamp01(f.y) }); }
     renderList(); draw(); return;
   }
@@ -232,6 +326,7 @@ window.addEventListener("mousemove", e => {
     const f = toFrac(m.x, m.y); cur().points[drag.i] = { x: clamp01(f.x), y: clamp01(f.y) }; draw(); return;
   }
   if (drag && drag.kind === "pan") { view.x = drag.vx + m.x - drag.sx; view.y = drag.vy + m.y - drag.sy; draw(); return; }
+  if (!items.length) return;
   const h = hit(m); if (JSON.stringify(h) !== JSON.stringify(hover)) { hover = h; draw(); }
 });
 window.addEventListener("mouseup", () => {
@@ -245,34 +340,80 @@ cv.addEventListener("wheel", e => {
   view.x = m.x - (m.x - view.x) * r; view.y = m.y - (m.y - view.y) * r; view.s = s; draw();
 }, { passive: false });
 
+async function postJSON(path, body) {
+  const res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const reply = await res.json();
+  if (!res.ok) throw new Error(reply.error);
+  return reply;
+}
+
 async function save() {
-  const w = cur(), s = subjects[sel];
-  if (w.drawing || w.points.length < 3 || same(w.points, w.saved)) return;
+  const it = item(), w = cur();
+  if ($("save").disabled) return;
   status("Saving…");
   try {
-    const res = await fetch("/outline", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: s.id, points: w.points }) });
-    const body = await res.json();
-    if (!res.ok) { status("Not saved: " + body.error, "err"); return; }
-    w.saved = clone(w.points); s.source = "traced-by-matt";
-    status(`Saved ${s.title} (${body.points} points).`, "ok"); renderList(); draw();
-  } catch (err) { status("Not saved: the tracer server isn't running.", "err"); }
+    if (isRegion(it)) {
+      const body = { name: w.name, notes: w.notes, points: w.points };
+      if (it.id !== null) body.id = it.id;
+      const reply = await postJSON("/region", body);
+      it.id = reply.saved; w.name = w.name.trim(); w.savedName = w.name; w.saved = clone(w.points); w.savedNotes = w.notes;
+      status(`Saved region ${w.name} (${it.id}) to notes/regions.json.`, "ok");
+    } else {
+      const parts = [];
+      if (!same(w.points, w.saved)) {
+        const reply = await postJSON("/outline", { id: it.id, points: w.points });
+        w.saved = clone(w.points); it.source = "traced-by-matt"; parts.push(`outline (${reply.points} points)`);
+      }
+      if (w.notes !== w.savedNotes) {
+        await postJSON("/figure-notes", { id: it.id, notes: w.notes });
+        w.savedNotes = w.notes; parts.push("notes");
+      }
+      status(`Saved ${it.title}: ${parts.join(" and ")}.`, "ok");
+    }
+    renderList(); showDetails(); draw();
+  } catch (err) {
+    status("Not saved: " + (err instanceof TypeError ? "the tracer server isn't running." : err.message), "err");
+    renderList(); draw();
+  }
+}
+
+async function removeRegion() {
+  const it = item(), w = cur();
+  if (!isRegion(it) || !confirm(`Delete the region "${w.name || "(unnamed)"}" and its notes?`)) return;
+  try {
+    if (it.id !== null) await postJSON("/region/delete", { id: it.id });
+  } catch (err) { status("Not deleted: " + err.message, "err"); return; }
+  items.splice(sel, 1); delete work[it.uid];
+  sel = Math.min(sel, items.length - 1);
+  status(`Deleted region ${w.name || "(unnamed)"}.`, "ok"); renderList(); showDetails(); draw();
+}
+
+function newRegion() {
+  const it = addItem({ kind: "new", id: null, title: "" }, [], "");
+  work[it.uid].drawing = true;
+  select(items.length - 1);
+  status("Click points around the new region; click the first point or press Return to close.");
 }
 
 $("save").onclick = save; $("undo").onclick = undo; $("redo").onclick = redo; $("fit").onclick = fit;
+$("newregion").onclick = newRegion; $("delete").onclick = removeRegion;
 $("smooth").onchange = draw; $("others").onchange = draw;
-$("redraw").onclick = () => { remember(); const w = cur(); w.points = []; w.drawing = true; status("Click points around the figure; click the first point or press Return to close."); renderList(); draw(); };
-$("revert").onclick = () => { remember(); const w = cur(); w.points = clone(w.saved); w.drawing = false; renderList(); draw(); };
+$("redraw").onclick = () => { remember(); const w = cur(); w.points = []; w.drawing = true; status("Click points around the shape; click the first point or press Return to close."); renderList(); draw(); };
+$("revert").onclick = () => {
+  remember(); const w = cur(); w.points = clone(w.saved); w.drawing = false; w.notes = w.savedNotes; w.name = w.savedName;
+  renderList(); showDetails(); draw();
+};
 window.addEventListener("keydown", e => {
-  const meta = e.metaKey || e.ctrlKey;
+  const meta = e.metaKey || e.ctrlKey, typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
   if (meta && e.key.toLowerCase() === "s") { e.preventDefault(); save(); }
+  else if (typing) return;   // let the name and notes fields have their own keys (and text undo)
   else if (meta && e.key.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); }
-  else if (e.key === "Enter" && cur().drawing && cur().points.length >= 3) { cur().drawing = false; status("Shape closed. Adjust, then Save."); draw(); }
-  else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sel = (sel + (e.key === "ArrowDown" ? 1 : subjects.length - 1)) % subjects.length; renderList(); draw(); }
+  else if (e.key === "Enter" && cur().drawing && cur().points.length >= 3) closeShape();
+  else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); select((sel + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length); }
   else if (e.key === "f" && !meta) fit();
 });
 window.addEventListener("beforeunload", e => {
-  if (subjects.some(s => !same(work[s.id].points, work[s.id].saved))) { e.preventDefault(); e.returnValue = ""; }
+  if (items.some(dirty)) { e.preventDefault(); e.returnValue = ""; }
 });
 window.addEventListener("resize", resize);
 new ResizeObserver(resize).observe(cv);
