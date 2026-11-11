@@ -18,6 +18,8 @@ struct RootView: View {
     private let ticker = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
 
     private static var now: Double { Date().timeIntervalSinceReferenceDate }
+    /// UI tests launch with `-skipIntro YES` so their first press acts at rest, as before.
+    private static var skipIntro: Bool { UserDefaults.standard.bool(forKey: "skipIntro") }
 
     var body: some View {
         GeometryReader { geo in
@@ -31,8 +33,9 @@ struct RootView: View {
                             screen: geo.size,
                             canCancel: store.saved != nil,
                             onFinish: { outcome in
-                                if case let .save(cal) = outcome { store.save(cal) }
-                                machine?.finishCalibration()
+                                var saved = false
+                                if case let .save(cal) = outcome { store.save(cal); saved = true }
+                                machine?.finishCalibration(now: Self.now, playIntro: saved && !Self.skipIntro)
                             })
                     } else if let cal = store.saved {
                         artwork(cal, screen: geo.size)
@@ -42,7 +45,9 @@ struct RootView: View {
         }
         .ignoresSafeArea()
         .onAppear {
-            if machine == nil { machine = ModeMachine(calibrated: store.saved != nil, now: Self.now) }
+            if machine == nil {
+                machine = ModeMachine(calibrated: store.saved != nil, now: Self.now, intro: !Self.skipIntro)
+            }
         }
         .onReceive(ticker) { _ in tick() }
         // Waking the Apple TV (or dismissing its screensaver) is use, even though the press
@@ -68,8 +73,12 @@ struct RootView: View {
                             .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
                     }
                     LightLayer(library: content.library, tuning: tuningStore.tuning,
-                               targets: lightTargets(mode, content), exploring: isExploring(mode))
+                               targets: lightTargets(mode, content), exploring: isExploring(mode),
+                               dark: mode.isIntro)
                     switch mode {
+                    case let .intro(startedAt):
+                        IntroView(library: content.library, tuning: tuningStore.tuning, startedAt: startedAt)
+                            .transition(.opacity.animation(.easeOut(duration: 1.0)))
                     case .stillness:
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
@@ -180,4 +189,8 @@ extension MoveCommandDirection {
         @unknown default: .right
         }
     }
+}
+
+private extension Mode {
+    var isIntro: Bool { if case .intro = self { return true }; return false }
 }

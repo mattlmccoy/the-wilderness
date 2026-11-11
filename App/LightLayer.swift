@@ -12,6 +12,8 @@ struct LightLayer: View {
     let targets: Set<String>
     /// While exploring, the wash drops so the rest of the tapestry recedes.
     let exploring: Bool
+    /// The boot-up intro starts on a dark wall: no wash until it ends.
+    var dark = false
 
     /// Feather of about 2.2 in on the wall (44 canvas units).
     static let featherRadius: CGFloat = 22
@@ -21,6 +23,7 @@ struct LightLayer: View {
     @State private var levels: [String: Double] = [:]
     @State private var shown: Set<String> = []
     @State private var shownExploring = false
+    @State private var shownDark = false
     private static let gone = 0.0001
 
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
@@ -36,10 +39,13 @@ struct LightLayer: View {
         .frame(width: canvas.width, height: canvas.height)
         .allowsHitTesting(false)
         .onAppear {
-            shown = targets; shownExploring = exploring
+            shown = targets; shownExploring = exploring; shownDark = dark
             for id in targets { levels[id] = 1 }
         }
         .onChange(of: targets) { old, new in restage(from: old, to: new) }
+        .onChange(of: dark) { _, new in
+            withAnimation(.easeInOut(duration: LightTiming.wake)) { shownDark = new }
+        }
     }
 
     /// Fades to the new targets. Lights left from earlier quick presses fade out fast, so only
@@ -59,14 +65,15 @@ struct LightLayer: View {
     }
 
     private var washOpacity: Double {
+        if shownDark { return 0 }
         if shown.contains(UnfoldBeat.wholeTarget) { return tuning.subjectStrength * 0.5 }
         return tuning.baseWash * (shownExploring ? tuning.exploreWashFactor : 1)
     }
 }
 
 /// One subject's light: its outline, smoothed and blurred. Drawn once and composited as a
-/// single layer so opacity changes don't re-run the blur.
-private struct SubjectGlow: View {
+/// single layer so opacity changes don't re-run the blur. Also the intro's faint glow.
+struct SubjectGlow: View {
     let outline: [Point<ArtworkSpace>]
     let canvas: CGSize
 

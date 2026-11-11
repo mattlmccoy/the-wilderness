@@ -31,6 +31,7 @@
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
+		A03307C8A71EF39B9F612887 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */; };
 		A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
 		AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE8658D36AD63360176932D /* SelectHoldDetector.swift */; };
 		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		10055DBD8B0259D70A5114C9 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-CormorantGaramond.txt"; sourceTree = "<group>"; };
 		29BA13ECF8A5F9A7660C4A71 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				3E899EF5E0A146751A13B832 /* CalibrationView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
+				0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */,
 				0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */,
 				7D05E43D6E479D37C55550E7 /* LightLayer.swift */,
 				AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */,
@@ -311,6 +314,7 @@
 				719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */,
 				698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */,
 				21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */,
+				A03307C8A71EF39B9F612887 /* IntroView.swift in Sources */,
 				B0C64794E425760E28401393 /* LightLayer.swift in Sources */,
 				218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */,
 				36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */,

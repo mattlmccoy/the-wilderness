@@ -28,6 +28,21 @@ final class ScreenshotTour: XCTestCase {
         return app
     }
 
+    /// The boot-up intro, launched without -skipIntro: outlines drawing, softening, fading.
+    func testIntro() {
+        let app = XCUIApplication()
+        app.launchArguments += SavedCalibration.args(skipIntro: false)
+        app.launch()
+        let start = Date()
+        // Times are from launch() returning; the intro itself began about a second earlier.
+        for (name, at) in [("intro-00s", 0.0), ("intro-01s", 1.0), ("intro-03s", 3.0), ("intro-07s", 7.0),
+                           ("intro-10s", 10.0), ("intro-11s", 11.0), ("intro-14s", 14.0), ("intro-17s", 17.0)] {
+            let wait = at - Date().timeIntervalSince(start)
+            if wait > 0 { usleep(UInt32(wait * 1_000_000)) }
+            shot(name)
+        }
+    }
+
     /// The menu and the first seconds of Explore (collapsed: no verse text in these shots).
     func testMenu() {
         _ = launch()
