@@ -96,7 +96,8 @@ struct RootView: View {
                             .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
-                                    calibration: cal, showsHint: machine?.hintUntil != nil)
+                                    calibration: cal, showsHint: machine?.hintUntil != nil,
+                                    edgeLine: tuningStore.tuning.edgeLine)
                     case let .unfold(p):
                         UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal,
                                    header: mode.wayfinding(library: content.library, script: content.script),
@@ -110,6 +111,10 @@ struct RootView: View {
                         RegistrationTestPattern()
                     case .tuning:
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal, demo: true)
+                        // Show the edge line on Christ while tuning it (and everything else).
+                        if let christ = content.library.annotations.first(where: { $0.id == "christ" }) {
+                            EdgeLineView(annotation: christ, strength: tuningStore.tuning.edgeLine)
+                        }
                         SettingsView(mode: mode, tuning: tuningSession, notices: content.notices, showPainting: showPainting)
                     case .settings, .about:
                         SettingsView(mode: mode, tuning: nil, notices: content.notices, showPainting: showPainting)

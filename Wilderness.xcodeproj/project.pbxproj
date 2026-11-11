@@ -27,6 +27,7 @@
 		604586D0FA971FF7C46A774C /* context.json in Resources */ = {isa = PBXBuildFile; fileRef = AC0C2043D85D5E257480B75E /* context.json */; };
 		607B28E705A4A3CC43B5D727 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
 		60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
+		697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */; };
 		698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10055DBD8B0259D70A5114C9 /* ExploreView.swift */; };
 		719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E899EF5E0A146751A13B832 /* CalibrationView.swift */; };
 		7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5575DEF51153E5584DC61376 /* UnfoldView.swift */; };
@@ -79,6 +80,7 @@
 		4685DA18E56C3A97752987DC /* notices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = notices.json; sourceTree = "<group>"; };
 		4D8385225EF6CEFBD3D833AD /* licensed-verses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "licensed-verses.json"; sourceTree = "<group>"; };
 		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
+		5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeLineView.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Variable.ttf"; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */,
 				3E899EF5E0A146751A13B832 /* CalibrationView.swift */,
 				BBBA3E5909571B3CFA2A7003 /* ContextView.swift */,
+				5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
 				0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */,
@@ -335,6 +338,7 @@
 				1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */,
 				719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */,
 				5CC5BF584E868827B2405033 /* ContextView.swift in Sources */,
+				697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */,
 				698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */,
 				21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */,
 				A03307C8A71EF39B9F612887 /* IntroView.swift in Sources */,

@@ -10,6 +10,8 @@ struct ExploreView: View {
     let state: ExploreState
     let calibration: Calibration
     var showsHint: Bool = false
+    /// Tune light → Edge line (0 = off).
+    var edgeLine: Double = 0
 
     private var selected: (Annotation, Bool)? {
         guard case let .exploring(id, expanded) = state,
@@ -19,6 +21,11 @@ struct ExploreView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
+            if case let (a, _)? = selected, a.outline != nil {
+                EdgeLineView(annotation: a, strength: edgeLine)
+                    .id(a.id + "-edge")
+                    .transition(.opacity.animation(.easeOut(duration: LightTiming.textOut)))
+            }
             if case let (a, expanded)? = selected {
                 WallText(title: a.title, short: a.short, more: a.more,
                          expanded: expanded,

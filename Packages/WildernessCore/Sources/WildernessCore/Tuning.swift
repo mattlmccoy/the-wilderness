@@ -9,6 +9,8 @@ public struct Tuning: Codable, Equatable, Sendable {
     public var glintBrightness = 1.0
     public var glintSizeInches = 0.06
     public var glintStyle: GlintStyle = .thread
+    /// Explore: strength of the thin line drawn around the chosen figure (0 = off).
+    public var edgeLine = 0.8
 
     public init() {}
     public static let defaults = Tuning()
@@ -17,6 +19,7 @@ public struct Tuning: Codable, Equatable, Sendable {
     /// A new field must be added here and in `init(from:)`, or it is silently not saved.
     enum CodingKeys: String, CodingKey {
         case subjectStrength, baseWash, exploreWashFactor, glintMeanInterval, glintBrightness, glintSizeInches, glintStyle
+        case edgeLine
     }
 
     /// Tolerant of profiles saved before a field existed: a missing key takes that field's
@@ -31,6 +34,7 @@ public struct Tuning: Codable, Equatable, Sendable {
         glintBrightness = try c.decodeIfPresent(Double.self, forKey: .glintBrightness) ?? d.glintBrightness
         glintSizeInches = try c.decodeIfPresent(Double.self, forKey: .glintSizeInches) ?? d.glintSizeInches
         glintStyle = try c.decodeIfPresent(GlintStyle.self, forKey: .glintStyle) ?? d.glintStyle
+        edgeLine = try c.decodeIfPresent(Double.self, forKey: .edgeLine) ?? d.edgeLine
     }
 
     public var glintParams: GlintParams {
@@ -41,7 +45,7 @@ public struct Tuning: Codable, Equatable, Sendable {
 }
 
 public enum TuningRow: Int, CaseIterable, Sendable {
-    case subjectStrength, baseWash, glintFrequency, glintBrightness, glintSize, glintStyle, resetDefaults
+    case subjectStrength, baseWash, edgeLine, glintFrequency, glintBrightness, glintSize, glintStyle, resetDefaults
 }
 
 /// The tuning screen's remote logic: up/down picks a row, left/right changes its value.
@@ -74,6 +78,7 @@ public struct TuningSession: Sendable {
         switch row {
         case .subjectStrength: tuning.subjectStrength = step(tuning.subjectStrength, 0.02, 0...1)
         case .baseWash: tuning.baseWash = step(tuning.baseWash, 0.01, 0...0.5)
+        case .edgeLine: tuning.edgeLine = step(tuning.edgeLine, 0.05, 0...1)
         case .glintBrightness: tuning.glintBrightness = step(tuning.glintBrightness, 0.05, 0.2...1)
         case .glintSize: tuning.glintSizeInches = step(tuning.glintSizeInches, 0.01, 0.02...0.2)
         case .glintStyle: tuning.glintStyle = tuning.glintStyle == .thread ? .pinpoint : .thread
@@ -92,6 +97,7 @@ public struct TuningSession: Sendable {
         switch row {
         case .subjectStrength: return "Light on subjects · \(pct(t.subjectStrength))"
         case .baseWash: return "Background wash · \(pct(t.baseWash))"
+        case .edgeLine: return "Edge line · " + (t.edgeLine == 0 ? "off" : pct(t.edgeLine))
         case .glintFrequency:
             return "Glints · " + (frequencies.first { $0.seconds == t.glintMeanInterval }?.name ?? "\(t.glintMeanInterval) s")
         case .glintBrightness: return "Glint brightness · \(pct(t.glintBrightness))"
