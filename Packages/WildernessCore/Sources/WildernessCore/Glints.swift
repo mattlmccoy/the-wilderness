@@ -52,6 +52,10 @@ public struct Glint: Equatable, Sendable {
 /// One glint at a time, at random (Poisson) intervals, never closer than `minGap` apart.
 public struct GlintScheduler<R: RandomNumberGenerator> {
     public var params: GlintParams
+    /// Optional preference, 0…1, for a point at a time (the breath of the region under it).
+    /// A candidate is kept with that probability; after a few tries the last one stands.
+    public var weight: ((Point<ArtworkSpace>, Double) -> Double)?
+    static var weightedTries: Int { 8 }
     private let points: [Point<ArtworkSpace>]
     private var rng: R
     private var current: Glint?
@@ -86,8 +90,18 @@ public struct GlintScheduler<R: RandomNumberGenerator> {
         return max(params.minGap, -params.meanInterval * log(1 - u))
     }
 
+    private mutating func pick(at t: Double) -> Point<ArtworkSpace> {
+        var p = points[Int.random(in: 0..<points.count, using: &rng)]
+        guard let weight else { return p }
+        for _ in 1..<Self.weightedTries {
+            if Double.random(in: 0..<1, using: &rng) < weight(p, t) { break }
+            p = points[Int.random(in: 0..<points.count, using: &rng)]
+        }
+        return p
+    }
+
     private mutating func make(at t: Double) -> Glint {
-        Glint(point: points[Int.random(in: 0..<points.count, using: &rng)], start: t,
+        Glint(point: pick(at: t), start: t,
               life: Double.random(in: params.life, using: &rng),
               peak: Double.random(in: params.peak, using: &rng),
               direction: Bool.random(using: &rng) ? 1 : -1)

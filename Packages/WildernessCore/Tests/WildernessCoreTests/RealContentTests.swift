@@ -81,3 +81,17 @@ private let contentDir = contentURL.deletingLastPathComponent()
     #expect(Translation.niv.needsNotice && Translation.esv.needsNotice && Translation.nlt.needsNotice)
     #expect(!Translation.dra.needsNotice && !Translation.bsb.needsNotice)
 }
+
+/// Breathing: no two shipped regions share a rhythm, so the wall never pulses in unison.
+@Test func noTwoShippedRegionsBreatheInStep() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let ids = lib.annotations.filter { $0.outline != nil }.map(\.id)
+    let breathing = Breathing(ids: ids)
+    for (i, a) in ids.enumerated() {
+        for b in ids[(i + 1)...] {
+            let samePeriod = abs(breathing.period(for: a) - breathing.period(for: b)) < 0.15
+            let samePhase = abs(breathing.phase(for: a) - breathing.phase(for: b)) < 0.08
+            #expect(!(samePeriod && samePhase), "\(a) and \(b) breathe together")
+        }
+    }
+}
