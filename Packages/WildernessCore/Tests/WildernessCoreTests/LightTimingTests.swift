@@ -20,3 +20,10 @@ import Testing
     #expect(stale == ["angels", "basilisk"])
     #expect(LightTiming.staleFade < LightTiming.crossFade)
 }
+
+@Test func finishedFadesLeaveTheLevelsSoTheyAreNoLongerDrawn() {
+    let g = LightTiming.fadingOut
+    #expect(g > 0)   // still "visible" mid-fade, so a quick press can speed it up
+    let settled = LightTiming.settled(["christ": 1, "angels": g, "stag": 0])
+    #expect(settled == ["christ": 1])
+}
