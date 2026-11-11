@@ -40,6 +40,7 @@ struct ExploreView: View {
 struct AppContent {
     let library: AnnotationLibrary
     let script: UnfoldScript
+    let context: ContextScript
     let glints: GlintPoints
     let notices: Notices
 }
@@ -53,6 +54,7 @@ enum ContentLoader {
             let library = try AnnotationLibrary.decode(data("annotations"))
             return AppContent(library: library.applying(licensed),
                               script: try UnfoldScript.decode(data("unfold"), library: library).applying(licensed),
+                              context: try ContextScript.decode(data("context"), library: library),
                               glints: try GlintPoints.decode(data("glints")),
                               notices: try Notices.decode(data("notices")))
         }

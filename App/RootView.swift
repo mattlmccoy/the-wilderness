@@ -94,6 +94,11 @@ struct RootView: View {
                         UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal,
                                    header: mode.wayfinding(library: content.library, script: content.script),
                                    showsHint: machine?.hintUntil != nil)
+                    case let .context(page):
+                        ContextView(script: content.context, page: page, calibration: cal,
+                                    header: mode.wayfinding(library: content.library, script: content.script,
+                                                            context: content.context),
+                                    showsHint: machine?.hintUntil != nil)
                     case .pattern:
                         RegistrationTestPattern()
                     case .tuning:
@@ -126,7 +131,8 @@ struct RootView: View {
 
     private func send(_ input: AppInput, _ content: AppContent) {
         guard var m = machine else { return }
-        if m.handle(input, now: Self.now, library: content.library, script: content.script) == .togglePainting {
+        if m.handle(input, now: Self.now, library: content.library, script: content.script,
+                    context: content.context) == .togglePainting {
             showPainting.toggle()
         }
         if m.mode == .tuning, tuningSession == nil { tuningSession = TuningSession(tuning: tuningStore.tuning) }
@@ -156,6 +162,7 @@ struct RootView: View {
         switch mode {
         case let .explore(id, _): [id]
         case let .unfold(p): UnfoldView.targets(c.script, p)
+        case let .context(page): ContextView.targets(c.context, page: page)
         case .tuning: ["christ"]
         default: []
         }
@@ -168,6 +175,9 @@ struct RootView: View {
         case let .unfold(p):
             guard case let .success(c) = content else { return true }
             return !UnfoldView.targets(c.script, p).contains(UnfoldBeat.wholeTarget)
+        case let .context(page):
+            guard case let .success(c) = content else { return false }
+            return !ContextView.targets(c.context, page: page).isEmpty
         default:
             return false
         }

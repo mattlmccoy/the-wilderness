@@ -49,4 +49,5 @@ enum Wayfinding {
 
     static let exploreHint = "Arrows to move  ·  Select for more\nBack to return"
     static let unfoldHint = "Play/Pause to pause  ·  Arrows to skip\nBack to return"
+    static let contextHint = "Arrows to turn the page\nBack to return"
 }

@@ -53,6 +53,15 @@ final class ScreenshotTour: XCTestCase {
         sleep(5); shot("menu-3-hint-faded")
     }
 
+    /// Every Context page (no verse text on these screens).
+    func testContext() {
+        _ = launch()
+        let r = XCUIRemote.shared
+        r.press(.select); sleep(1)
+        r.press(.down); r.press(.down); r.press(.select); sleep(4); shot("context-1")
+        for i in 2...5 { r.press(.right); sleep(i == 2 ? 5 : 4); shot("context-\(i)") }
+    }
+
     func testLight() {
         _ = launch()
         let r = XCUIRemote.shared

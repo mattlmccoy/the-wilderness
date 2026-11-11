@@ -90,6 +90,20 @@ final class ExperienceFlowUITests: XCTestCase {
         remote.press(.menu)
     }
 
+    func testContextFromTheMenuTurnsPagesAndBackReturnsToTheMenu() {
+        let app = launch()
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Context"].waitForExistence(timeout: 3))
+        remote.press(.down); remote.press(.down); remote.press(.select)
+        XCTAssertTrue(app.staticTexts["The Painter"].waitForExistence(timeout: 5))
+        XCTAssertTrue(text(app, containing: "CONTEXT · 1 of 5").exists)
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Its Real Size"].waitForExistence(timeout: 5))
+        remote.press(.menu)
+        XCTAssertTrue(app.staticTexts["Context"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["Its Real Size"].exists)
+    }
+
     func testArrowShortcutSkipsTheHint() {
         let app = launch()
         remote.press(.right)

@@ -34,6 +34,7 @@ extension MenuItem {
         switch self {
         case .explore: "Explore"
         case .unfold: "Unfold"
+        case .context: "Context"
         }
     }
 
@@ -41,6 +42,7 @@ extension MenuItem {
         switch self {
         case .explore: "one figure at a time"
         case .unfold: "the story, five minutes"
+        case .context: "where it came from"
         }
     }
 }
