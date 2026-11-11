@@ -28,6 +28,16 @@ final class ScreenshotTour: XCTestCase {
         return app
     }
 
+    /// The menu and the first seconds of Explore (collapsed: no verse text in these shots).
+    func testMenu() {
+        _ = launch()
+        let r = XCUIRemote.shared
+        r.press(.select); sleep(2); shot("menu-0-explore")
+        r.press(.down); sleep(1); shot("menu-1-unfold")
+        r.press(.up); r.press(.select); sleep(4); shot("menu-2-explore-hint")
+        sleep(5); shot("menu-3-hint-faded")
+    }
+
     func testLight() {
         _ = launch()
         let r = XCUIRemote.shared

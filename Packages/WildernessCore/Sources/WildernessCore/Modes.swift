@@ -124,6 +124,7 @@ public struct ModeMachine: Equatable, Sendable {
     /// Time passing: idle modes fall back to Stillness; a playing Unfold plays on to its end.
     /// Calibration never times out.
     public mutating func tick(now: Double, dt: Double, script: UnfoldScript) {
+        if let h = hintUntil, now >= h { hintUntil = nil }
         let idle = now - lastInputAt
         switch mode {
         case .explore where idle >= Self.exploreIdleTimeout,

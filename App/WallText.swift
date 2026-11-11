@@ -16,34 +16,18 @@ struct WallText: View {
     let anchorY: Double
     /// Unfold only: a small "Paused" line under the text.
     var paused: Bool = false
-
-    @State private var columnHeight: CGFloat = 0
-    private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
-    private static let unitsPerInch: CGFloat = 20
-    private var column: CGFloat { placement.widthInches * Self.unitsPerInch }
+    /// Faint "you are here" line above the title, e.g. "UNFOLD · 2 of 8".
+    var header: String? = nil
+    /// One-line remote hint under the text, shown for a few seconds after entering from the menu.
+    var hint: String? = nil
 
     var body: some View {
-        switch placement.position {
-        case .beside(let side):
-            let x = side == .right ? canvas.width + TextColumnLayout.gap * Self.unitsPerInch
-                                   : -TextColumnLayout.gap * Self.unitsPerInch - column
-            // Start level with the subject, but move up as far as needed to keep the whole
-            // column on the tapestry's height (bigger type makes it tall).
-            content
-                .frame(width: column, alignment: .leading)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
-                .offset(x: x, y: max(0, min(anchorY * canvas.height - 90, canvas.height - columnHeight)))
-        case .overLowerEdge:
-            content
-                .frame(width: column, alignment: .leading)
-                .frame(width: canvas.width - 2 * Self.unitsPerInch, height: canvas.height - Self.unitsPerInch,
-                       alignment: .bottomLeading)
-                .offset(x: Self.unitsPerInch, y: 0)
-        }
+        WallColumn(placement: placement, anchorY: anchorY) { content }
     }
 
     private var content: some View {
         VStack(alignment: .leading, spacing: 14) {
+            if let header { Wayfinding.header(header) }
             Text(title)
                 .font(Typography.title())
                 .foregroundStyle(Palette.ivory)
@@ -78,7 +62,13 @@ struct WallText: View {
                     .padding(.top, 6)
                     .transition(.opacity)
             }
+            if let hint {
+                Wayfinding.hint(hint)
+                    .padding(.top, 10)
+                    .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
+            }
         }
+        .animation(.easeInOut(duration: LightTiming.textOut), value: hint)
         .multilineTextAlignment(.leading)
         // Never truncate wall text: take the full height the words need.
         .fixedSize(horizontal: false, vertical: true)

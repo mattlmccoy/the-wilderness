@@ -47,13 +47,54 @@ final class ExperienceFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["In the Beginning"].waitForExistence(timeout: 5))
     }
 
-    func testBackReturnsToStillness() {
+    func testBackGoesUpToTheMenuThenToRest() {
         let app = launch()
         remote.press(.right)
         XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
         remote.press(.menu)
-        XCTAssertFalse(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 2.5))
+        XCTAssertTrue(app.staticTexts["Explore"].waitForExistence(timeout: 3), "Back should open the menu")
+        XCTAssertFalse(app.staticTexts["Jesus Christ"].exists)
+        remote.press(.menu)
+        XCTAssertFalse(app.staticTexts["Explore"].waitForExistence(timeout: 2.5), "second Back should rest")
         XCTAssertEqual(app.state, .runningForeground)
+    }
+
+    func testSelectAtRestOpensTheMenuAndEntersExploreWithAHint() {
+        let app = launch()
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Explore"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.staticTexts["Unfold"].exists)
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["EXPLORE"].exists, "no you-are-here line")
+        XCTAssertTrue(text(app, containing: "Back to return").exists, "no hint after entering from the menu")
+        sleep(8)
+        XCTAssertFalse(text(app, containing: "Back to return").exists, "hint should fade after ~6 s")
+    }
+
+    func testMenuDownSelectStartsUnfoldWithItsPlace() {
+        let app = launch()
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Unfold"].waitForExistence(timeout: 3))
+        remote.press(.down)
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["In the Beginning"].waitForExistence(timeout: 5))
+        XCTAssertTrue(text(app, containing: "UNFOLD · 1 of ").exists)
+    }
+
+    func testHoldSelectAtRestOpensSettingsNotTheMenu() {
+        let app = launch()
+        remote.press(.select, forDuration: 1.2)
+        XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["Unfold"].exists, "the menu opened under Settings")
+        remote.press(.menu)
+    }
+
+    func testArrowShortcutSkipsTheHint() {
+        let app = launch()
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
+        XCTAssertFalse(text(app, containing: "Back to return").exists)
     }
 
     /// Licensed verses replace the BSB placeholders. Checks citations only ("ref · NIV"), so the

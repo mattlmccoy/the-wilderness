@@ -289,3 +289,10 @@ private extension ModeMachine {
     #expect(Mode.stillness.wayfinding(library: lib, script: script) == nil)
     #expect(Mode.menu(focus: .explore).wayfinding(library: lib, script: script) == nil)
 }
+
+@Test func tickClearsAnExpiredHintSoTheScreenRedrawsWithoutIt() {
+    var m = machine(.menu(focus: .explore))
+    m.press(.select, at: 10)
+    m.tick(now: 15, dt: 0.25, script: script); #expect(m.hintUntil != nil)
+    m.tick(now: 16.1, dt: 0.25, script: script); #expect(m.hintUntil == nil)
+}

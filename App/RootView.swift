@@ -73,11 +73,18 @@ struct RootView: View {
                     case .stillness:
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
+                    case let .menu(focus):
+                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
+                                   demo: UserDefaults.standard.bool(forKey: "glintDemo"))
+                        MenuView(focus: focus, calibration: cal)
+                            .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
-                                    calibration: cal)
+                                    calibration: cal, showsHint: machine?.hintUntil != nil)
                     case let .unfold(p):
-                        UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal)
+                        UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal,
+                                   header: mode.wayfinding(library: content.library, script: content.script),
+                                   showsHint: machine?.hintUntil != nil)
                     case .pattern:
                         RegistrationTestPattern()
                     case .tuning:

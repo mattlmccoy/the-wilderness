@@ -9,6 +9,7 @@ struct ExploreView: View {
     let library: AnnotationLibrary
     let state: ExploreState
     let calibration: Calibration
+    var showsHint: Bool = false
 
     private var selected: (Annotation, Bool)? {
         guard case let .exploring(id, expanded) = state,
@@ -22,7 +23,8 @@ struct ExploreView: View {
                 WallText(title: a.title, short: a.short, more: a.more, fallbackExtended: a.extended,
                          expanded: expanded,
                          placement: TextColumnLayout.place(preferred: a.textSide, calibration: calibration),
-                         anchorY: a.anchor.y)
+                         anchorY: a.anchor.y, header: "EXPLORE",
+                         hint: showsHint ? Wayfinding.exploreHint : nil)
                     .id(a.id)
                     .transition(.asymmetric(
                         insertion: .opacity.animation(.easeIn(duration: LightTiming.textIn).delay(LightTiming.textDelay)),

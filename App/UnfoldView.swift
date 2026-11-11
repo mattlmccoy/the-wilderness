@@ -8,6 +8,8 @@ struct UnfoldView: View {
     let playback: UnfoldPlayback
     let library: AnnotationLibrary
     let calibration: Calibration
+    var header: String? = nil
+    var showsHint: Bool = false
 
     private var beat: UnfoldBeat { script.beats[playback.beat] }
 
@@ -21,7 +23,8 @@ struct UnfoldView: View {
             WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
                      expanded: beat.more != nil,
                      placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
-                     anchorY: anchorY, paused: playback.paused)
+                     anchorY: anchorY, paused: playback.paused, header: header,
+                     hint: showsHint ? Wayfinding.unfoldHint : nil)
             .id(beat.id)
             .transition(.asymmetric(
                 insertion: .opacity.animation(.easeIn(duration: LightTiming.textIn).delay(LightTiming.textDelay)),

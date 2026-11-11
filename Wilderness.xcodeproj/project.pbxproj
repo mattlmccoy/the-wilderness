@@ -17,6 +17,7 @@
 		2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96443CC736D66435C0FEE8F1 /* SettingsView.swift */; };
 		3112350BA2ADE9C0DD2AB7BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63272EBAD19DCC2048941CE0 /* Assets.xcassets */; };
 		3576D09A2B2003A03D056D30 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06B70493ADCF9380EB26B7 /* Typography.swift */; };
+		36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393AF73F60A0DEC4D2325EBB /* MenuView.swift */; };
 		4D82EBC476E49CB3071E006B /* ExperienceFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */; };
 		5260564F328098D8AD414850 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = CC94F1B3458529F9BDDDB5AD /* WildernessCore */; };
 		52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */; };
@@ -40,6 +41,7 @@
 		DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */; };
 		DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD97476B6D5814CC002BB613 /* TuningStore.swift */; };
 		E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
+		F55E0385F25B73F4A6CA82D3 /* WallColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +64,7 @@
 		2BEA43B01189736807F84B94 /* WildernessUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34504EEACA619A61C36E1178 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTour.swift; sourceTree = "<group>"; };
+		393AF73F60A0DEC4D2325EBB /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		3E899EF5E0A146751A13B832 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		3F6E3C541A7FD4DED662EFED /* WildernessCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WildernessCore; path = Packages/WildernessCore; sourceTree = SOURCE_ROOT; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
@@ -78,6 +81,7 @@
 		9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFlowUITests.swift; sourceTree = "<group>"; };
 		949D7018FF5ACDAE3CF94E43 /* painting.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = painting.jpg; sourceTree = "<group>"; };
 		96443CC736D66435C0FEE8F1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallColumn.swift; sourceTree = "<group>"; };
 		A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappedCanvas.swift; sourceTree = "<group>"; };
 		B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSupport.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 				0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */,
 				7D05E43D6E479D37C55550E7 /* LightLayer.swift */,
 				AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */,
+				393AF73F60A0DEC4D2325EBB /* MenuView.swift */,
 				34504EEACA619A61C36E1178 /* Palette.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
 				EAE8658D36AD63360176932D /* SelectHoldDetector.swift */,
@@ -130,6 +135,7 @@
 				FD97476B6D5814CC002BB613 /* TuningStore.swift */,
 				6F06B70493ADCF9380EB26B7 /* Typography.swift */,
 				5575DEF51153E5584DC61376 /* UnfoldView.swift */,
+				A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */,
 				F6BDD2885BEE47A41C152161 /* WallText.swift */,
 				EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */,
 				95148E6B311B87780B181219 /* Content */,
@@ -307,6 +313,7 @@
 				21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */,
 				B0C64794E425760E28401393 /* LightLayer.swift in Sources */,
 				218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */,
+				36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */,
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
 				AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */,
@@ -314,6 +321,7 @@
 				DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */,
 				3576D09A2B2003A03D056D30 /* Typography.swift in Sources */,
 				7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */,
+				F55E0385F25B73F4A6CA82D3 /* WallColumn.swift in Sources */,
 				0DE7FEC62E086B038A0D1875 /* WallText.swift in Sources */,
 				52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */,
 			);
