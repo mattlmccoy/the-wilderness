@@ -31,4 +31,33 @@ final class CalibrationFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Bottom left · 4 of 4"].waitForExistence(timeout: 3))
         XCTAssertEqual(app.state, .runningForeground)
     }
+
+    /// Recalibrating from Settings must hand the remote back: after the save (which plays the
+    /// boot-up intro, so the intro is not skipped here) the arrows reach Explore again.
+    func testRecalibratingFromSettingsThenArrowsReachExplore() {
+        let app = XCUIApplication()
+        app.launchArguments += SavedCalibration.args(skipIntro: false)
+        app.launch()
+        let remote = XCUIRemote.shared
+        remote.press(.select)   // skips the launch intro to rest
+        sleep(1)
+        remote.press(.select, forDuration: 1.2)
+        XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3), "Settings did not open")
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Top left · 1 of 4"].waitForExistence(timeout: 5), "Calibrate did not open")
+        for _ in 0..<4 { remote.press(.select) }
+        let review = app.staticTexts["Check the outline"]
+        XCTAssertTrue(review.waitForExistence(timeout: 3))
+        remote.press(.select)   // save
+        let closed = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: review)
+        wait(for: [closed], timeout: 5)
+
+        // The save plays the intro; the first press only skips it, so it must not explore.
+        remote.press(.right)
+        XCTAssertFalse(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 2.5),
+                       "the first press after saving should only skip the intro")
+        remote.press(.right)
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5),
+                      "after recalibrating, an arrow no longer reaches Explore")
+    }
 }

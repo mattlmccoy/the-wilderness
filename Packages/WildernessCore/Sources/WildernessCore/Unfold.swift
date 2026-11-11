@@ -39,7 +39,9 @@ public struct UnfoldScript: Codable, Equatable, Sendable {
         let script = try JSONDecoder().decode(UnfoldScript.self, from: data)
         let ids = Set(library.annotations.map(\.id)).union([UnfoldBeat.wholeTarget])
         guard !script.beats.isEmpty else { throw Invalid.invalid("unfold has no beats") }
+        var seen = Set<String>()
         for b in script.beats {
+            guard seen.insert(b.id).inserted else { throw Invalid.invalid("duplicate beat id \(b.id)") }
             guard b.duration > 0 else { throw Invalid.invalid("\(b.id): duration must be positive") }
             guard !b.light.isEmpty, b.light.allSatisfy({ !$0.isEmpty }) else {
                 throw Invalid.invalid("\(b.id): every light step needs a target")
@@ -76,6 +78,9 @@ public struct UnfoldScript: Codable, Equatable, Sendable {
     public func previous(_ p: UnfoldPlayback) -> UnfoldPlayback {
         UnfoldPlayback(beat: max(p.beat - 1, 0), elapsed: 0, paused: p.paused)
     }
+
+    /// What is lit at this moment: the current step's targets.
+    public func targets(_ p: UnfoldPlayback) -> Set<String> { Set(beats[p.beat].light[step(p)]) }
 
     /// Which light step is showing; steps split the beat's duration evenly.
     public func step(_ p: UnfoldPlayback) -> Int {

@@ -412,3 +412,12 @@ private extension ModeMachine {
     #expect(m.mode == .menu(focus: .sound))
     #expect(!m.showsHint(now: 3.5))
 }
+
+@Test func contextDimsTheWashOnlyOnPagesThatLightSubjects() {
+    let lit = ContextScript(pages: [
+        ContextPage(id: "map", title: "t", text: "t", light: [], visual: .map, textSide: .left, sources: ["s"], draft: true),
+        ContextPage(id: "edge", title: "t", text: "t", light: ["christ"], visual: nil, textSide: .left, sources: ["s"], draft: true),
+    ])
+    #expect(!Mode.context(page: 0).dimsWash(script: script, context: lit))
+    #expect(Mode.context(page: 1).dimsWash(script: script, context: lit))
+}

@@ -15,12 +15,12 @@ struct UnfoldView: View {
 
     /// What the root LightLayer lights for this moment of Unfold.
     static func targets(_ script: UnfoldScript, _ p: UnfoldPlayback) -> Set<String> {
-        Set(script.beats[p.beat].light[script.step(p)])
+        script.targets(p)
     }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
+            WallText(title: beat.title, short: beat.short, more: beat.more,
                      expanded: beat.more != nil,
                      placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
                      anchorY: anchorY, paused: playback.paused, header: header,

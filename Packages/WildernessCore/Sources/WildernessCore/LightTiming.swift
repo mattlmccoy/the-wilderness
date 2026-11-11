@@ -6,6 +6,16 @@ public enum LightTiming {
     /// incoming lights show at once.
     public static let staleFade = 0.25
 
+    /// An outgoing light animates to this, not 0, so a later quick press still sees it as
+    /// visible and can speed its fade up (`staleLights`).
+    public static let fadingOut = 0.0001
+
+    /// Once the fades have finished: lights that faded out (or were snuffed to 0) leave the
+    /// levels, so they are drawn at exactly 0 instead of composited at `fadingOut` forever.
+    public static func settled(_ levels: [String: Double]) -> [String: Double] {
+        levels.filter { $0.value > fadingOut }
+    }
+
     public static func staleLights(visible: Set<String>, old: Set<String>, new: Set<String>) -> Set<String> {
         visible.subtracting(old).subtracting(new)
     }

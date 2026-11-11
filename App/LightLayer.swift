@@ -10,7 +10,7 @@ struct LightLayer: View {
     let tuning: Tuning
     /// Annotation ids and/or "whole". Empty means Stillness.
     let targets: Set<String>
-    /// While exploring, the wash drops so the rest of the tapestry recedes.
+    /// While a subject is lit (`Mode.dimsWash`), the wash drops so the rest of the tapestry recedes.
     let exploring: Bool
     /// The boot-up intro starts on a dark wall: no wash until it ends.
     var dark = false
@@ -18,13 +18,15 @@ struct LightLayer: View {
     /// Feather of about 2.2 in on the wall (44 canvas units).
     static let featherRadius: CGFloat = 22
 
-    /// Per-subject level, 0…1 (times subjectStrength). An outgoing light animates to `gone`
-    /// rather than 0, so a later change can still see it and speed it up (see `restage`).
+    /// Per-subject level, 0…1 (times subjectStrength). An outgoing light animates to
+    /// `LightTiming.fadingOut` rather than 0, so a later change can still see it and speed it up
+    /// (see `restage`); once its fade has finished it leaves `levels` and is drawn at exactly 0.
     @State private var levels: [String: Double] = [:]
+    /// Counts restages, so a finished fade only settles `levels` if no newer change is running.
+    @State private var restages = 0
     @State private var shown: Set<String> = []
     @State private var shownExploring = false
     @State private var shownDark = false
-    private static let gone = 0.0001
 
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
 
@@ -56,11 +58,17 @@ struct LightLayer: View {
         withAnimation(.easeOut(duration: LightTiming.staleFade)) {
             for id in stale { levels[id] = 0 }
         }
+        restages += 1
+        let generation = restages
         withAnimation(.easeInOut(duration: LightTiming.duration(from: old, to: new))) {
-            for id in old.subtracting(new) { levels[id] = Self.gone }
+            for id in old.subtracting(new) { levels[id] = LightTiming.fadingOut }
             for id in new { levels[id] = 1 }
             shown = new
             shownExploring = exploring
+        } completion: {
+            // A newer change owns any light still fading; its own completion settles them.
+            guard generation == restages else { return }
+            levels = LightTiming.settled(levels)
         }
     }
 
