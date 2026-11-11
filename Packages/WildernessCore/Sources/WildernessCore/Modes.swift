@@ -2,7 +2,7 @@ import Foundation
 
 public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, painting, about }
 /// The guest-facing front door: a short list beside the tapestry (Select at rest).
-public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold }
+public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold, context }
 
 /// Everything the app can be showing (spec §5).
 public enum Mode: Equatable, Sendable {
@@ -13,6 +13,8 @@ public enum Mode: Equatable, Sendable {
     case menu(focus: MenuItem)
     case explore(id: String, expanded: Bool)
     case unfold(UnfoldPlayback)
+    /// Context: pages about the painting itself, turned with ← →.
+    case context(page: Int)
     case settings(focus: SettingsItem)
     case calibrating, tuning, pattern, about
 }
@@ -44,7 +46,7 @@ public struct ModeMachine: Equatable, Sendable {
 
     @discardableResult
     public mutating func handle(_ input: AppInput, now: Double, library: AnnotationLibrary,
-                                script: UnfoldScript) -> ModeEffect? {
+                                script: UnfoldScript, context: ContextScript = .empty) -> ModeEffect? {
         lastInputAt = now
         let before = mode
         var fromMenu = false
@@ -68,6 +70,18 @@ public struct ModeMachine: Equatable, Sendable {
             var e = ExploreState.idle
             e.handle(.move(.right), library: library)
             if case let .exploring(id, expanded) = e { mode = .explore(id: id, expanded: expanded); fromMenu = true }
+        case (.menu(.context), .select) where !context.pages.isEmpty:
+            mode = .context(page: 0); fromMenu = true
+        case (.context(let page), .move(.right)):
+            mode = .context(page: min(page + 1, max(context.pages.count - 1, 0)))
+        case (.context(let page), .move(.left)):
+            mode = .context(page: max(page - 1, 0))
+        case (.context, .back):
+            mode = .menu(focus: .context)
+        case (.context, .playPause):
+            mode = .unfold(.start)
+        case (.context, .holdSelect):
+            mode = .settings(focus: .calibrate)
         case (.menu(.unfold), .select):
             mode = .unfold(.start); fromMenu = true
         case (.menu, .back):
@@ -122,6 +136,8 @@ public struct ModeMachine: Equatable, Sendable {
         return nil
     }
 
+    /// Context pages are read, not glanced at: two minutes before returning to rest.
+    public static let readingIdleTimeout = 120.0
     /// Settings and About return to Stillness after this long without a press.
     public static let menuIdleTimeout = 45.0
     /// Tune light, the alignment pattern and a paused Unfold get longer: they are used while
@@ -135,6 +151,7 @@ public struct ModeMachine: Equatable, Sendable {
         let idle = now - lastInputAt
         switch mode {
         case .explore where idle >= Self.exploreIdleTimeout,
+             .context where idle >= Self.readingIdleTimeout,
              .menu where idle >= Self.menuIdleTimeout,
              .settings where idle >= Self.menuIdleTimeout,
              .about where idle >= Self.menuIdleTimeout,
@@ -183,17 +200,21 @@ extension Mode {
         case .pattern: 7
         case .about: 8
         case .intro: 9
+        case .context: 10
         }
     }
 
     /// The faint "you are here" line at the top of the text column, e.g. "UNFOLD · 2 of 8".
-    public func wayfinding(library: AnnotationLibrary, script: UnfoldScript) -> String? {
+    public func wayfinding(library: AnnotationLibrary, script: UnfoldScript,
+                           context: ContextScript = .empty) -> String? {
         switch self {
         case .explore:
             // No "3 of 11": arrows move to the nearest subject that way, so a count would jump.
             return "EXPLORE"
         case let .unfold(p):
             return "UNFOLD · \(p.beat + 1) of \(script.beats.count)"
+        case let .context(page):
+            return "CONTEXT · \(page + 1) of \(context.pages.count)"
         default:
             return nil
         }

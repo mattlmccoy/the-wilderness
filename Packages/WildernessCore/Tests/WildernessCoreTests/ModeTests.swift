@@ -242,8 +242,9 @@ private extension ModeMachine {
     var m = machine(.menu(focus: .explore))
     m.press(.move(.up)); #expect(m.mode == .menu(focus: .explore))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .unfold))
-    m.press(.move(.down)); #expect(m.mode == .menu(focus: .unfold))
-    m.press(.move(.up)); #expect(m.mode == .menu(focus: .explore))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .context))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .context))
+    m.press(.move(.up)); #expect(m.mode == .menu(focus: .unfold))
 }
 
 @Test func selectInTheMenuEntersTheFocusedMode() {
@@ -261,9 +262,9 @@ private extension ModeMachine {
 }
 
 @Test func menuReturnsToStillnessAfter45SecondsIdle() {
-    var m = machine(.menu(focus: .unfold))
+    var m = machine(.menu(focus: .context))
     m.press(.move(.down), at: 0)
-    m.tick(now: 44, dt: 0.25, script: script); #expect(m.mode == .menu(focus: .unfold))
+    m.tick(now: 44, dt: 0.25, script: script); #expect(m.mode == .menu(focus: .context))
     m.tick(now: 45, dt: 0.25, script: script); #expect(m.mode == .stillness)
 }
 
@@ -355,4 +356,50 @@ private let everyInput: [AppInput] = [.select, .holdSelect, .playPause, .back,
 
 @Test func theIntroHasNoWayfindingLine() {
     #expect(Mode.intro(startedAt: 0).wayfinding(library: lib, script: script) == nil)
+}
+
+// MARK: - Context (approved 2026-11-10)
+
+private func ctxPage(_ id: String) -> ContextPage {
+    ContextPage(id: id, title: id, text: "t", light: [], visual: nil, textSide: .left, sources: ["s"], draft: true)
+}
+private let ctx = ContextScript(pages: [ctxPage("p1"), ctxPage("p2"), ctxPage("p3")])
+private extension ModeMachine {
+    @discardableResult
+    mutating func pressCtx(_ i: AppInput, at t: Double = 1) -> ModeEffect? {
+        handle(i, now: t, library: lib, script: script, context: ctx)
+    }
+}
+
+@Test func menuReachesContextAndSelectOpensItsFirstPageWithAHint() {
+    var m = machine(.menu(focus: .explore))
+    m.pressCtx(.move(.down)); m.pressCtx(.move(.down))
+    #expect(m.mode == .menu(focus: .context))
+    m.pressCtx(.select, at: 5)
+    #expect(m.mode == .context(page: 0))
+    #expect(m.showsHint(now: 6))
+}
+
+@Test func contextPagesTurnWithLeftRightAndStopAtTheEnds() {
+    var m = machine(.context(page: 0))
+    m.pressCtx(.move(.left)); #expect(m.mode == .context(page: 0))
+    m.pressCtx(.move(.right)); m.pressCtx(.move(.right)); #expect(m.mode == .context(page: 2))
+    m.pressCtx(.move(.right)); #expect(m.mode == .context(page: 2))
+    m.pressCtx(.move(.left)); #expect(m.mode == .context(page: 1))
+}
+
+@Test func backFromContextGoesToTheMenuOnContext() {
+    var m = machine(.context(page: 1)); m.pressCtx(.back)
+    #expect(m.mode == .menu(focus: .context))
+}
+
+@Test func contextReturnsToStillnessAfterTwoMinutesIdle() {
+    var m = machine(.context(page: 1))
+    m.pressCtx(.move(.right), at: 0)
+    m.tick(now: 119, dt: 0.25, script: script); #expect(m.mode != .stillness)
+    m.tick(now: 120, dt: 0.25, script: script); #expect(m.mode == .stillness)
+}
+
+@Test func contextWayfindingCountsPages() {
+    #expect(Mode.context(page: 1).wayfinding(library: lib, script: script, context: ctx) == "CONTEXT · 2 of 3")
 }

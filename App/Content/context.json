@@ -1,0 +1,67 @@
+{
+  "pages": [
+    {
+      "id": "painter",
+      "title": "The Painter",
+      "text": "Moretto da Brescia was born in Brescia around 1498 and died there in 1554. He painted this when he was about twenty, in a city that lies between Milan and Venice.",
+      "light": [],
+      "visual": "map",
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/art/collection/search/437157 (artist Brescia ca. 1498–1554 Brescia; dated ca. 1515–20)"
+      ],
+      "draft": true
+    },
+    {
+      "id": "size",
+      "title": "Its Real Size",
+      "text": "The canvas itself is small: eighteen inches high and not quite twenty-two wide. The frame of light shows it at its true size. Christ and every creature around Him fit inside it.",
+      "light": [],
+      "visual": "trueSize",
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/art/collection/search/437157 (oil on canvas, 18 x 21 3/4 in.)"
+      ],
+      "draft": true
+    },
+    {
+      "id": "fragment",
+      "title": "A Fragment",
+      "text": "This was once part of a larger canvas. The faint cherubs at the left edge were cut through when it was trimmed, and the lost part probably showed other moments from Christ's life. A painting in London of Christ blessing John the Baptist may have come from the same canvas.",
+      "light": ["fragment"],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://metmuseum.org/toah/works-of-art/11.53 (a fragment of a larger canvas that continued past the cherubim at the left and showed other events from Christ's life)",
+        "https://www.nationalgallery.org.uk/paintings/moretto-da-brescia-christ-blessing-saint-john-the-baptist (suggested to have been part of the same composition; figure sizes differ)"
+      ],
+      "draft": true
+    },
+    {
+      "id": "subject",
+      "title": "A Rare Subject",
+      "text": "Few painters chose the forty days in the wilderness. Mark tells it in two short verses and says He was with the wild animals. Moretto took that line and filled the hills with them.",
+      "light": ["lion", "bear", "stag", "fox", "basilisk", "snake", "pelican"],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/en/essays/painting-the-life-of-christ-in-medieval-and-renaissance-italy (the unusual theme let Moretto fill the landscape with birds and animals)",
+        "Mark 1:12–13"
+      ],
+      "draft": true
+    },
+    {
+      "id": "home",
+      "title": "Where It Hangs",
+      "text": "The painting belongs to The Metropolitan Museum of Art in New York. What hangs here is a copy, nearly three times its size.",
+      "light": ["christ"],
+      "visual": null,
+      "textSide": "left",
+      "sources": [
+        "https://www.metmuseum.org/art/collection/search/437157 (Metropolitan Museum of Art, accession 11.53)",
+        "Tapestry 60 x 50 in. against the original 21 3/4 x 18 in.: about 2.8 times"
+      ],
+      "draft": true
+    }
+  ]
+}
