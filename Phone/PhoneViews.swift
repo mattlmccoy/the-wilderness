@@ -152,6 +152,11 @@ struct SettingsSheet: View {
                     slider("Edge line", \.edgeLine, 0...1)
                     slider("Background wash", \.baseWash, 0...0.5)
                 }
+                Section("At rest") {
+                    slider("Breathing", \.breathing, 0...0.3)
+                    Toggle("Passing light", isOn: Binding(get: { tuning.passingLight },
+                                                          set: { tuning.passingLight = $0; client.send(.setTuning(tuning)) }))
+                }
                 Section("Glints") {
                     slider("Brightness", \.glintBrightness, 0.2...1)
                     slider("Size (in)", \.glintSizeInches, 0.02...0.2)

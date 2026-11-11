@@ -25,6 +25,8 @@ struct RootView: View {
     private let ticker = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
     /// Measures the real time between ticks; a box, so updating it never redraws the view.
     @State private var clock = TickClockBox()
+    /// When the wall started breathing, so glints can follow the breath.
+    @State private var alive = AliveClock()
 
     private static var now: Double { Date().timeIntervalSinceReferenceDate }
     /// UI tests launch with `-skipIntro YES` so their first press acts at rest, as before.
@@ -88,13 +90,15 @@ struct RootView: View {
                     LightLayer(library: content.library, tuning: tuningStore.tuning,
                                targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script, context: content.context),
                                dark: mode.isIntro)
+                    AliveLayer(library: content.library, breathing: content.breathing, tuning: tuningStore.tuning,
+                               active: Breathing.isActive(mode), clock: alive)
                     switch mode {
                     case let .intro(startedAt):
                         IntroView(library: content.library, tuning: tuningStore.tuning, startedAt: startedAt)
                             .transition(.opacity.animation(.easeOut(duration: 1.0)))
                     case .stillness:
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
-                                   demo: UserDefaults.standard.bool(forKey: "glintDemo"))
+                                   demo: UserDefaults.standard.bool(forKey: "glintDemo"), bias: glintBias(content))
                     case let .menu(focus):
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
@@ -116,7 +120,8 @@ struct RootView: View {
                     case .pattern:
                         RegistrationTestPattern()
                     case .tuning:
-                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal, demo: true)
+                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal, demo: true,
+                                   bias: glintBias(content))
                         // Show the edge line on Christ while tuning it (and everything else).
                         if let christ = content.library.annotations.first(where: { $0.id == "christ" }) {
                             EdgeLineView(annotation: christ, strength: tuningStore.tuning.edgeLine)
@@ -180,6 +185,16 @@ struct RootView: View {
             showPainting = on
         default:
             if let input = command.input { send(input, c) }
+        }
+    }
+
+    /// Glints lean toward regions near the top of their breath, while breathing is on.
+    private func glintBias(_ c: AppContent) -> ((Point<ArtworkSpace>, Double) -> Double)? {
+        guard tuningStore.tuning.breathing > 0 else { return nil }
+        let clock = alive, library = c.library, breathing = c.breathing
+        return { p, t in
+            guard let since = clock.since else { return 1 }
+            return breathing.glintWeight(regionId: FigureHitTest.figure(at: p, in: library), at: t, since: since)
         }
     }
 

@@ -50,6 +50,9 @@ struct AppContent {
     let context: ContextScript
     let glints: GlintPoints
     let notices: Notices
+
+    /// Each traced region's breathing rhythm (cheap: a handful of entries).
+    var breathing: Breathing { Breathing(ids: library.annotations.filter { $0.outline != nil }.map(\.id)) }
 }
 
 enum ContentLoader {

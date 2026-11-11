@@ -9,6 +9,8 @@ struct GlintLayer: View {
     let calibration: Calibration
     /// Tuning screen: a glint every 2 s, so changes are visible right away.
     let demo: Bool
+    /// Preference for where the next glint lands (the breath of the region under it); nil = anywhere.
+    var bias: ((Point<ArtworkSpace>, Double) -> Double)? = nil
 
     @State private var clock = GlintClock()
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
@@ -18,7 +20,7 @@ struct GlintLayer: View {
         TimelineView(.animation(minimumInterval: 1.0 / 30)) { timeline in
             Canvas { ctx, _ in
                 let now = timeline.date.timeIntervalSinceReferenceDate
-                guard let g = clock.glint(at: now, points: points, tuning: tuning, demo: demo) else { return }
+                guard let g = clock.glint(at: now, points: points, tuning: tuning, demo: demo, bias: bias) else { return }
                 draw(g, at: now, in: &ctx)
             }
         }
@@ -57,12 +59,14 @@ final class GlintClock {
     private var scheduler: GlintScheduler<SplitMix64>?
     private var lastDemo = 0.0
 
-    func glint(at now: Double, points: GlintPoints, tuning: Tuning, demo: Bool) -> Glint? {
+    func glint(at now: Double, points: GlintPoints, tuning: Tuning, demo: Bool,
+               bias: ((Point<ArtworkSpace>, Double) -> Double)?) -> Glint? {
         if scheduler == nil {
             scheduler = GlintScheduler(points: points.points, params: tuning.glintParams,
                                        rng: SplitMix64(seed: UInt64(now * 1000)), now: now)
         }
         scheduler!.params = tuning.glintParams
+        scheduler!.weight = bias
         if demo, now - lastDemo >= 2 {
             scheduler!.fireNow(at: now)
             lastDemo = now
