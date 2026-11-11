@@ -2,9 +2,9 @@ import XCTest
 
 /// Drives the real app with Siri Remote presses, starting calibrated and in Stillness.
 final class ExperienceFlowUITests: XCTestCase {
-    private func launch() -> XCUIApplication {
+    private func launch(skipIntro: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += SavedCalibration.args()
+        app.launchArguments += SavedCalibration.args(skipIntro: skipIntro)
         app.launch()
         return app
     }
@@ -137,5 +137,31 @@ final class ExperienceFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts[flipped].waitForExistence(timeout: 2))
         remote.press(.select)   // restore what the viewer had
         XCTAssertTrue(app.staticTexts[original].waitForExistence(timeout: 2))
+    }
+
+    // MARK: - Boot-up intro: any press skips it to rest, and does nothing else.
+
+    func testSelectDuringTheIntroSkipsToRestWithoutOpeningTheMenu() {
+        let app = launch(skipIntro: false)
+        remote.press(.select)
+        XCTAssertFalse(app.staticTexts["Explore"].waitForExistence(timeout: 2.5), "the skipping press opened the menu")
+        remote.press(.right)   // at rest, an arrow explores Christ
+        XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5), "the intro was not skipped to rest")
+    }
+
+    func testArrowDuringTheIntroSkipsToRestWithoutExploring() {
+        let app = launch(skipIntro: false)
+        remote.press(.right)
+        XCTAssertFalse(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 2.5), "the skipping press entered Explore")
+        remote.press(.select)  // at rest, Select opens the menu
+        XCTAssertTrue(app.staticTexts["Explore"].waitForExistence(timeout: 3), "the intro was not skipped to rest")
+        XCTAssertTrue(app.staticTexts["Unfold"].exists)
+    }
+
+    func testTheIntroEndsAtRestByItself() {
+        let app = launch(skipIntro: false)
+        sleep(17)
+        remote.press(.select)  // if the intro were still playing, this would only skip it
+        XCTAssertTrue(app.staticTexts["Explore"].waitForExistence(timeout: 3), "not at rest after the intro")
     }
 }

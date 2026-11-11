@@ -7,6 +7,9 @@ public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold }
 /// Everything the app can be showing (spec §5).
 public enum Mode: Equatable, Sendable {
     case stillness
+    /// The boot-up intro: outlines draw around the figures, then fade into Stillness.
+    /// Started on a calibrated launch and right after a calibration is saved.
+    case intro(startedAt: Double)
     case menu(focus: MenuItem)
     case explore(id: String, expanded: Bool)
     case unfold(UnfoldPlayback)
@@ -33,8 +36,9 @@ public struct ModeMachine: Equatable, Sendable {
     public private(set) var hintUntil: Double?
     public static let hintDuration = 6.0
 
-    public init(calibrated: Bool, now: Double) {
-        mode = calibrated ? .stillness : .calibrating
+    /// `intro: false` starts a calibrated machine at rest (UI tests launch with -skipIntro YES).
+    public init(calibrated: Bool, now: Double, intro: Bool = true) {
+        mode = !calibrated ? .calibrating : intro ? .intro(startedAt: now) : .stillness
         lastInputAt = now
     }
 
@@ -49,6 +53,9 @@ public struct ModeMachine: Equatable, Sendable {
             else if before.kind != mode.kind { hintUntil = nil }
         }
         switch (mode, input) {
+        case (.intro, _):
+            // Any button skips the intro, and the press is used up: it opens nothing else.
+            mode = .stillness
         case (.stillness, .back):
             return .exitApp
         case (.stillness, .select), (.stillness, .move(.up)), (.stillness, .move(.down)):
@@ -122,7 +129,7 @@ public struct ModeMachine: Equatable, Sendable {
     public static let workIdleTimeout = 300.0
 
     /// Time passing: idle modes fall back to Stillness; a playing Unfold plays on to its end.
-    /// Calibration never times out.
+    /// Calibration never times out; the intro is never cut short, it simply ends.
     public mutating func tick(now: Double, dt: Double, script: UnfoldScript) {
         if let h = hintUntil, now >= h { hintUntil = nil }
         let idle = now - lastInputAt
@@ -133,6 +140,8 @@ public struct ModeMachine: Equatable, Sendable {
              .about where idle >= Self.menuIdleTimeout,
              .tuning where idle >= Self.workIdleTimeout,
              .pattern where idle >= Self.workIdleTimeout:
+            mode = .stillness
+        case .intro(let start) where IntroTimeline.isFinished(at: now - start):
             mode = .stillness
         case .unfold(let p) where p.paused:
             if idle >= Self.workIdleTimeout { mode = .stillness }
@@ -145,10 +154,13 @@ public struct ModeMachine: Equatable, Sendable {
 
     /// Something happened that wasn't a press this machine saw, such as the app returning to
     /// the foreground after the Apple TV woke. Counts as use for the awake policy and timeouts.
+    /// Never starts the intro again: that plays only on launch and after a calibration is saved.
     public mutating func noteActivity(now: Double) { lastInputAt = now }
 
-    public mutating func finishCalibration() {
-        if mode == .calibrating { mode = .stillness }
+    /// Leaves calibration: into the intro when a calibration was just saved (and intros are
+    /// not skipped), otherwise straight to Stillness.
+    public mutating func finishCalibration(now: Double, playIntro: Bool) {
+        if mode == .calibrating { mode = playIntro ? .intro(startedAt: now) : .stillness }
     }
 
     public func showsHint(now: Double) -> Bool { hintUntil.map { now < $0 } ?? false }
@@ -170,6 +182,7 @@ extension Mode {
         case .tuning: 6
         case .pattern: 7
         case .about: 8
+        case .intro: 9
         }
     }
 

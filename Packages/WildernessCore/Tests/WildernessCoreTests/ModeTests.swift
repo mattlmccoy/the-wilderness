@@ -14,8 +14,9 @@ private func beat(_ id: String, _ d: Double) -> UnfoldBeat {
 }
 private let script = UnfoldScript(beats: [beat("one", 10), beat("two", 20), beat("three", 30)])
 
+/// A calibrated machine already past the boot-up intro, i.e. at rest.
 private func machine(_ mode: Mode? = nil) -> ModeMachine {
-    var m = ModeMachine(calibrated: true, now: 0)
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
     if let mode { m.force(mode) }
     return m
 }
@@ -154,10 +155,10 @@ private extension ModeMachine {
     #expect(m.mode == .explore(id: id, expanded: false))
 }
 
-@Test func uncalibratedStartsCalibratingAndFinishGoesToStillness() {
+@Test func uncalibratedStartsCalibratingAndFinishWithoutIntroGoesToStillness() {
     var m = ModeMachine(calibrated: false, now: 0)
     #expect(m.mode == .calibrating)
-    m.finishCalibration()
+    m.finishCalibration(now: 5, playIntro: false)
     #expect(m.mode == .stillness)
 }
 
@@ -295,4 +296,63 @@ private extension ModeMachine {
     m.press(.select, at: 10)
     m.tick(now: 15, dt: 0.25, script: script); #expect(m.hintUntil != nil)
     m.tick(now: 16.1, dt: 0.25, script: script); #expect(m.hintUntil == nil)
+}
+
+// MARK: - Boot-up intro (2026-11-10)
+
+private let everyInput: [AppInput] = [.select, .holdSelect, .playPause, .back,
+                                      .move(.left), .move(.right), .move(.up), .move(.down)]
+
+@Test func calibratedLaunchPlaysTheIntroUnlessSkipped() {
+    #expect(ModeMachine(calibrated: true, now: 100).mode == .intro(startedAt: 100))
+    #expect(ModeMachine(calibrated: true, now: 100, intro: false).mode == .stillness)
+    #expect(ModeMachine(calibrated: false, now: 100).mode == .calibrating)
+}
+
+@Test func savingACalibrationPlaysTheIntro() {
+    var m = ModeMachine(calibrated: false, now: 0)
+    m.finishCalibration(now: 30, playIntro: true)
+    #expect(m.mode == .intro(startedAt: 30))
+    var fromSettings = machine(.calibrating)
+    fromSettings.finishCalibration(now: 50, playIntro: true)
+    #expect(fromSettings.mode == .intro(startedAt: 50))
+}
+
+@Test func anyPressDuringTheIntroSkipsToStillnessAndDoesNothingElse() {
+    for input in everyInput {
+        var m = ModeMachine(calibrated: true, now: 0)
+        #expect(m.press(input, at: 3) == nil, "\(input) had an effect")
+        #expect(m.mode == .stillness, "\(input) did not skip to rest")
+        #expect(m.hintUntil == nil)
+        #expect(m.lastInputAt == 3)
+    }
+}
+
+@Test func theIntroEndsInStillnessWhenItsTimeIsUp() {
+    var m = ModeMachine(calibrated: true, now: 100)
+    m.tick(now: 100 + IntroTimeline.duration - 0.1, dt: 0.25, script: script)
+    #expect(m.mode == .intro(startedAt: 100))
+    m.tick(now: 100 + IntroTimeline.duration, dt: 0.25, script: script)
+    #expect(m.mode == .stillness)
+}
+
+@Test func idleTimeoutsNeverInterruptTheIntro() {
+    var m = ModeMachine(calibrated: false, now: 0)           // last press long ago
+    m.finishCalibration(now: 10_000, playIntro: true)
+    m.tick(now: 10_000 + IntroTimeline.duration - 0.1, dt: 0.25, script: script)
+    #expect(m.mode == .intro(startedAt: 10_000))
+}
+
+@Test func returningFromTheBackgroundNeitherRestartsNorReplaysTheIntro() {
+    var m = ModeMachine(calibrated: true, now: 0)
+    m.noteActivity(now: 5)
+    #expect(m.mode == .intro(startedAt: 0))
+    m.tick(now: IntroTimeline.duration, dt: 0.25, script: script)
+    #expect(m.mode == .stillness)
+    m.noteActivity(now: 900)
+    #expect(m.mode == .stillness)
+}
+
+@Test func theIntroHasNoWayfindingLine() {
+    #expect(Mode.intro(startedAt: 0).wayfinding(library: lib, script: script) == nil)
 }
