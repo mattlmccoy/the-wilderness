@@ -14,9 +14,10 @@ private func page(_ id: String, light: String = "", visual: String = "null", tex
 }
 
 @Test func contextDecodesPagesWithLightAndVisuals() throws {
-    let s = try ContextScript.decode(json(page("a", visual: #""map""#) + "," + page("b", light: #""fragment""#)), library: lib)
+    let s = try ContextScript.decode(json(page("a", visual: #""trueSize""#) + "," + page("b", light: #""fragment""#)), library: lib)
     #expect(s.pages.map(\.id) == ["a", "b"])
-    #expect(s.pages[0].visual == .map)
+    #expect(s.pages[0].visual == .trueSize)
+    #expect(s.pages[0].map == nil && s.pages[0].image == nil)
     #expect(s.pages[1].light == ["fragment"])
 }
 
@@ -31,8 +32,10 @@ private func page(_ id: String, light: String = "", visual: String = "null", tex
     let content = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .appendingPathComponent("../../../../App/Content").standardized
     let library = try AnnotationLibrary.decode(Data(contentsOf: content.appendingPathComponent("annotations.json")))
-    let s = try ContextScript.decode(Data(contentsOf: content.appendingPathComponent("context.json")), library: library)
-    #expect(s.pages.count == 5)
+    let maps = try ContextMaps.decode(Data(contentsOf: content.appendingPathComponent("maps.json")))
+    let s = try ContextScript.decode(Data(contentsOf: content.appendingPathComponent("context.json")),
+                                     library: library, maps: maps)
+    #expect(s.pages.count >= 5)
     #expect(s.pages.allSatisfy { !$0.sources.isEmpty }, "every page cites where its facts come from")
 }
 
@@ -41,14 +44,4 @@ private func page(_ id: String, light: String = "", visual: String = "null", tex
     let f = OriginalCanvas.trueSizeFrame(canvasWidth: 1200, canvasHeight: 1000, unitsPerInch: 20)
     #expect(f.width == 435 && f.height == 360)
     #expect(f.x == 382.5 && f.y == 320)
-}
-
-@Test func mapPlacesBresciaBetweenMilanAndVenice() {
-    let pts = ItalyMap.layout(width: 300)
-    let x = { (n: String) in pts.first { $0.place.name == n }!.x }
-    #expect(x("Milan") == 0)
-    #expect(abs(x("Venice") - 300) < 0.001)
-    #expect(x("Milan") < x("Brescia") && x("Brescia") < x("Venice"))
-    // Brescia is about a third of the way from Milan to Venice (~85 km of ~245 km).
-    #expect(abs(x("Brescia") / 300 - 0.32) < 0.05)
 }

@@ -8,6 +8,8 @@ struct SettingsView: View {
     let tuning: TuningSession?
     let notices: Notices
     let showPainting: Bool
+    /// Context: the map data's source and every photograph's licence credit.
+    var credits: [String] = []
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -29,6 +31,7 @@ struct SettingsView: View {
                 if notices.notices.isEmpty { hint("Bible translation notices: none yet (no translation is quoted).") }
                 hint("Image: The Metropolitan Museum of Art, 11.53, public domain.")
                 hint("Fonts: Cormorant Garamond and EB Garamond, SIL Open Font License.")
+                ForEach(credits, id: \.self) { hint($0) }
             default:
                 EmptyView()
             }

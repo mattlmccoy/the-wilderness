@@ -47,7 +47,7 @@ VIEWS = [
             {"name": "Brescia", "lat": 45.5417, "lon": 10.2167, "home": True},    # en.wikipedia Brescia
             {"name": "Venice", "lat": 45.4375, "lon": 12.3358, "home": False},    # en.wikipedia Venice
         ],
-        "labels": [{"text": "Lake Garda", "lat": 45.66, "lon": 10.66}, {"text": "Po", "lat": 45.08, "lon": 10.6}],
+        "labels": [{"text": "Lake Garda", "lat": 45.8, "lon": 11.08}, {"text": "Po", "lat": 45.08, "lon": 10.6}],
         "route": None,
     },
     {

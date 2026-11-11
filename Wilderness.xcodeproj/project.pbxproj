@@ -26,10 +26,12 @@
 		45F67052610914C12403E339 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		4D82EBC476E49CB3071E006B /* ExperienceFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */; };
 		4EC4A7D42FF434BECCF8E6CB /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
+		4F75DC0856BE7739A7D5D43F /* ContextVisuals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48359873878EEE55C08BC20 /* ContextVisuals.swift */; };
 		5260564F328098D8AD414850 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = CC94F1B3458529F9BDDDB5AD /* WildernessCore */; };
 		52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */; };
 		563576B5C812D60693833113 /* glints.json in Resources */ = {isa = PBXBuildFile; fileRef = 69A6BB2EC267DFB6DEB14308 /* glints.json */; };
 		595051D0CC6239EB1FFFF05F /* ScreenshotTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */; };
+		5BFD811DF4A1267483527309 /* maps.json in Resources */ = {isa = PBXBuildFile; fileRef = 4819C180FAC10AFBD91FC9FD /* maps.json */; };
 		5CC5BF584E868827B2405033 /* ContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBA3E5909571B3CFA2A7003 /* ContextView.swift */; };
 		604586D0FA971FF7C46A774C /* context.json in Resources */ = {isa = PBXBuildFile; fileRef = AC0C2043D85D5E257480B75E /* context.json */; };
 		607B28E705A4A3CC43B5D727 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
@@ -106,6 +108,7 @@
 		3F6E3C541A7FD4DED662EFED /* WildernessCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WildernessCore; path = Packages/WildernessCore; sourceTree = SOURCE_ROOT; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
 		4685DA18E56C3A97752987DC /* notices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = notices.json; sourceTree = "<group>"; };
+		4819C180FAC10AFBD91FC9FD /* maps.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maps.json; sourceTree = "<group>"; };
 		4D088259126199245FC8AD1E /* PhoneViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViews.swift; sourceTree = "<group>"; };
 		4D8385225EF6CEFBD3D833AD /* licensed-verses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "licensed-verses.json"; sourceTree = "<group>"; };
 		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
@@ -134,6 +137,7 @@
 		C383264E565691887550532C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-EBGaramond.txt"; sourceTree = "<group>"; };
 		C9B6A942754A14FEB94BB43E /* AliveLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliveLayer.swift; sourceTree = "<group>"; };
+		D48359873878EEE55C08BC20 /* ContextVisuals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextVisuals.swift; sourceTree = "<group>"; };
 		D5C5982E11F5F02CA3E2E12B /* Wilderness.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wilderness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		E10720E4193012A37B12219F /* CompanionServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionServer.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 				3E899EF5E0A146751A13B832 /* CalibrationView.swift */,
 				E10720E4193012A37B12219F /* CompanionServer.swift */,
 				BBBA3E5909571B3CFA2A7003 /* ContextView.swift */,
+				D48359873878EEE55C08BC20 /* ContextVisuals.swift */,
 				5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
@@ -248,6 +253,7 @@
 				AC0C2043D85D5E257480B75E /* context.json */,
 				69A6BB2EC267DFB6DEB14308 /* glints.json */,
 				4D8385225EF6CEFBD3D833AD /* licensed-verses.json */,
+				4819C180FAC10AFBD91FC9FD /* maps.json */,
 				4685DA18E56C3A97752987DC /* notices.json */,
 				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
@@ -452,6 +458,7 @@
 				604586D0FA971FF7C46A774C /* context.json in Resources */,
 				563576B5C812D60693833113 /* glints.json in Resources */,
 				DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */,
+				5BFD811DF4A1267483527309 /* maps.json in Resources */,
 				D52C0C38148E458A5BB06309 /* notices.json in Resources */,
 				A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
@@ -490,6 +497,7 @@
 				719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */,
 				BC81D67AB0B01913A484ACE3 /* CompanionServer.swift in Sources */,
 				5CC5BF584E868827B2405033 /* ContextView.swift in Sources */,
+				4F75DC0856BE7739A7D5D43F /* ContextVisuals.swift in Sources */,
 				697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */,
 				698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */,
 				21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */,

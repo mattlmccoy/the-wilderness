@@ -7,6 +7,7 @@ import WildernessCore
 /// root LightLayer (`ContextView.targets`).
 struct ContextView: View {
     let script: ContextScript
+    var maps: ContextMaps = .empty
     let page: Int
     let calibration: Calibration
     var header: String? = nil
@@ -32,7 +33,10 @@ struct ContextView: View {
                     Text(p.text)
                         .font(Typography.text(Typography.Size.story)).lineSpacing(6)
                         .foregroundStyle(Palette.ivory.opacity(0.9))
-                    if p.visual == .map { CityMap().padding(.top, 18) }
+                    if let id = p.map, let map = maps.map(id) {
+                        ContextMapView(map: map).id(p.id + "-map").padding(.top, 18)
+                    }
+                    if let img = p.image { ContextPhoto(image: img).id(p.id + "-photo").padding(.top, 18) }
                     if showsHint {
                         Wayfinding.hint(Wayfinding.contextHint).padding(.top, 10).transition(.opacity)
                     }
@@ -47,38 +51,6 @@ struct ContextView: View {
                 removal: .opacity.animation(.easeOut(duration: LightTiming.textOut))))
         }
         .animation(.easeInOut(duration: LightTiming.textOut), value: page)
-    }
-}
-
-/// Milan, Brescia and Venice at their real relative positions (ItalyMap), Brescia brightest.
-/// No coastline is drawn: three true points rather than an invented outline.
-private struct CityMap: View {
-    var body: some View {
-        Canvas { ctx, size in
-            let pad: CGFloat = 50
-            let pts = ItalyMap.layout(width: size.width - 2 * pad)
-            let maxY = pts.map(\.y).max() ?? 0
-            let top = (size.height - maxY) / 2
-            var road = Path()
-            for (i, pt) in pts.sorted(by: { $0.x < $1.x }).enumerated() {
-                let at = CGPoint(x: pad + pt.x, y: top + pt.y)
-                i == 0 ? road.move(to: at) : road.addLine(to: at)
-            }
-            ctx.stroke(road, with: .color(Palette.ivory.opacity(0.18)), style: StrokeStyle(lineWidth: 1.5, dash: [4, 6]))
-            for pt in pts {
-                let home = pt.place.name == "Brescia"
-                let at = CGPoint(x: pad + pt.x, y: top + pt.y)
-                let r: CGFloat = home ? 7 : 4.5
-                ctx.fill(Path(ellipseIn: CGRect(x: at.x - r, y: at.y - r, width: 2 * r, height: 2 * r)),
-                         with: .color(home ? Palette.gold : Palette.ivory.opacity(0.6)))
-                ctx.draw(Text(pt.place.name)
-                            .font(Typography.text(Typography.Size.citation, italic: !home))
-                            .foregroundStyle(Palette.ivory.opacity(home ? 0.95 : 0.6)),
-                         at: CGPoint(x: at.x, y: at.y + 22), anchor: .top)
-            }
-        }
-        .frame(height: 120)
-        .accessibilityLabel("Map: Milan, Brescia, Venice")
     }
 }
 

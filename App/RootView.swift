@@ -113,7 +113,7 @@ struct RootView: View {
                                    header: mode.wayfinding(library: content.library, script: content.script),
                                    showsHint: machine?.hintUntil != nil)
                     case let .context(page):
-                        ContextView(script: content.context, page: page, calibration: cal,
+                        ContextView(script: content.context, maps: content.maps, page: page, calibration: cal,
                                     header: mode.wayfinding(library: content.library, script: content.script,
                                                             context: content.context),
                                     showsHint: machine?.hintUntil != nil)
@@ -128,7 +128,8 @@ struct RootView: View {
                         }
                         SettingsView(mode: mode, tuning: tuningSession, notices: content.notices, showPainting: showPainting)
                     case .settings, .about:
-                        SettingsView(mode: mode, tuning: nil, notices: content.notices, showPainting: showPainting)
+                        SettingsView(mode: mode, tuning: nil, notices: content.notices, showPainting: showPainting,
+                                     credits: ["Maps: " + content.maps.source] + content.context.imageCredits.map { "Photo: " + $0 })
                     case .calibrating:
                         EmptyView()
                     }

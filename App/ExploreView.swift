@@ -48,6 +48,7 @@ struct AppContent {
     let library: AnnotationLibrary
     let script: UnfoldScript
     let context: ContextScript
+    let maps: ContextMaps
     let glints: GlintPoints
     let notices: Notices
 
@@ -62,9 +63,11 @@ enum ContentLoader {
             // Verse wording pasted in from Matt's licensed Bible replaces the free placeholders.
             let licensed = try LicensedVerses.decode(data("licensed-verses"))
             let library = try AnnotationLibrary.decode(data("annotations"))
+            let maps = try ContextMaps.decode(data("maps"))
             return AppContent(library: library.applying(licensed),
                               script: try UnfoldScript.decode(data("unfold"), library: library).applying(licensed),
-                              context: try ContextScript.decode(data("context"), library: library),
+                              context: try ContextScript.decode(data("context"), library: library, maps: maps),
+                              maps: maps,
                               glints: try GlintPoints.decode(data("glints")),
                               notices: try Notices.decode(data("notices")))
         }
