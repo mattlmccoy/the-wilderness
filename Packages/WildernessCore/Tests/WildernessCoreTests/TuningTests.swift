@@ -62,3 +62,27 @@ private func session(at row: TuningRow, _ t: Tuning = .defaults) -> TuningSessio
     t.glintSizeInches = 0.09
     #expect(try JSONDecoder().decode(Tuning.self, from: JSONEncoder().encode(t)) == t)
 }
+
+/// A profile saved before a field existed must keep its saved values, not reset to defaults.
+@Test func decodingAProfileMissingAFieldKeepsTheSavedValues() throws {
+    let saved = #"{"subjectStrength":0.6,"baseWash":0.05,"exploreWashFactor":0.45,"glintMeanInterval":4,"glintBrightness":0.8,"glintStyle":"pinpoint"}"#
+    let t = try JSONDecoder().decode(Tuning.self, from: Data(saved.utf8))
+    #expect(t.subjectStrength == 0.6 && t.baseWash == 0.05 && t.glintMeanInterval == 4)
+    #expect(t.glintBrightness == 0.8 && t.glintStyle == .pinpoint)
+    #expect(t.glintSizeInches == Tuning.defaults.glintSizeInches)   // the missing field
+}
+
+@Test func decodingAnEmptyProfileGivesTheDefaults() throws {
+    #expect(try JSONDecoder().decode(Tuning.self, from: Data("{}".utf8)) == .defaults)
+}
+
+@Test func aSavedValueOfTheWrongTypeStillFailsLoudly() {
+    #expect(throws: DecodingError.self) { try JSONDecoder().decode(Tuning.self, from: Data(#"{"baseWash":"bright"}"#.utf8)) }
+}
+
+/// Guards the hand-written CodingKeys: every stored field must be saved.
+@Test func everyTuningFieldIsSaved() throws {
+    let fields = Set(Mirror(reflecting: Tuning.defaults).children.compactMap(\.label))
+    let json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(Tuning.defaults)) as! [String: Any]
+    #expect(Set(json.keys) == fields)
+}

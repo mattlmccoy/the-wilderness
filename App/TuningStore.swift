@@ -1,7 +1,8 @@
 import Foundation
 import WildernessCore
 
-/// Persists the light tuning on the Apple TV, like the calibration. A corrupt or old profile
+/// Persists the light tuning on the Apple TV, like the calibration. A profile saved before a
+/// field existed keeps its saved values (the new field takes its default); a corrupt profile
 /// falls back to the defaults and is logged, never half-applied.
 @MainActor
 final class TuningStore: ObservableObject {

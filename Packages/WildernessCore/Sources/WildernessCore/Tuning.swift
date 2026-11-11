@@ -14,6 +14,25 @@ public struct Tuning: Codable, Equatable, Sendable {
     public static let defaults = Tuning()
     public static let storageKey = "tuning.v1"
 
+    /// A new field must be added here and in `init(from:)`, or it is silently not saved.
+    enum CodingKeys: String, CodingKey {
+        case subjectStrength, baseWash, exploreWashFactor, glintMeanInterval, glintBrightness, glintSizeInches, glintStyle
+    }
+
+    /// Tolerant of profiles saved before a field existed: a missing key takes that field's
+    /// default and every saved value is kept. A present but unreadable value still throws.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let d = Tuning()
+        subjectStrength = try c.decodeIfPresent(Double.self, forKey: .subjectStrength) ?? d.subjectStrength
+        baseWash = try c.decodeIfPresent(Double.self, forKey: .baseWash) ?? d.baseWash
+        exploreWashFactor = try c.decodeIfPresent(Double.self, forKey: .exploreWashFactor) ?? d.exploreWashFactor
+        glintMeanInterval = try c.decodeIfPresent(Double.self, forKey: .glintMeanInterval) ?? d.glintMeanInterval
+        glintBrightness = try c.decodeIfPresent(Double.self, forKey: .glintBrightness) ?? d.glintBrightness
+        glintSizeInches = try c.decodeIfPresent(Double.self, forKey: .glintSizeInches) ?? d.glintSizeInches
+        glintStyle = try c.decodeIfPresent(GlintStyle.self, forKey: .glintStyle) ?? d.glintStyle
+    }
+
     public var glintParams: GlintParams {
         var p = GlintParams()
         p.meanInterval = glintMeanInterval
