@@ -58,3 +58,19 @@ private func distinctGlints(seconds: Double, step: Double = 0.05, seed: UInt64 =
     #expect(throws: (any Error).self) { try GlintPoints.decode(Data(#"{"source":"x","points":[]}"#.utf8)) }
     #expect(throws: (any Error).self) { try GlintPoints.decode(Data(#"{"source":"x","points":[{"x":1.5,"y":0.2}]}"#.utf8)) }
 }
+
+@Test func glintsPeakBrightEnoughToSeeOnALitTapestry() {
+    // Matt, 2026-11-11: at max size and brightness he could not see a single glint.
+    let p = GlintParams()
+    #expect(p.peak.lowerBound >= 0.75 && p.peak.upperBound == 1.0)
+}
+
+@Test func glintSizeIsBigEnoughToSeeOnAProjectedWall() {
+    // About 17 projector pixels per inch on Matt's wall: 0.2 in was ~3 px. Range now 0.05–0.6 in.
+    var s = TuningSession(tuning: .defaults)
+    while s.row != .glintSize { s.handle(.down) }
+    for _ in 0..<100 { s.handle(.right) }
+    #expect(abs(s.tuning.glintSizeInches - 0.6) < 1e-9)
+    for _ in 0..<100 { s.handle(.left) }
+    #expect(abs(s.tuning.glintSizeInches - 0.05) < 1e-9)
+}

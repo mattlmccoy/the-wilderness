@@ -7,7 +7,8 @@ public struct Tuning: Codable, Equatable, Sendable {
     public var exploreWashFactor = 0.45
     public var glintMeanInterval = 8.0
     public var glintBrightness = 1.0
-    public var glintSizeInches = 0.06
+    /// Matt's wall is ~17 projector px per inch: below ~0.1 in a glint is a pixel or two.
+    public var glintSizeInches = 0.15
     public var glintStyle: GlintStyle = .thread
     /// Explore: strength of the thin line drawn around the chosen figure (0 = off).
     public var edgeLine = 0.8
@@ -88,7 +89,7 @@ public struct TuningSession: Sendable {
         case .breathing: tuning.breathing = step(tuning.breathing, 0.02, 0...0.3)
         case .passingLight: tuning.passingLight.toggle()
         case .glintBrightness: tuning.glintBrightness = step(tuning.glintBrightness, 0.05, 0.2...1)
-        case .glintSize: tuning.glintSizeInches = step(tuning.glintSizeInches, 0.01, 0.02...0.2)
+        case .glintSize: tuning.glintSizeInches = step(tuning.glintSizeInches, 0.05, 0.05...0.6)
         case .glintStyle: tuning.glintStyle = tuning.glintStyle == .thread ? .pinpoint : .thread
         case .glintFrequency:
             let f = Self.frequencies

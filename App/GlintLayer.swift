@@ -34,22 +34,39 @@ struct GlintLayer: View {
         let r = coreInches * Self.unitsPerInch
         let i = g.intensity(at: now) * tuning.glintBrightness
         let p = CGPoint(x: g.point.x * canvas.width, y: g.point.y * canvas.height)
-        let R = r * 2.2
-        let gradient = Gradient(stops: [
-            .init(color: Palette.ivory.opacity(i), location: 0),
-            .init(color: Palette.ivory.opacity(i * 0.35), location: 0.4),
-            .init(color: Palette.ivory.opacity(0), location: 1),
-        ])
         var c = ctx
+        // Light adds to what is already lit (the tapestry, or the painting in preview); it never
+        // just tints it. Without this a glint over a bright passage barely shows.
+        c.blendMode = .plusLighter
         c.translateBy(x: p.x, y: p.y)
         if tuning.glintStyle == .thread {
-            // Light running along one thread: stretched 3:1 and sliding about 0.35 in.
-            let slide = g.direction * (g.progress(at: now) - 0.5) * 0.35 * Self.unitsPerInch
-            c.translateBy(x: slide, y: 0)
-            c.scaleBy(x: 3, y: 1)
+            // Light running along one thread: sliding about 0.35 in.
+            c.translateBy(x: g.direction * (g.progress(at: now) - 0.5) * 0.35 * Self.unitsPerInch, y: 0)
         }
-        let rect = CGRect(x: -R, y: -R, width: 2 * R, height: 2 * R)
-        c.fill(Path(ellipseIn: rect), with: .radialGradient(gradient, center: .zero, startRadius: 0, endRadius: R))
+        // Soft halo, stretched along the thread for that style.
+        var halo = c
+        if tuning.glintStyle == .thread { halo.scaleBy(x: 3, y: 1) }
+        let R = r * 2.2
+        halo.fill(Path(ellipseIn: CGRect(x: -R, y: -R, width: 2 * R, height: 2 * R)),
+                  with: .radialGradient(Gradient(stops: [
+                    .init(color: Palette.ivory.opacity(i * 0.55), location: 0),
+                    .init(color: Palette.ivory.opacity(i * 0.18), location: 0.45),
+                    .init(color: Palette.ivory.opacity(0), location: 1)]),
+                                        center: .zero, startRadius: 0, endRadius: R))
+        // A small hard core: the point of light the eye actually catches.
+        let k = r * 0.32
+        c.fill(Path(ellipseIn: CGRect(x: -k, y: -k, width: 2 * k, height: 2 * k)), with: .color(.white.opacity(i)))
+        // A faint four-point twinkle, only near the peak.
+        let t = max(0, i - 0.5) * 2
+        if t > 0 {
+            var star = Path()
+            let L = r * 2.6
+            star.move(to: CGPoint(x: -L, y: 0)); star.addLine(to: CGPoint(x: L, y: 0))
+            star.move(to: CGPoint(x: 0, y: -L * 0.7)); star.addLine(to: CGPoint(x: 0, y: L * 0.7))
+            c.stroke(star, with: .linearGradient(Gradient(colors: [.clear, Palette.ivory.opacity(0.6 * t), .clear]),
+                                                 startPoint: CGPoint(x: -L, y: 0), endPoint: CGPoint(x: L, y: 0)),
+                     lineWidth: max(0.6, r * 0.12))
+        }
     }
 }
 

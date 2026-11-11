@@ -174,8 +174,13 @@ struct SettingsSheet: View {
                                                           set: { tuning.passingLight = $0; client.send(.setTuning(tuning)) }))
                 }
                 Section("Glints") {
+                    Picker("How often", selection: Binding(get: { tuning.glintMeanInterval },
+                                                           set: { tuning.glintMeanInterval = $0; client.send(.setTuning(tuning)) })) {
+                        Text("Rare").tag(16.0); Text("Now and then").tag(8.0); Text("Often").tag(4.0)
+                    }
+                    .pickerStyle(.segmented)
                     slider("Brightness", \.glintBrightness, 0.2...1)
-                    slider("Size (in)", \.glintSizeInches, 0.02...0.2)
+                    slider("Size", \.glintSizeInches, 0.05...0.6)
                 }
                 Section {
                     Toggle("Sound", isOn: Binding(get: { client.snapshot?.soundOn ?? false },
