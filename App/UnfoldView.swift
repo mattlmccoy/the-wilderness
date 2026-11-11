@@ -20,7 +20,7 @@ struct UnfoldView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            WallText(title: beat.title, short: beat.short, more: beat.more, fallbackExtended: nil,
+            WallText(title: beat.title, short: beat.short, more: beat.more,
                      expanded: beat.more != nil,
                      placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
                      anchorY: anchorY, paused: playback.paused, header: header,

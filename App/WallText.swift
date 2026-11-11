@@ -8,8 +8,6 @@ struct WallText: View {
     let title: String
     let short: String
     let more: More?
-    /// Temporary until the copy pass: shown as the story when `more` is missing.
-    let fallbackExtended: String?
     let expanded: Bool
     let placement: ColumnPlacement
     /// Vertical position of the subject, 0…1 in the artwork.
@@ -36,7 +34,7 @@ struct WallText: View {
                 .foregroundStyle(Palette.ivory.opacity(0.95))
             if expanded {
                 VStack(alignment: .leading, spacing: 22) {
-                    if let story = more?.story ?? fallbackExtended {
+                    if let story = more?.story {
                         Text(story)
                             .font(Typography.text(Typography.Size.story)).lineSpacing(6)
                             .foregroundStyle(Palette.ivory.opacity(0.9))

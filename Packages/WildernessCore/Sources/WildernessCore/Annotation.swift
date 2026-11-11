@@ -59,7 +59,8 @@ public struct Annotation: Codable, Equatable, Identifiable, Sendable {
     public var textSide: TextSide
     /// Provenance of the geometry, e.g. "met-reference-estimate" or "tapestry-photo-trace".
     public var geometrySource: String
-    /// Story and verses for the second press. nil until the copy pass.
+    /// Story and verses for the second press. Optional in the type (tests build subjects
+    /// without it), but `AnnotationLibrary.decode` requires it for shipped content.
     public var more: More? = nil
 }
 
@@ -83,7 +84,8 @@ public struct AnnotationLibrary: Codable, Sendable {
                 throw ValidationError.invalid("\(a.id): geometry outside the artwork (0...1)")
             }
             if let o = a.outline, o.count < 3 { throw ValidationError.invalid("\(a.id): outline needs 3+ points") }
-            if let m = a.more { try validate(m, id: a.id) }
+            guard let m = a.more else { throw ValidationError.invalid("\(a.id): more is missing") }
+            try validate(m, id: a.id)
         }
         return lib
     }

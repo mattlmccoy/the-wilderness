@@ -20,7 +20,7 @@ struct ExploreView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             if case let (a, expanded)? = selected {
-                WallText(title: a.title, short: a.short, more: a.more, fallbackExtended: a.extended,
+                WallText(title: a.title, short: a.short, more: a.more,
                          expanded: expanded,
                          placement: TextColumnLayout.place(preferred: a.textSide, calibration: calibration),
                          anchorY: a.anchor.y, header: "EXPLORE",

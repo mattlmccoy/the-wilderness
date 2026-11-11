@@ -24,11 +24,15 @@ private let all = [stag, fox, christ, angels, lion, basilisk]
     #expect(SpatialNavigator.next(from: lion, direction: .right, among: all, artworkAspect: 1.2) == nil)
 }
 
+/// The smallest valid second-press text, for fixtures that are about something else.
+private let minimalMore = #"{"story":"s","connection":"inScripture","draft":true,"verses":[{"ref":"Mark 1:13","text":"t","testament":"new","translation":"BSB"}]}"#
+
 @Test func libraryDecodesAndKeepsOrder() throws {
     let json = #"""
     {"artworkAspect": 1.2, "annotations": [
       {"id":"christ","title":"Christ","short":"s","extended":"e","references":["Mark 1:13"],
-       "evidence":"documented","anchor":{"x":0.77,"y":0.52},"textSide":"left","geometrySource":"met-reference-estimate"}
+       "evidence":"documented","anchor":{"x":0.77,"y":0.52},"textSide":"left","geometrySource":"met-reference-estimate",
+       "more":\#(minimalMore)}
     ]}
     """#
     let lib = try AnnotationLibrary.decode(Data(json.utf8))
@@ -42,9 +46,9 @@ private let all = [stag, fox, christ, angels, lion, basilisk]
 }
 
 @Test func libraryRejectsDuplicateIDs() {
-    let one = #"{"id":"x","title":"","short":"","extended":"","references":[],"evidence":"plausible","anchor":{"x":0.4,"y":0.5},"textSide":"left","geometrySource":"t"}"#
+    let one = #"{"id":"x","title":"","short":"","extended":"","references":[],"evidence":"plausible","anchor":{"x":0.4,"y":0.5},"textSide":"left","geometrySource":"t","more":\#(minimalMore)}"#
     let json = #"{"artworkAspect":1.2,"annotations":[\#(one),\#(one)]}"#
-    #expect(throws: AnnotationLibrary.ValidationError.self) { try AnnotationLibrary.decode(Data(json.utf8)) }
+    #expect { try AnnotationLibrary.decode(Data(json.utf8)) } throws: { String(describing: $0) == "duplicate id x" }
 }
 
 private func libraryJSON(more: String?) -> Data {
@@ -76,7 +80,10 @@ private func libraryJSON(more: String?) -> Data {
     #expect(throws: (any Error).self) { try AnnotationLibrary.decode(libraryJSON(more: more)) }
 }
 
-@Test func annotationWithoutMoreStillDecodes() throws {
-    let lib = try AnnotationLibrary.decode(libraryJSON(more: nil))
-    #expect(lib.annotations[0].more == nil)
+/// Every subject's second press needs its story and verses; a missing `more` fails loudly
+/// rather than showing an empty second press.
+@Test func annotationWithoutMoreIsRejected() {
+    #expect { try AnnotationLibrary.decode(libraryJSON(more: nil)) } throws: {
+        String(describing: $0) == "christ: more is missing"
+    }
 }
