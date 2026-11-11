@@ -89,7 +89,8 @@ struct SubjectGlow: View {
         SmoothOutline(points: outline.map { CGPoint(x: $0.x * canvas.width, y: $0.y * canvas.height) })
             .fill(Palette.ivory)
             .frame(width: canvas.width, height: canvas.height)
-            .blur(radius: LightLayer.featherRadius)
+            // Thin figures (the serpent) get a sharper edge so their light isn't spread away.
+            .blur(radius: SubjectFeather.radius(outline: outline, canvasWidth: canvas.width, canvasHeight: canvas.height))
             .drawingGroup()
     }
 }
