@@ -117,10 +117,16 @@
       "textSide": "left",
       "sources": [
         "Great-circle distance Brescia (45.54, 10.22) – Jerusalem (31.78, 35.23): 2,638 km / 1,639 mi (Wikipedia coordinates)",
-        "https://www.metmuseum.org/essays/botanical-imagery-in-european-painting (beech: 'an attribute of Christ, and a symbol of abstinence'; nuts fed hermits)"
+        "https://www.metmuseum.org/essays/botanical-imagery-in-european-painting (beech: 'an attribute of Christ, and a symbol of abstinence'; nuts fed hermits)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Edward_Lear_-_Lago_d%27Iseo_-_B1997.7.342_-_Yale_Center_for_British_Art.jpg (CC0 1.0 (public domain dedication))"
       ],
       "draft": true,
-      "map": "mediterranean"
+      "map": "mediterranean",
+      "image": {
+        "file": "context-lago-d-iseo-lear.jpg",
+        "caption": "Lake Iseo, near Brescia, sketched by Edward Lear in 1867",
+        "credit": "Edward Lear, Lago d'Iseo, 1867. Yale Center for British Art (B1997.7.342). CC0."
+      }
     },
     {
       "id": "size",
@@ -160,9 +166,15 @@
       "textSide": "left",
       "sources": [
         "https://metmuseum.org/toah/works-of-art/11.53 (a fragment of a larger canvas that continued past the cherubim at the left and showed other events from Christ's life)",
-        "https://www.nationalgallery.org.uk/paintings/moretto-da-brescia-christ-blessing-saint-john-the-baptist (suggested to have been part of the same composition; figure sizes differ)"
+        "https://www.nationalgallery.org.uk/paintings/moretto-da-brescia-christ-blessing-saint-john-the-baptist (suggested to have been part of the same composition; figure sizes differ)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Moretto,_cristo_che_benedice_il_battista.JPG (Public domain (PD-Art, PD-old-auto-expired))"
       ],
-      "draft": true
+      "draft": true,
+      "image": {
+        "file": "context-moretto-christ-blessing-john.jpg",
+        "caption": "Moretto, Christ Blessing Saint John the Baptist, National Gallery, London",
+        "credit": "Moretto da Brescia, Christ blessing Saint John the Baptist, National Gallery, London (NG3096). Public domain."
+      }
     },
     {
       "id": "subject",
@@ -211,9 +223,15 @@
       "visual": null,
       "textSide": "left",
       "sources": [
-        "https://www.metmuseum.org/art/collection/search/437157 (Rogers Fund, 1911; on view in Gallery 611 as of 2026-11-11)"
+        "https://www.metmuseum.org/art/collection/search/437157 (Rogers Fund, 1911; on view in Gallery 611 as of 2026-11-11)",
+        "Photo: https://commons.wikimedia.org/wiki/File:Metropolitan_Museum_of_Art_-_Main_Building.jpg (CC BY-SA 4.0)"
       ],
-      "draft": true
+      "draft": true,
+      "image": {
+        "file": "context-met-fifth-avenue.jpg",
+        "caption": "The Metropolitan Museum of Art, Fifth Avenue, New York",
+        "credit": "Photo: Yair Haklai, CC BY-SA 4.0, via Wikimedia Commons"
+      }
     }
   ]
 }
