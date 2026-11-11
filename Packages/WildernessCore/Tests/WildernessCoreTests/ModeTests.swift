@@ -30,10 +30,10 @@ private extension ModeMachine {
     #expect(m.mode == .explore(id: "christ", expanded: false))
 }
 
-@Test func selectInStillnessDoesNothing() {
+@Test func selectInStillnessOpensTheMenuOnExplore() {
     var m = machine()
     m.press(.select)
-    #expect(m.mode == .stillness)
+    #expect(m.mode == .menu(focus: .explore))
 }
 
 @Test func playPauseFromStillnessAndExploreStartsUnfoldAtTheBeginning() {
@@ -69,8 +69,14 @@ private extension ModeMachine {
     #expect(m.mode == .stillness)
 }
 
-@Test func backFromUnfoldExploreAndSettingsReturnsToStillness() {
-    for start: Mode in [.unfold(.start), .explore(id: "christ", expanded: true), .settings(focus: .about)] {
+@Test func backGoesUpOneLevelModeThenMenuThenStillness() {
+    var e = machine(.explore(id: "christ", expanded: true))
+    #expect(e.press(.back) == nil)
+    #expect(e.mode == .menu(focus: .explore))
+    var u = machine(.unfold(.start))
+    u.press(.back)
+    #expect(u.mode == .menu(focus: .unfold))
+    for start: Mode in [.menu(focus: .unfold), .settings(focus: .about)] {
         var m = machine(start)
         #expect(m.press(.back) == nil)
         #expect(m.mode == .stillness, "from \(start)")
@@ -220,4 +226,66 @@ private extension ModeMachine {
 
 @Test func showPaintingSitsBetweenPatternAndAbout() {
     #expect(SettingsItem.allCases == [.calibrate, .tune, .pattern, .painting, .about])
+}
+
+// MARK: - Menu and wayfinding (navigation design, 2026-11-10)
+
+@Test func upOrDownInStillnessOpensTheMenuWhileLeftRightStillExplore() {
+    for d in [NudgeDirection.up, .down] {
+        var m = machine(); m.press(.move(d))
+        #expect(m.mode == .menu(focus: .explore), "\(d)")
+    }
+}
+
+@Test func menuFocusMovesWithUpDownAndStopsAtTheEnds() {
+    var m = machine(.menu(focus: .explore))
+    m.press(.move(.up)); #expect(m.mode == .menu(focus: .explore))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .unfold))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .unfold))
+    m.press(.move(.up)); #expect(m.mode == .menu(focus: .explore))
+}
+
+@Test func selectInTheMenuEntersTheFocusedMode() {
+    var e = machine(.menu(focus: .explore)); e.press(.select)
+    #expect(e.mode == .explore(id: "christ", expanded: false))
+    var u = machine(.menu(focus: .unfold)); u.press(.select)
+    #expect(u.mode == .unfold(.start))
+}
+
+@Test func playPauseAndHoldSelectWorkFromTheMenu() {
+    var p = machine(.menu(focus: .explore)); p.press(.playPause)
+    #expect(p.mode == .unfold(.start))
+    var h = machine(.menu(focus: .unfold)); h.press(.holdSelect)
+    #expect(h.mode == .settings(focus: .calibrate))
+}
+
+@Test func menuReturnsToStillnessAfter45SecondsIdle() {
+    var m = machine(.menu(focus: .unfold))
+    m.press(.move(.down), at: 0)
+    m.tick(now: 44, dt: 0.25, script: script); #expect(m.mode == .menu(focus: .unfold))
+    m.tick(now: 45, dt: 0.25, script: script); #expect(m.mode == .stillness)
+}
+
+@Test func hintShowsForSixSecondsOnlyWhenAModeIsEnteredFromTheMenu() {
+    var m = machine(.menu(focus: .explore))
+    m.press(.select, at: 10)
+    #expect(m.showsHint(now: 15.9))
+    #expect(!m.showsHint(now: 16.1))
+    m.press(.back, at: 12)                       // leaving clears it
+    #expect(!m.showsHint(now: 12.5))
+    var shortcut = machine()
+    shortcut.press(.move(.right), at: 10)        // shortcut: no hint
+    #expect(!shortcut.showsHint(now: 10.5))
+    var moving = machine(.menu(focus: .explore))
+    moving.press(.select, at: 10)
+    moving.press(.move(.right), at: 11)          // moving within the mode keeps it
+    #expect(moving.showsHint(now: 11.5))
+}
+
+@Test func wayfindingNamesTheModeAndPlace() {
+    #expect(Mode.explore(id: "stag", expanded: false).wayfinding(library: lib, script: script) == "EXPLORE")  // arrows move spatially, so a count would jump
+    var p = UnfoldPlayback.start; p.beat = 1
+    #expect(Mode.unfold(p).wayfinding(library: lib, script: script) == "UNFOLD · 2 of 3")
+    #expect(Mode.stillness.wayfinding(library: lib, script: script) == nil)
+    #expect(Mode.menu(focus: .explore).wayfinding(library: lib, script: script) == nil)
 }
