@@ -95,3 +95,26 @@ private let contentDir = contentURL.deletingLastPathComponent()
         }
     }
 }
+
+/// Unfold: whatever a beat's words name must light up during that beat (Matt: beat 6 said
+/// "The Angels" while the stag was lit). Words → the figures that satisfy them.
+@Test func everyUnfoldBeatLightsWhatItTalksAbout() throws {
+    let content = contentURL.deletingLastPathComponent()
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let script = try UnfoldScript.decode(Data(contentsOf: content.appendingPathComponent("unfold.json")), library: lib)
+    let animals: Set<String> = ["stag", "fox", "bear", "lion", "beast", "raven", "pelican"]
+    let named: [(words: [String], any: Set<String>)] = [
+        (["angel"], ["angels"]),
+        (["serpent"], ["snake", "basilisk"]),
+        (["lion"], ["lion"]),
+        (["jesus christ", "son of god"], ["christ"]),
+        (["wild beasts", "animals"], animals),
+    ]
+    for b in script.beats {
+        let text = [b.title, b.short, b.more?.story ?? ""].joined(separator: " ").lowercased()
+        let lit = Set(b.light.joined())
+        for n in named where n.words.contains(where: text.contains) {
+            #expect(!lit.isDisjoint(with: n.any), "\(b.id) (“\(b.title)”) names \(n.words[0]) but lights \(lit.sorted())")
+        }
+    }
+}

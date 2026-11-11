@@ -37,7 +37,10 @@
       "duration": 35,
       "light": [
         [
-          "basilisk"
+          "snake"
+        ],
+        [
+          "christ"
         ]
       ],
       "textSide": "left",
@@ -127,7 +130,13 @@
       "duration": 35,
       "light": [
         [
+          "christ"
+        ],
+        [
           "angels"
+        ],
+        [
+          "christ"
         ]
       ],
       "textSide": "right",
@@ -159,16 +168,13 @@
       "duration": 35,
       "light": [
         [
-          "stag"
+          "angels"
         ],
         [
-          "fox"
+          "christ"
         ],
         [
-          "bear"
-        ],
-        [
-          "lion"
+          "angels"
         ]
       ],
       "textSide": "left",
@@ -235,7 +241,14 @@
       "duration": 35,
       "light": [
         [
-          "fragment"
+          "christ"
+        ],
+        [
+          "beast",
+          "stag",
+          "fox",
+          "bear",
+          "lion"
         ],
         [
           "whole"
