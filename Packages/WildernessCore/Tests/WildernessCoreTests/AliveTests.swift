@@ -127,3 +127,44 @@ private let ids = ["christ", "angels", "basilisk", "lion", "stag", "fox", "bear"
     let back = try JSONDecoder().decode(Tuning.self, from: JSONEncoder().encode(changed))
     #expect(back == changed)
 }
+
+// MARK: Sun rays (the passing light, Matt 2026-11-11: "sun rays shining down from different angles")
+
+@Test func sunRaysOnlyShowDuringAPass() {
+    #expect(SunRays.frame(at: 0, since: 0) == nil)
+    #expect(SunRays.frame(at: 194, since: 0) == nil)
+    #expect(SunRays.frame(at: 195 + 22.5, since: 0) != nil)
+}
+
+@Test func eachPassComesFromItsOwnAngleWithThreeToFiveBeams() {
+    var angles = Set<Int>()
+    for pass in 0..<6 {
+        let a = SunRays.frame(at: Double(pass) * 240 + 195 + 22.5, since: 0)!
+        let b = SunRays.frame(at: Double(pass) * 240 + 195 + 22.5, since: 0)!
+        #expect(a == b)                                   // the same pass always looks the same
+        #expect((3...5).contains(a.beams.count))
+        #expect(abs(a.angleDegrees) <= 40)                // from above, never sideways
+        #expect((0...1).contains(a.originX))
+        angles.insert(Int(a.angleDegrees.rounded()))
+    }
+    #expect(angles.count >= 4)                            // different angles across passes
+}
+
+@Test func raysAlwaysLeanBackAcrossTheTapestry() {
+    for pass in 0..<12 {
+        let f = SunRays.frame(at: Double(pass) * 240 + 195 + 22.5, since: 0)!
+        // From the left they slant right, from the right they slant left (positive = rightward).
+        #expect((f.originX < 0.5) == (f.angleDegrees > 0), "pass \(pass): origin \(f.originX), angle \(f.angleDegrees)")
+        #expect(abs(f.angleDegrees) >= 8)
+        #expect(f.beams.allSatisfy { (0.08...0.2).contains($0.width) })
+    }
+}
+
+@Test func raysSweepSlowlyAndStayFaint() {
+    let start = SunRays.frame(at: 195.5, since: 0)!, end = SunRays.frame(at: 239.5, since: 0)!
+    #expect(abs(end.angleDegrees - start.angleDegrees) > 2 && abs(end.angleDegrees - start.angleDegrees) <= 12)
+    let mid = SunRays.frame(at: 195 + 22.5, since: 0)!
+    // Visible on a lit tapestry, still well under a lit figure (0.44).
+    #expect(mid.intensity >= 0.12 && mid.intensity <= 0.16)
+    #expect(start.intensity < 0.01)
+}

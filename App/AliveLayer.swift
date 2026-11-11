@@ -35,7 +35,12 @@ struct AliveLayer: View {
 /// When breathing began, shared with the glints so they can follow the breath.
 final class AliveClock {
     private(set) var since: Double?
-    func start(at t: Double) { if since == nil { since = t } }
+    func start(at t: Double) {
+        guard since == nil else { return }
+        // Preview: `-passingLightDemo YES` starts a pass of sun rays right away.
+        let demo = UserDefaults.standard.bool(forKey: "passingLightDemo")
+        since = demo ? t - (PassingLight.every - PassingLight.duration) : t
+    }
 }
 
 /// One region: its soft glow, swelling in and easing out forever. A system animation
@@ -58,7 +63,7 @@ private struct BreathingRegion: View {
     }
 }
 
-/// A wide, very soft band of light drifting left to right across the tapestry.
+/// Sun rays: a few soft beams slanting down from above the tapestry (SunRays), added as light.
 private struct PassingLightView: View {
     let clock: AliveClock
     let canvas: CGSize
@@ -67,20 +72,34 @@ private struct PassingLightView: View {
         TimelineView(.animation(minimumInterval: 1.0 / 20)) { timeline in
             Canvas { ctx, size in
                 let now = timeline.date.timeIntervalSinceReferenceDate
-                guard let since = clock.since, let s = PassingLight.state(at: now, since: since) else { return }
-                let ry = size.height * 0.9, rx = size.width * 0.22
-                let g = Gradient(stops: [
-                    .init(color: Palette.ivory.opacity(s.intensity), location: 0),
-                    .init(color: Palette.ivory.opacity(s.intensity * 0.5), location: 0.45),
-                    .init(color: Palette.ivory.opacity(0), location: 1),
-                ])
-                var c = ctx
-                c.translateBy(x: s.x * size.width, y: size.height / 2)
-                c.scaleBy(x: rx / ry, y: 1)
-                c.fill(Path(ellipseIn: CGRect(x: -ry, y: -ry, width: 2 * ry, height: 2 * ry)),
-                       with: .radialGradient(g, center: .zero, startRadius: 0, endRadius: ry))
+                guard let since = clock.since, let f = SunRays.frame(at: now, since: since) else { return }
+                ctx.blendMode = .plusLighter
+                ctx.addFilter(.blur(radius: 9))
+                let origin = CGPoint(x: f.originX * size.width, y: -size.height * 0.35)
+                let length = size.height * 1.9
+                for beam in f.beams {
+                    let a = (f.angleDegrees + beam.offsetDegrees) * .pi / 180
+                    let dir = CGPoint(x: sin(a), y: cos(a))          // 0° is straight down
+                    let normal = CGPoint(x: dir.y, y: -dir.x)
+                    let far = CGPoint(x: origin.x + dir.x * length, y: origin.y + dir.y * length)
+                    let wFar = beam.width * size.width / 2, wNear = wFar * 0.15
+                    var wedge = Path()
+                    wedge.move(to: CGPoint(x: origin.x + normal.x * wNear, y: origin.y + normal.y * wNear))
+                    wedge.addLine(to: CGPoint(x: far.x + normal.x * wFar, y: far.y + normal.y * wFar))
+                    wedge.addLine(to: CGPoint(x: far.x - normal.x * wFar, y: far.y - normal.y * wFar))
+                    wedge.addLine(to: CGPoint(x: origin.x - normal.x * wNear, y: origin.y - normal.y * wNear))
+                    wedge.closeSubpath()
+                    let i = f.intensity * beam.strength
+                    ctx.fill(wedge, with: .linearGradient(
+                        Gradient(stops: [.init(color: Palette.ivory.opacity(0), location: 0.1),
+                                         .init(color: Palette.ivory.opacity(i), location: 0.4),
+                                         .init(color: Palette.ivory.opacity(i * 0.6), location: 0.75),
+                                         .init(color: Palette.ivory.opacity(0), location: 1)]),
+                        startPoint: origin, endPoint: far))
+                }
             }
         }
         .frame(width: canvas.width, height: canvas.height)
+        .clipped()
     }
 }

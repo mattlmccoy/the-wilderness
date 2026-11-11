@@ -77,3 +77,47 @@ public enum PassingLight {
         return (x: -0.3 + 1.6 * p, intensity: peak * s * s)
     }
 }
+
+/// The passing light as sun rays (Matt, 2026-11-11): a few soft beams slanting down from above
+/// the tapestry, as if through broken cloud. Each pass (PassingLight timing: 45 s, every 4 min,
+/// never at launch) comes from its own angle and point, sweeps a few degrees, and fades.
+public enum SunRays {
+    /// Strongest beam at the middle of a pass: visible on a lit tapestry, well under a lit figure (0.44).
+    public static let peak = 0.14
+    public struct Beam: Equatable, Sendable {
+        /// Angle relative to the pass's main angle, degrees.
+        public var offsetDegrees: Double
+        /// Width where it meets the tapestry, as a fraction of the tapestry's width.
+        public var width: Double
+        /// 0…1 share of the pass's intensity.
+        public var strength: Double
+    }
+
+    public struct Frame: Equatable, Sendable {
+        /// Where the rays come from, above the top edge: 0 = left, 1 = right.
+        public var originX: Double
+        /// Main angle from straight down, degrees (negative leans left).
+        public var angleDegrees: Double
+        /// Peak opacity of the strongest beam right now.
+        public var intensity: Double
+        public var beams: [Beam]
+    }
+
+    public static func frame(at t: Double, since start: Double) -> Frame? {
+        guard let s = PassingLight.state(at: t, since: start) else { return nil }
+        let pass = UInt64(max(0, ((t - start) / PassingLight.every).rounded(.down)))
+        var rng = SplitMix64(seed: 0x5EED_0000 &+ pass &* 7919)
+        let originX = Double.random(in: 0.1...0.9, using: &rng)
+        // Lean back across the tapestry: from the left they slant right, and vice versa.
+        let base = Double.random(in: 12...32, using: &rng) * (originX < 0.5 ? 1 : -1)
+        let sweep = Double.random(in: 4...8, using: &rng) * (Bool.random(using: &rng) ? 1 : -1)
+        let beams = (0..<Int.random(in: 3...5, using: &rng)).map { _ in
+            Beam(offsetDegrees: Double.random(in: -12...12, using: &rng),
+                 width: Double.random(in: 0.08...0.2, using: &rng),
+                 strength: Double.random(in: 0.5...1, using: &rng))
+        }
+        let progress = (s.x + 0.3) / 1.6   // 0…1 through the pass
+        return Frame(originX: originX, angleDegrees: base + sweep * (progress - 0.5),
+                     intensity: s.intensity / PassingLight.peak * peak, beams: beams)
+    }
+}
