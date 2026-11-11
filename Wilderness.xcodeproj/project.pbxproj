@@ -7,18 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0554CD1424002FBAC0EAF7B7 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
 		0DE7FEC62E086B038A0D1875 /* WallText.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BDD2885BEE47A41C152161 /* WallText.swift */; };
 		0EAD76D204D659E6EFC2C933 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34504EEACA619A61C36E1178 /* Palette.swift */; };
+		142BDE380D6756EFAD97F1C8 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
+		1A3E825D8DF9C1766804B19B /* WildernessPhoneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */; };
 		1B42BB5778852B23F8F7146B /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
+		1DC8D6B1048D207A6E9D3339 /* CompanionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00541C4509425B1002EE55BF /* CompanionClient.swift */; };
 		1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */; };
 		21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425BD17EFB125958F97DC424 /* GlintLayer.swift */; };
 		218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */; };
+		2A98FCA5C1CCEEBD0346B5D2 /* CompanionRoundTripUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A99AD67A32A46E664548762 /* CompanionRoundTripUITests.swift */; };
 		2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96443CC736D66435C0FEE8F1 /* SettingsView.swift */; };
 		3112350BA2ADE9C0DD2AB7BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63272EBAD19DCC2048941CE0 /* Assets.xcassets */; };
 		3576D09A2B2003A03D056D30 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06B70493ADCF9380EB26B7 /* Typography.swift */; };
 		36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393AF73F60A0DEC4D2325EBB /* MenuView.swift */; };
+		45F67052610914C12403E339 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		4D82EBC476E49CB3071E006B /* ExperienceFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */; };
+		4EC4A7D42FF434BECCF8E6CB /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		5260564F328098D8AD414850 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = CC94F1B3458529F9BDDDB5AD /* WildernessCore */; };
 		52B2B88A457EF685B9F4DE0A /* WildernessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */; };
 		563576B5C812D60693833113 /* glints.json in Resources */ = {isa = PBXBuildFile; fileRef = 69A6BB2EC267DFB6DEB14308 /* glints.json */; };
@@ -29,24 +36,33 @@
 		60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */; };
 		698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10055DBD8B0259D70A5114C9 /* ExploreView.swift */; };
+		6ADF519634EEB1ECF0280B98 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
 		719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E899EF5E0A146751A13B832 /* CalibrationView.swift */; };
 		7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5575DEF51153E5584DC61376 /* UnfoldView.swift */; };
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
+		9BA4BD9DB0933ECA033F0AD8 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
 		A03307C8A71EF39B9F612887 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */; };
+		A50F0CF636D0377ED97F7164 /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
 		A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
+		AA631997609D4FC70F29A91B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9454B4A0B41FE0516A95935 /* Assets.xcassets */; };
 		AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE8658D36AD63360176932D /* SelectHoldDetector.swift */; };
 		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
+		BC81D67AB0B01913A484ACE3 /* CompanionServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10720E4193012A37B12219F /* CompanionServer.swift */; };
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
+		C30A7F5606E2F4A061AFC73E /* PhoneViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D088259126199245FC8AD1E /* PhoneViews.swift */; };
 		C75BCA21F10F270B6B8DA6E7 /* wind.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2BEF54A7E360DF2A05EDE79A /* wind.m4a */; };
 		CD05E8F3650DFC776F8BF9C9 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA1011679F17D8912C77D4 /* SoundPlayer.swift */; };
 		D52C0C38148E458A5BB06309 /* notices.json in Resources */ = {isa = PBXBuildFile; fileRef = 4685DA18E56C3A97752987DC /* notices.json */; };
 		DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */ = {isa = PBXBuildFile; fileRef = 4D8385225EF6CEFBD3D833AD /* licensed-verses.json */; };
 		DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */; };
 		DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD97476B6D5814CC002BB613 /* TuningStore.swift */; };
+		E1165F574DA60DA8B5292E6A /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
 		E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
+		EBF7A280A6A7B4A9BDC8A5A1 /* PhoneScreenshotTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */; };
+		F521A9BA1D56D0D09CFCAFA7 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2573921B243044A441868503 /* WildernessCore */; };
 		F55E0385F25B73F4A6CA82D3 /* WallColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
 /* End PBXBuildFile section */
@@ -59,9 +75,19 @@
 			remoteGlobalIDString = 4F048F4535D0442C8F436CFB;
 			remoteInfo = Wilderness;
 		};
+		AC8E7CD993E52E4D0EBC6609 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 69A87BBDC3DA0896E7FEAF8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0D0CA36CA9F15F4D5EA8F8E9;
+			remoteInfo = WildernessPhone;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00541C4509425B1002EE55BF /* CompanionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionClient.swift; sourceTree = "<group>"; };
+		00CD53A38F289ADB465D2F63 /* WildernessPhone.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WildernessPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessPhoneApp.swift; sourceTree = "<group>"; };
 		0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		10055DBD8B0259D70A5114C9 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
@@ -74,33 +100,41 @@
 		34504EEACA619A61C36E1178 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTour.swift; sourceTree = "<group>"; };
 		393AF73F60A0DEC4D2325EBB /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneScreenshotTour.swift; sourceTree = "<group>"; };
 		3E899EF5E0A146751A13B832 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		3F6E3C541A7FD4DED662EFED /* WildernessCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WildernessCore; path = Packages/WildernessCore; sourceTree = SOURCE_ROOT; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
 		4685DA18E56C3A97752987DC /* notices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = notices.json; sourceTree = "<group>"; };
+		4D088259126199245FC8AD1E /* PhoneViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViews.swift; sourceTree = "<group>"; };
 		4D8385225EF6CEFBD3D833AD /* licensed-verses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "licensed-verses.json"; sourceTree = "<group>"; };
 		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
 		5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeLineView.swift; sourceTree = "<group>"; };
+		5A99AD67A32A46E664548762 /* CompanionRoundTripUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionRoundTripUITests.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		69A6BB2EC267DFB6DEB14308 /* glints.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = glints.json; sourceTree = "<group>"; };
 		6F06B70493ADCF9380EB26B7 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		70EA86F0730BB326ACDC744A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7D05E43D6E479D37C55550E7 /* LightLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightLayer.swift; sourceTree = "<group>"; };
 		896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFlowUITests.swift; sourceTree = "<group>"; };
 		949D7018FF5ACDAE3CF94E43 /* painting.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = painting.jpg; sourceTree = "<group>"; };
 		96443CC736D66435C0FEE8F1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A1D42FB33D87953C764C407B /* WildernessPhoneUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallColumn.swift; sourceTree = "<group>"; };
 		A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		AC0C2043D85D5E257480B75E /* context.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = context.json; sourceTree = "<group>"; };
 		AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappedCanvas.swift; sourceTree = "<group>"; };
 		B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSupport.swift; sourceTree = "<group>"; };
 		B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStore.swift; sourceTree = "<group>"; };
+		B9454B4A0B41FE0516A95935 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBBA3E5909571B3CFA2A7003 /* ContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextView.swift; sourceTree = "<group>"; };
+		C383264E565691887550532C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-EBGaramond.txt"; sourceTree = "<group>"; };
 		D5C5982E11F5F02CA3E2E12B /* Wilderness.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wilderness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
+		E10720E4193012A37B12219F /* CompanionServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionServer.swift; sourceTree = "<group>"; };
 		EAE8658D36AD63360176932D /* SelectHoldDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectHoldDetector.swift; sourceTree = "<group>"; };
 		EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessApp.swift; sourceTree = "<group>"; };
 		F6BDD2885BEE47A41C152161 /* WallText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallText.swift; sourceTree = "<group>"; };
@@ -109,6 +143,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1FD69C59C9B03DD7A3B97A49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F521A9BA1D56D0D09CFCAFA7 /* WildernessCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EEF6179293CE3E0D88134183 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -120,6 +162,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		120BADBCCFC09D5AD94257F5 /* Phone */ = {
+			isa = PBXGroup;
+			children = (
+				B9454B4A0B41FE0516A95935 /* Assets.xcassets */,
+				00541C4509425B1002EE55BF /* CompanionClient.swift */,
+				C383264E565691887550532C /* Info.plist */,
+				4D088259126199245FC8AD1E /* PhoneViews.swift */,
+				06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */,
+			);
+			path = Phone;
+			sourceTree = "<group>";
+		};
 		5560573162E60A37AA1EC3E6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,10 +188,12 @@
 				63272EBAD19DCC2048941CE0 /* Assets.xcassets */,
 				B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */,
 				3E899EF5E0A146751A13B832 /* CalibrationView.swift */,
+				E10720E4193012A37B12219F /* CompanionServer.swift */,
 				BBBA3E5909571B3CFA2A7003 /* ContextView.swift */,
 				5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
+				70EA86F0730BB326ACDC744A /* Info.plist */,
 				0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */,
 				0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */,
 				7D05E43D6E479D37C55550E7 /* LightLayer.swift */,
@@ -166,9 +222,20 @@
 			children = (
 				664FF1D41B2CD17C096A94A7 /* App */,
 				5560573162E60A37AA1EC3E6 /* Packages */,
+				120BADBCCFC09D5AD94257F5 /* Phone */,
+				73DFCDD5FBEE7AF70142B4A6 /* PhoneUITests */,
 				DB3C0B7387B08B78D7363CC9 /* UITests */,
 				C34789CBE22240E138B0FBE1 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		73DFCDD5FBEE7AF70142B4A6 /* PhoneUITests */ = {
+			isa = PBXGroup;
+			children = (
+				5A99AD67A32A46E664548762 /* CompanionRoundTripUITests.swift */,
+				3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */,
+			);
+			path = PhoneUITests;
 			sourceTree = "<group>";
 		};
 		95148E6B311B87780B181219 /* Content */ = {
@@ -189,6 +256,8 @@
 			isa = PBXGroup;
 			children = (
 				D5C5982E11F5F02CA3E2E12B /* Wilderness.app */,
+				00CD53A38F289ADB465D2F63 /* WildernessPhone.app */,
+				A1D42FB33D87953C764C407B /* WildernessPhoneUITests.xctest */,
 				2BEA43B01189736807F84B94 /* WildernessUITests.xctest */,
 			);
 			name = Products;
@@ -229,6 +298,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0D0CA36CA9F15F4D5EA8F8E9 /* WildernessPhone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C13EE0672883A3BBF344C255 /* Build configuration list for PBXNativeTarget "WildernessPhone" */;
+			buildPhases = (
+				5D5DBDCBB1F34C800AEF4737 /* Sources */,
+				32DC9F69F3ACE3C86E63E0EA /* Resources */,
+				1FD69C59C9B03DD7A3B97A49 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WildernessPhone;
+			packageProductDependencies = (
+				2573921B243044A441868503 /* WildernessCore */,
+			);
+			productName = WildernessPhone;
+			productReference = 00CD53A38F289ADB465D2F63 /* WildernessPhone.app */;
+			productType = "com.apple.product-type.application";
+		};
 		4F048F4535D0442C8F436CFB /* Wilderness */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93D96AE2234784C9986A8502 /* Build configuration list for PBXNativeTarget "Wilderness" */;
@@ -267,6 +356,24 @@
 			productReference = 2BEA43B01189736807F84B94 /* WildernessUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		A89F8EE436FB3D50FE901C44 /* WildernessPhoneUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A4C4E4D23334049164C5449A /* Build configuration list for PBXNativeTarget "WildernessPhoneUITests" */;
+			buildPhases = (
+				A9DD8DB0DADA2964C7DE80EB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5EBC45111BA6ECE4BD88533A /* PBXTargetDependency */,
+			);
+			name = WildernessPhoneUITests;
+			packageProductDependencies = (
+			);
+			productName = WildernessPhoneUITests;
+			productReference = A1D42FB33D87953C764C407B /* WildernessPhoneUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -278,6 +385,9 @@
 				TargetAttributes = {
 					8888AF9EEBA81549C92B652E = {
 						TestTargetID = 4F048F4535D0442C8F436CFB;
+					};
+					A89F8EE436FB3D50FE901C44 = {
+						TestTargetID = 0D0CA36CA9F15F4D5EA8F8E9;
 					};
 				};
 			};
@@ -300,11 +410,29 @@
 			targets = (
 				4F048F4535D0442C8F436CFB /* Wilderness */,
 				8888AF9EEBA81549C92B652E /* WildernessUITests */,
+				0D0CA36CA9F15F4D5EA8F8E9 /* WildernessPhone */,
+				A89F8EE436FB3D50FE901C44 /* WildernessPhoneUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		32DC9F69F3ACE3C86E63E0EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA631997609D4FC70F29A91B /* Assets.xcassets in Resources */,
+				6ADF519634EEB1ECF0280B98 /* CormorantGaramond-Italic-Variable.ttf in Resources */,
+				A50F0CF636D0377ED97F7164 /* CormorantGaramond-Variable.ttf in Resources */,
+				E1165F574DA60DA8B5292E6A /* EBGaramond-Italic-Variable.ttf in Resources */,
+				142BDE380D6756EFAD97F1C8 /* EBGaramond-Variable.ttf in Resources */,
+				9BA4BD9DB0933ECA033F0AD8 /* OFL-CormorantGaramond.txt in Resources */,
+				4EC4A7D42FF434BECCF8E6CB /* OFL-EBGaramond.txt in Resources */,
+				45F67052610914C12403E339 /* annotations.json in Resources */,
+				0554CD1424002FBAC0EAF7B7 /* painting.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CA65119CED6B29938A783B1C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -331,12 +459,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5D5DBDCBB1F34C800AEF4737 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DC8D6B1048D207A6E9D3339 /* CompanionClient.swift in Sources */,
+				C30A7F5606E2F4A061AFC73E /* PhoneViews.swift in Sources */,
+				1A3E825D8DF9C1766804B19B /* WildernessPhoneApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9DD8DB0DADA2964C7DE80EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A98FCA5C1CCEEBD0346B5D2 /* CompanionRoundTripUITests.swift in Sources */,
+				EBF7A280A6A7B4A9BDC8A5A1 /* PhoneScreenshotTour.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E96BD95C77B13C56CC51FC7C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */,
 				719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */,
+				BC81D67AB0B01913A484ACE3 /* CompanionServer.swift in Sources */,
 				5CC5BF584E868827B2405033 /* ContextView.swift in Sources */,
 				697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */,
 				698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */,
@@ -373,6 +521,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5EBC45111BA6ECE4BD88533A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0D0CA36CA9F15F4D5EA8F8E9 /* WildernessPhone */;
+			targetProxy = AC8E7CD993E52E4D0EBC6609 /* PBXContainerItemProxy */;
+		};
 		7A10E2E3D12C26811BD4A39C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4F048F4535D0442C8F436CFB /* Wilderness */;
@@ -388,6 +541,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Wilderness";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
@@ -400,6 +554,25 @@
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		2476CFEF8BAB024CBEB2455D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mattmccoy.wilderness.phone.uitests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = WildernessPhone;
 			};
 			name = Release;
 		};
@@ -420,6 +593,26 @@
 				TEST_TARGET_NAME = Wilderness;
 			};
 			name = Debug;
+		};
+		6E03E2953EAADD2E2F9573D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Phone/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mattmccoy.wilderness.phone;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
 		};
 		72B0BF2D0682B68DE03AEF00 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -469,7 +662,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -484,6 +676,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Wilderness";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
@@ -554,11 +747,30 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 17.0;
+			};
+			name = Debug;
+		};
+		CFEFE04BAD9E5BBBADD57C5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Phone/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mattmccoy.wilderness.phone;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -580,6 +792,25 @@
 			};
 			name = Release;
 		};
+		E7932D8B43C646DC5251EB4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mattmccoy.wilderness.phone.uitests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = WildernessPhone;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -597,6 +828,24 @@
 			buildConfigurations = (
 				B0DF45D2A3125BF40D730C43 /* Debug */,
 				1054DE48123C9BB75C830958 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A4C4E4D23334049164C5449A /* Build configuration list for PBXNativeTarget "WildernessPhoneUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7932D8B43C646DC5251EB4F /* Debug */,
+				2476CFEF8BAB024CBEB2455D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C13EE0672883A3BBF344C255 /* Build configuration list for PBXNativeTarget "WildernessPhone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFEFE04BAD9E5BBBADD57C5C /* Debug */,
+				6E03E2953EAADD2E2F9573D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -620,6 +869,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2573921B243044A441868503 /* WildernessCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WildernessCore;
+		};
 		CC94F1B3458529F9BDDDB5AD /* WildernessCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WildernessCore;

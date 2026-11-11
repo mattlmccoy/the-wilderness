@@ -14,6 +14,8 @@ struct RootView: View {
     /// Menu → Sound: the quiet wind bed, off by default (Matt, 2026-11-10).
     @AppStorage("sound.on") private var soundOn = false
     @State private var sound = SoundPlayer()
+    /// The phone companion (docs/superpowers/specs/2026-11-11-iphone-companion-design.md).
+    @State private var companion = CompanionServer()
     private static let painting: UIImage? = Bundle.main.path(forResource: "painting", ofType: "jpg").flatMap(UIImage.init(contentsOfFile:))
     @State private var machine: ModeMachine?
     @State private var tuningSession: TuningSession?
@@ -55,7 +57,11 @@ struct RootView: View {
             if machine == nil {
                 machine = ModeMachine(calibrated: store.saved != nil, now: Self.now, intro: !Self.skipIntro)
             }
+            companion.onCommand = { handlePhone($0) }
+            companion.start()
         }
+        // Every phone sees what the wall shows, and the settings it can change, as they change.
+        .onChange(of: snapshot) { _, s in if let s { companion.broadcast(s) } }
         .onReceive(ticker) { _ in tick() }
         // Waking the Apple TV (or dismissing its screensaver) is use, even though the press
         // never reaches the app: hold the screensaver off again for the next 6 hours.
@@ -153,6 +159,28 @@ struct RootView: View {
         if m.mode != .tuning { tuningSession = nil }
         machine = m
         updateIdleTimer()
+    }
+
+    private var snapshot: WallSnapshot? {
+        guard let m = machine, case let .success(c) = Self.content else { return nil }
+        return WallSnapshot.make(mode: m.mode, library: c.library, script: c.script, context: c.context,
+                                 tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting)
+    }
+
+    private func handlePhone(_ command: PhoneCommand) {
+        guard case let .success(c) = Self.content else { return }
+        switch command {
+        case .hello:
+            if let s = snapshot { companion.broadcast(s) }
+        case let .setTuning(t):
+            tuningStore.tuning = t
+        case let .setSound(on):
+            soundOn = on
+        case let .setShowPainting(on):
+            showPainting = on
+        default:
+            if let input = command.input { send(input, c) }
+        }
     }
 
     private func applyTuning() {

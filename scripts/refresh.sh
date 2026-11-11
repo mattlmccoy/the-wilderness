@@ -8,6 +8,7 @@
 # Needs scripts/refresh.conf with:
 #   TEAM_ID=XXXXXXXXXX        # Xcode → Settings → Accounts → your Personal Team ID
 #   DEVICE_ID=XXXXXXXX-...    # from: xcrun devicectl list devices
+#   PHONE_ID=...              # optional: the iPhone for the companion app (same list)
 #   APIBIBLE_KEY=...          # api.bible key; with NIV_BIBLE_ID and NLT_BIBLE_ID, the licensed
 #                             # verses are re-fetched before each build (scripts/fetch_verses.py)
 set -u
@@ -42,3 +43,18 @@ xcrun devicectl device install app --device "$DEVICE_ID" "$APP" >> "$LOG" 2>&1 \
   || notify_fail "install on Apple TV (is it on the same Wi-Fi and paired?)"
 
 echo "$(date '+%F %T') OK: installed fresh build" >> "$LOG"
+
+# The iPhone companion (optional): re-signed and installed when PHONE_ID is set and the phone is
+# reachable (awake, unlocked, same Wi-Fi). A missing phone only warns; the Apple TV is what matters.
+if [[ -n "${PHONE_ID:-}" ]]; then
+  if xcodebuild -project "$ROOT/Wilderness.xcodeproj" -scheme WildernessPhone -configuration Release \
+       -destination "id=$PHONE_ID" -derivedDataPath "$ROOT/build" \
+       -allowProvisioningUpdates DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic \
+       build >> "$LOG" 2>&1 \
+     && xcrun devicectl device install app --device "$PHONE_ID" \
+          "$ROOT/build/Build/Products/Release-iphoneos/WildernessPhone.app" >> "$LOG" 2>&1; then
+    echo "$(date '+%F %T') OK: installed iPhone companion" >> "$LOG"
+  else
+    echo "$(date '+%F %T') WARN: iPhone companion not installed (phone asleep, locked or away?)" >> "$LOG"
+  fi
+fi

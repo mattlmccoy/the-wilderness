@@ -12,6 +12,13 @@ targets:
     type: application
     platform: tvOS
     sources: [App]
+    info:
+      path: App/Info.plist
+      properties:
+        NSBonjourServices: [_wilderness._tcp]
+        NSLocalNetworkUsageDescription: The Wilderness talks to your iPhone on your home network so you can guide the wall from your phone.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
     dependencies:
       - package: WildernessCore
     settings:
@@ -38,6 +45,52 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.mattmccoy.wilderness.uitests
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "3"
+  WildernessPhone:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - Phone
+      - path: App/Content/painting.jpg
+        buildPhase: resources
+      - path: App/Content/annotations.json
+        buildPhase: resources
+      - path: App/Fonts
+        buildPhase: resources
+    info:
+      path: Phone/Info.plist
+      properties:
+        CFBundleDisplayName: Wilderness
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSBonjourServices: [_wilderness._tcp]
+        NSLocalNetworkUsageDescription: Wilderness finds The Wilderness on your Apple TV so you can guide the wall from your phone.
+        UILaunchScreen: {}
+        UIUserInterfaceStyle: Dark
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+    dependencies:
+      - package: WildernessCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mattmccoy.wilderness.phone
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  WildernessPhoneUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [PhoneUITests]
+    dependencies:
+      - target: WildernessPhone
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.mattmccoy.wilderness.phone.uitests
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
 schemes:
   Wilderness:
     build:
@@ -46,3 +99,10 @@ schemes:
     test:
       targets:
         - WildernessUITests
+  WildernessPhone:
+    build:
+      targets:
+        WildernessPhone: all
+    test:
+      targets:
+        - WildernessPhoneUITests

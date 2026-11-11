@@ -165,3 +165,18 @@ tyndale.com/permissions yourself.
 
 `scripts/refresh.sh` rebuilds and reinstalls daily via launchd (`scripts/com.mattmccoy.wilderness.refresh.plist`).
 Not yet enabled: needs `scripts/refresh.conf` (TEAM_ID, DEVICE_ID) and one supervised run.
+
+## iPhone companion
+
+`WildernessPhone` (Phone/) is Matt's hand on the piece: tap a figure on the painting to send the wall
+straight to it, read along with what the wall shows (larger, with the full story and verses), start
+Unfold or Context, and change light, edge line, glints, sound and the debug painting with real sliders.
+The Siri Remote keeps working exactly as before.
+
+- It finds the Apple TV on the home network over Bonjour (`_wilderness._tcp`); both must be on the same
+  Wi-Fi with the app open on the Apple TV. iOS asks once for local network access.
+- Free Apple ID signing: it installs only on registered devices (not guests' phones). `scripts/refresh.sh`
+  re-signs it nightly when `PHONE_ID` is set in `scripts/refresh.conf` and the phone is reachable.
+- Licensed verse text is never bundled on the phone; it arrives from the Apple TV's copy.
+- Simulators on this Mac cannot advertise over Bonjour, so tests connect directly: launch the Apple TV
+  app with `-companionPort 52741` and the phone tests use `-companionHost 127.0.0.1:52741`.
