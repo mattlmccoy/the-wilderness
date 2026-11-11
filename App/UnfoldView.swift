@@ -15,7 +15,7 @@ struct UnfoldView: View {
 
     /// What the root LightLayer lights for this moment of Unfold.
     static func targets(_ script: UnfoldScript, _ p: UnfoldPlayback) -> Set<String> {
-        Set(script.beats[p.beat].light[script.step(p)])
+        script.targets(p)
     }
 
     var body: some View {

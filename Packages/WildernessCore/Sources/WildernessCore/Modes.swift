@@ -210,3 +210,16 @@ public enum AwakePolicy {
     public static let releaseAfter = 6.0 * 3600
     public static func keepAwake(lastInputAt: Double, now: Double) -> Bool { now - lastInputAt < releaseAfter }
 }
+
+extension Mode {
+    /// Whether the background wash drops (× `Tuning.exploreWashFactor`) so a lit subject stands
+    /// out. Not while tuning: the wall shows the wash at the value being set, which is what the
+    /// "Background wash" row reads and what Stillness will show.
+    public func dimsWash(script: UnfoldScript) -> Bool {
+        switch self {
+        case .explore: true
+        case let .unfold(p): !script.targets(p).contains(UnfoldBeat.wholeTarget)
+        default: false
+        }
+    }
+}

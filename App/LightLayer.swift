@@ -10,7 +10,7 @@ struct LightLayer: View {
     let tuning: Tuning
     /// Annotation ids and/or "whole". Empty means Stillness.
     let targets: Set<String>
-    /// While exploring, the wash drops so the rest of the tapestry recedes.
+    /// While a subject is lit (`Mode.dimsWash`), the wash drops so the rest of the tapestry recedes.
     let exploring: Bool
     /// The boot-up intro starts on a dark wall: no wash until it ends.
     var dark = false

@@ -78,3 +78,13 @@ private func scriptJSON(_ beats: [(String, Double, String)]) -> Data {
         String(describing: error) == "duplicate beat id a"
     }
 }
+
+/// The wash drops (× exploreWashFactor) only when a subject is lit to stand out. While tuning,
+/// the wall must show the background wash at the value being set, as Stillness will.
+@Test func washDimsForALitSubjectButNotWhileTuning() {
+    #expect(Mode.explore(id: "christ", expanded: false).dimsWash(script: script))
+    #expect(Mode.unfold(.init(beat: 1, elapsed: 0, paused: false)).dimsWash(script: script))
+    #expect(!Mode.unfold(.start).dimsWash(script: script))   // a "whole" beat lights everything
+    #expect(!Mode.stillness.dimsWash(script: script))
+    #expect(!Mode.tuning.dimsWash(script: script))
+}

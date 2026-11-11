@@ -77,7 +77,7 @@ struct RootView: View {
                             .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
                     }
                     LightLayer(library: content.library, tuning: tuningStore.tuning,
-                               targets: lightTargets(mode, content), exploring: isExploring(mode),
+                               targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script),
                                dark: mode.isIntro)
                     switch mode {
                     case let .intro(startedAt):
@@ -163,18 +163,6 @@ struct RootView: View {
         case let .unfold(p): UnfoldView.targets(c.script, p)
         case .tuning: ["christ"]
         default: []
-        }
-    }
-
-    private func isExploring(_ mode: Mode) -> Bool {
-        switch mode {
-        case .explore, .tuning:
-            return true
-        case let .unfold(p):
-            guard case let .success(c) = Self.content else { return true }
-            return !UnfoldView.targets(c.script, p).contains(UnfoldBeat.wholeTarget)
-        default:
-            return false
         }
     }
 

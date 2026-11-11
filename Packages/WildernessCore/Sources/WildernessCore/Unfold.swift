@@ -79,6 +79,9 @@ public struct UnfoldScript: Codable, Equatable, Sendable {
         UnfoldPlayback(beat: max(p.beat - 1, 0), elapsed: 0, paused: p.paused)
     }
 
+    /// What is lit at this moment: the current step's targets.
+    public func targets(_ p: UnfoldPlayback) -> Set<String> { Set(beats[p.beat].light[step(p)]) }
+
     /// Which light step is showing; steps split the beat's duration evenly.
     public func step(_ p: UnfoldPlayback) -> Int {
         let b = beats[p.beat]
