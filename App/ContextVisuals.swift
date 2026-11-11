@@ -41,19 +41,20 @@ struct ContextMapView: View {
 
     private func draw(_ proj: MapProjection, in ctx: inout GraphicsContext) {
         func cg(_ lon: Double, _ lat: Double) -> CGPoint { let p = proj.point(lon: lon, lat: lat); return CGPoint(x: p.x, y: p.y) }
-        ctx.clip(to: Path(CGRect(x: 0, y: 0, width: proj.width, height: proj.height)))
+        var lines = ctx   // only the water is cut at the map's edge; names may run past it
+        lines.clip(to: Path(CGRect(x: 0, y: 0, width: proj.width, height: proj.height)))
         for line in map.lines {
             var path = Path()
             path.addLines(line.points.map { cg($0[0], $0[1]) })
             if line.closed { path.closeSubpath() }
             switch line.kind {
             case "lake":
-                if line.closed { ctx.fill(path, with: .color(Palette.ivory.opacity(0.10))) }
-                ctx.stroke(path, with: .color(Palette.ivory.opacity(0.42)), lineWidth: 1)
+                if line.closed { lines.fill(path, with: .color(Palette.ivory.opacity(0.10))) }
+                lines.stroke(path, with: .color(Palette.ivory.opacity(0.42)), lineWidth: 1)
             case "river":
-                ctx.stroke(path, with: .color(Palette.ivory.opacity(0.26)), lineWidth: 1)
+                lines.stroke(path, with: .color(Palette.ivory.opacity(0.26)), lineWidth: 1)
             default:
-                ctx.stroke(path, with: .color(Palette.ivory.opacity(0.5)), lineWidth: 1.2)
+                lines.stroke(path, with: .color(Palette.ivory.opacity(0.5)), lineWidth: 1.2)
             }
         }
         for label in map.labels {
@@ -71,11 +72,17 @@ struct ContextMapView: View {
             }
             ctx.fill(Path(ellipseIn: CGRect(x: at.x - r, y: at.y - r, width: 2 * r, height: 2 * r)),
                      with: .color(place.home ? Palette.gold : Palette.ivory.opacity(0.75)))
-            // Labels sit right of the point, or left when the point is near the right edge.
-            let right = at.x < proj.width * 0.72
+            // The map says which side a name goes; otherwise right, or left near the right edge.
+            let side = place.label ?? (at.x < proj.width * 0.72 ? .right : .left)
+            let (offset, anchor): (CGPoint, UnitPoint) = switch side {
+            case .right: (CGPoint(x: 9, y: 0), .leading)
+            case .left: (CGPoint(x: -9, y: 0), .trailing)
+            case .above: (CGPoint(x: 0, y: -9), .bottom)
+            case .below: (CGPoint(x: 0, y: 9), .top)
+            }
             ctx.draw(Text(place.name).font(Typography.text(Typography.Size.citation * 0.85, italic: !place.home))
                         .foregroundStyle(Palette.ivory.opacity(place.home ? 0.95 : 0.7)),
-                     at: CGPoint(x: at.x + (right ? 9 : -9), y: at.y), anchor: right ? .leading : .trailing)
+                     at: CGPoint(x: at.x + offset.x, y: at.y + offset.y), anchor: anchor)
         }
     }
 

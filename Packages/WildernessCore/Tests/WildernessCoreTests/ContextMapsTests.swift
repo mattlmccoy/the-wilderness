@@ -87,3 +87,10 @@ private func script(_ extra: String) -> Data {
         try ContextScript.decode(script(#","image":{"file":"","caption":null,"credit":"Someone"}"#), library: lib, maps: maps)
     }
 }
+
+@Test func aPlaceCanSayWhichSideItsLabelGoes() throws {
+    let json = #"{"source":"s","maps":[{"id":"m","bbox":{"minLon":0,"minLat":0,"maxLon":1,"maxLat":1},"lines":[],"places":[{"name":"A","lat":0.5,"lon":0.5,"home":true,"label":"above"},{"name":"B","lat":0.2,"lon":0.2,"home":false}],"labels":[],"route":null}]}"#
+    let m = try ContextMaps.decode(Data(json.utf8)).maps[0]
+    #expect(m.places[0].label == .above)
+    #expect(m.places[1].label == nil)
+}

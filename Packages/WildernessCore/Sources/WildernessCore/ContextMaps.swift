@@ -69,7 +69,11 @@ public struct MapPlace: Codable, Equatable, Sendable {
     public var lon: Double
     /// The place the page is about: drawn in gold.
     public var home: Bool
+    /// Which side of the point its name goes; nil lets the view choose (right, or left near the edge).
+    public var label: LabelSide?
 }
+
+public enum LabelSide: String, Codable, Sendable { case left, right, above, below }
 
 public struct MapLabel: Codable, Equatable, Sendable {
     public var text: String

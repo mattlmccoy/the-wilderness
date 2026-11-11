@@ -52,31 +52,31 @@ VIEWS = [
     },
     {
         "id": "judea",
-        "bbox": (35.05, 31.3, 35.75, 32.05),
+        "bbox": (34.95, 31.45, 35.85, 32.02),
         "tolerance": 0.001,
         "layers": [
             {"kind": "lake", "layer": "lakes", "names": ["Dead Sea"]},
             {"kind": "river", "layer": "rivers", "names": ["Jordan"]},
         ],
         "places": [
-            {"name": "Jerusalem", "lat": 31.7789, "lon": 35.2256, "home": False},                 # en.wikipedia Jerusalem
-            {"name": "Jericho", "lat": 31.8561, "lon": 35.46, "home": False},                     # en.wikipedia Jericho
-            {"name": "Mount of Temptation", "lat": 31.8747, "lon": 35.4322, "home": True},        # Monastery of the Temptation
-            {"name": "Baptism site", "lat": 31.8383, "lon": 35.5392, "home": False},              # Qasr al-Yahud
+            {"name": "Jerusalem", "lat": 31.7789, "lon": 35.2256, "home": False, "label": "left"},  # en.wikipedia Jerusalem
+            {"name": "Jericho", "lat": 31.8561, "lon": 35.46, "home": False, "label": "below"},  # en.wikipedia Jericho
+            {"name": "Mount of Temptation", "lat": 31.8747, "lon": 35.4322, "home": True, "label": "above"},  # Monastery of the Temptation
+            {"name": "Baptism site", "lat": 31.8383, "lon": 35.5392, "home": False, "label": "right"},  # Qasr al-Yahud
         ],
-        "labels": [{"text": "Judean Desert", "lat": 31.62, "lon": 35.28},
-                   {"text": "Dead Sea", "lat": 31.55, "lon": 35.5},
+        "labels": [{"text": "Judean Desert", "lat": 31.6, "lon": 35.2},
+                   {"text": "Dead Sea", "lat": 31.52, "lon": 35.7},
                    {"text": "Jordan", "lat": 31.98, "lon": 35.6}],
         "route": None,
     },
     {
         "id": "mediterranean",
-        "bbox": (6.5, 29.5, 38.5, 47.0),
+        "bbox": (6.5, 30.8, 38.5, 47.6),
         "tolerance": 0.04,
         "layers": [{"kind": "coast", "layer": "coast"}],
         "places": [
-            {"name": "Brescia", "lat": 45.5417, "lon": 10.2167, "home": True},
-            {"name": "Jerusalem", "lat": 31.7789, "lon": 35.2256, "home": False},
+            {"name": "Brescia", "lat": 45.5417, "lon": 10.2167, "home": True, "label": "right"},
+            {"name": "Jerusalem", "lat": 31.7789, "lon": 35.2256, "home": False, "label": "left"},
         ],
         "labels": [],
         "route": ["Brescia", "Jerusalem"],
