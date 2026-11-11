@@ -5,7 +5,7 @@
       "id": "christ",
       "title": "Jesus Christ",
       "short": "The Son of God, hungry after forty days, rests His head in His hand.",
-      "extended": "Mark’s Gospel gives the scene two short verses: after his baptism, Christ was in the wilderness forty days, tempted by Satan, with the wild beasts, while angels served him. Moretto shows no struggle. Christ rests his head on his hand, a gesture long used in art for meditation and for melancholy.",
+      "extended": "Mark’s Gospel gives the scene two short verses: after His baptism, Christ was in the wilderness forty days, tempted by Satan, with the wild beasts, and angels served Him. Moretto shows no struggle. Christ rests His head on His hand, a gesture long used in art for meditation and for melancholy.",
       "references": [
         "Mark 1:12–13",
         "Matthew 4:1–2",
@@ -737,7 +737,7 @@
       "textSide": "right",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "He chose this weakness for us. He knows hunger and weariness from the inside, and He did not turn from either.",
+        "story": "He chose to be hungry and tired, as we are, and He did not turn away from either.",
         "verses": [
           {
             "ref": "Isaiah 53:4",
@@ -1455,7 +1455,7 @@
       "textSide": "right",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "Satan tempted Him with the promise of angels. He refused to test His Father, and the angels came anyway, as servants to their King.",
+        "story": "Satan tempted Him with the promise of angels. He refused to test His Father. When the temptations ended, angels came to serve Him.",
         "verses": [
           {
             "ref": "Psalm 91:11",
@@ -1704,8 +1704,8 @@
     {
       "id": "lion",
       "title": "The Lion",
-      "short": "The lion, king of beasts, lies at the feet of the King of kings.",
-      "extended": "Lions are among the wild beasts the Met identifies in the painting, and the Met links this one, with the serpent and the small dragon, to Psalm 91, which promises that the lion will be trampled. In Christian art the lion can stand for strength and kingship. Here it is calm, which suits a reading of the wilderness as a place where creation is at peace with Christ.",
+      "short": "A lion lies at His feet.",
+      "extended": "Lions are among the wild beasts the Met identifies in the painting, and the Met links this one, with the serpent and the small dragon, to Psalm 91, which promises that the lion will be trampled. In Christian art the lion can stand for strength and kingship. Here it lies calm beside Christ.",
       "references": [
         "Mark 1:13",
         "Psalm 91:13",
@@ -1845,7 +1845,7 @@
       "textSide": "right",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "Daniel needed an angel to shut the lions’ mouths. This lion needs no angel. It knows its Lord and lies down.",
+        "story": "Daniel needed an angel to shut the lions’ mouths. Here a lion lies quietly beside Christ.",
         "verses": [
           {
             "ref": "Daniel 6:22",
@@ -1867,7 +1867,7 @@
     {
       "id": "stag",
       "title": "The Stag",
-      "short": "A stag bends toward Him, its head lowered.",
+      "short": "A stag crosses the slope below the rocks.",
       "extended": "A stag crosses the slope at the left. The deer was a familiar Christian image of the soul seeking God, taken from Psalm 42. Whether Moretto meant that here, or simply painted the animals of a wild place, cannot be settled from the picture alone.",
       "references": [
         "Psalm 42:1"
@@ -2186,7 +2186,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "The psalmist longed for God as a deer longs for water. Here that longing has found Him. Whoever is thirsty may come.",
+        "story": "The psalmist longed for God as a deer longs for water. Jesus later said that whoever is thirsty should come to Him.",
         "verses": [
           {
             "ref": "Psalm 42:1",
@@ -2391,7 +2391,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "Every creature on this hillside has a place to sleep. Their Maker had nowhere to lay His head, and He bore it for us.",
+        "story": "Jesus said that foxes have dens but He had nowhere to lay His head. Here a fox rests while He goes without.",
         "verses": [
           {
             "ref": "John 1:3",
@@ -2553,7 +2553,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "A man alone in these hills should fear a bear. With Jesus Christ, the wild is at peace, as Isaiah said it would be.",
+        "story": "Isaiah foresaw a day when the bear would graze beside the cow. Here a bear lies quietly near Christ.",
         "verses": [
           {
             "ref": "Isaiah 11:7",
@@ -2699,7 +2699,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "This was once part of a larger painting of His life. His story continues past the frame, to the cross and the empty tomb.",
+        "story": "This was once part of a larger painting of His life. Mark’s account goes on to His ministry, His death and His resurrection.",
         "verses": [
           {
             "ref": "John 21:25",
@@ -3075,7 +3075,7 @@
       "textSide": "right",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "God promised in Eden that the serpent would strike the heel and have its head crushed. Here the heel rests above it, unafraid.",
+        "story": "God promised in Eden that the woman’s offspring would crush the serpent’s head. Here Christ’s bare foot rests just above it.",
         "verses": [
           {
             "ref": "Genesis 3:15",
@@ -3417,7 +3417,7 @@
       "textSide": "left",
       "geometrySource": "traced-by-matt",
       "more": {
-        "story": "Adam lost the tree of life in Eden. One day Jesus Christ would carry our sins on a tree, to open the way back.",
+        "story": "Adam lost the tree of life in Eden. Jesus would later carry our sins on a tree, the cross.",
         "verses": [
           {
             "ref": "Genesis 2:9",
