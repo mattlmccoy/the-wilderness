@@ -11,7 +11,7 @@ struct RootView: View {
     /// Debug: project the painting under everything to check where light and text land.
     // On by default while the tapestry is not hung yet (Matt); turn off in Settings → Show painting.
     @AppStorage("debug.showPainting") private var showPainting = true
-    /// Menu → Sound: the quiet wind bed, off by default (Matt, 2026-11-10).
+    /// Menu → Sound: the quiet ethereal pad, off by default (Matt, 2026-11-10).
     @AppStorage("sound.on") private var soundOn = false
     @State private var sound = SoundPlayer()
     /// The phone companion (docs/superpowers/specs/2026-11-11-iphone-companion-design.md).

@@ -2,7 +2,7 @@ import AVFoundation
 import os
 import WildernessCore
 
-/// Plays the quiet wind bed (App/Sound/wind.m4a, made by scripts/make_wind.py) as a gapless loop.
+/// Plays the ethereal pad (App/Sound/ambience.m4a, made by scripts/make_ambience.py) as a gapless loop.
 /// The file is decoded once into memory and looped from there, which avoids the small gap a
 /// compressed file leaves when a player loops it. Volume only ever fades (Soundscape.step).
 @MainActor
@@ -67,8 +67,8 @@ final class SoundPlayer {
     }
 
     private static func load() -> AVAudioPCMBuffer? {
-        guard let url = Bundle.main.url(forResource: "wind", withExtension: "m4a") else {
-            log.error("wind.m4a missing from the app bundle")
+        guard let url = Bundle.main.url(forResource: "ambience", withExtension: "m4a") else {
+            log.error("ambience.m4a missing from the app bundle")
             return nil
         }
         do {
@@ -78,7 +78,7 @@ final class SoundPlayer {
             try file.read(into: buf)
             return buf
         } catch {
-            log.error("wind.m4a unreadable: \(error.localizedDescription)")
+            log.error("ambience.m4a unreadable: \(error.localizedDescription)")
             return nil
         }
     }

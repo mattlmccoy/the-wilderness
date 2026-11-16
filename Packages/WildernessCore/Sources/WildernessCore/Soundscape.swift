@@ -1,6 +1,6 @@
 import Foundation
 
-/// Quiet sound (approved 2026-11-10): an optional, very low wind bed, off by default. It dips
+/// Quiet sound (approved 2026-11-10): an optional, quiet ethereal pad (was a wind bed, which small speakers could not play), off by default. It dips
 /// under Unfold so the words lead, is silent while calibrating, and always fades rather than
 /// starting or stopping abruptly.
 public enum Soundscape {

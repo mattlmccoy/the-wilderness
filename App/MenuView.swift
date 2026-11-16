@@ -61,7 +61,7 @@ extension MenuItem {
         case .explore: "one figure at a time"
         case .unfold: "the story, five minutes"
         case .context: "where it came from"
-        case .sound: "a quiet wind"
+        case .sound: "soft music"
         }
     }
 }

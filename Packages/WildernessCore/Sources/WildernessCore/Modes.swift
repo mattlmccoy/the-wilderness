@@ -35,7 +35,7 @@ public enum ModeEffect: Equatable, Sendable {
     case exitApp
     /// Debug: show or hide the painting projected under everything (Settings → Show painting).
     case togglePainting
-    /// Menu → Sound: switch the quiet wind bed on or off (the menu stays open).
+    /// Menu → Sound: switch the quiet pad on or off (the menu stays open).
     case toggleSound
 }
 
