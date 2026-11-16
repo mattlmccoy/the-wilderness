@@ -1,182 +1,155 @@
 # The Wilderness
 
-A native tvOS projection-mapping installation for a 60 × 50 in woven tapestry of
-Moretto da Brescia's *Christ in the Wilderness*, projected by an XGIMI Elfin Flip (1080p, 400 lm)
-driven by an Apple TV.
+A projection-mapped tapestry of Moretto da Brescia's *Christ in the Wilderness* (about 1515–20,
+The Metropolitan Museum of Art), made for a living room. An Apple TV drives a projector aimed
+at a 60 × 50 inch tapestry print of the painting. Light finds each figure, the wall breathes at
+rest, and short texts tell the story beside the figures they describe. An iPhone app guides it
+from the sofa.
 
-## Layout
+![The demo loop on the simulator](docs/media/demo-rest.gif)
 
-```
-project.yml                 XcodeGen spec (run `xcodegen generate` after adding files)
-App/                        tvOS app (SwiftUI)
-  RootView.swift            remote → ModeMachine; draws the current mode over one LightLayer
-  LightLayer.swift          base wash + feathered subject light, with fades
-  GlintLayer.swift          rare glints in Stillness
-  WallText.swift            title, short line, story and verses on the wall
-  ExploreView.swift         Explore's text; ContentLoader (all bundled JSON)
-  UnfoldView.swift          Unfold's text and light targets
-  SettingsView.swift        hidden Settings list, Tune light, About
-  TuningStore.swift         persists tuning on the Apple TV
-  Typography.swift          bundled Cormorant Garamond / EB Garamond (App/Fonts, OFL)
-  CalibrationView.swift     four-corner calibration with the Siri Remote
-  MappedCanvas.swift        draws in artwork coordinates, warps with one homography
-  CalibrationStore.swift    persists calibration on the Apple TV
-  Palette.swift             colours and artwork dimensions
-Packages/WildernessCore/    pure Swift, unit-tested on the Mac
-  CoordinateSpaces.swift    typed spaces: Artwork, Projector, Camera, Canvas, Screen
-  Homography.swift          4-point solve, inverse, composition, SwiftUI conversion
-  Calibration.swift         saved profile, validity, remote corner editing
-  CalibrationSession.swift  calibration screen flow: corners → review → save / cancel
-  Modes.swift               Stillness / Explore / Unfold / Settings state machine; awake policy
-  Unfold.swift              Unfold beats and timeline
-  Glints.swift              glint scheduler, seeded random source, glint points
-  WallGeometry.swift        pixels per inch, wall beside the tapestry, text column placement
-  Tuning.swift              tunable light values and the tuning screen's logic
-  LightTiming.swift         fade durations
-scripts/
-  import_outlines.py        estimated outlines → annotations.json
-  make_glints.py            reference image → glints.json (tests in scripts/tests)
-docs/                       brief, design spec, build plan, round-3 light study, reference images
-```
+*The self-running demo in the tvOS simulator, with the painting shown under the light. On the
+real wall the painting is the tapestry itself and the projector adds only light.*
 
-## Coordinate spaces
+---
 
-| Space | Meaning | Units |
-|---|---|---|
-| `ArtworkSpace` | the woven image; annotations live here | normalized 0…1 |
-| `ProjectorSpace` | the full projector frame | normalized 0…1 |
-| `CameraSpace` | an iPhone calibration photo (later) | normalized 0…1 |
-| `CanvasSpace` | the SwiftUI layer the artwork is drawn in | points |
-| `ScreenSpace` | the full-screen tvOS view | points |
+## What it does
 
-A `Homography<From, To>` can only be applied to points of `From` and composed with matching
-spaces, so mixing spaces is a compile error. Calibration stores the tapestry's four corners in
-`ProjectorSpace`; the renderer composes `Screen ← Projector ← Artwork ← Canvas` into one matrix.
+### Explore: light finds each figure
 
-## Tests
+Thirteen figures in the painting are traced by hand. Press an arrow on the remote, or tap a
+figure on the phone, and soft light gathers on that figure while the rest of the tapestry falls
+back. A short line appears near it; press Select for the story and two verses, one from each
+Testament.
 
-```bash
-cd Packages/WildernessCore && swift test
-```
+![The thirteen traced figures](docs/media/traced-figures.jpg)
 
-```bash
-xcodebuild test -project Wilderness.xcodeproj -scheme Wilderness -destination 'platform=tvOS Simulator,name=Apple TV 4K (4th generation) (at 1080p)' CODE_SIGNING_ALLOWED=NO
-```
+![Light gathering on Christ, with his short line set on the rocks](docs/media/demo-explore.gif)
 
-```bash
-python3 -m pytest scripts/tests -q
-```
+Every claim on the wall is graded by its evidence. The Met names the basilisk and links it, the
+lion and the serpent to Psalm 91:13, so those are marked documented. Nobody names the black bird
+or the animal coming down the rocks, so the wall says so and reads them from what the painting
+shows: a raven, perhaps, and an animal that bows its head toward Christ.
 
-`Packages/WildernessCore/test.sh` runs the core tests with only the Command Line Tools installed.
+### Text that sits on the painting
 
-## One-time Mac setup
+The wall has no room beside the tapestry for text, so text sits on the painting itself. A
+projector can only add light, which means ivory type reads well only over dark, calm passages.
+`scripts/make_text_zones.py` scores every card-sized window of the painting for darkness and
+calm, and keeps the best ones. The app then puts each figure's text in the nearest zone that
+covers neither that figure nor Christ.
 
-```bash
-sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-sudo xcodebuild -license accept
-```
+![Calm zones scored on the painting](docs/media/calm-zones.jpg)
 
-## Running on the Apple TV
+![The raven's text set on the shadowed rock face](docs/media/explore-on-canvas.jpg)
 
-1. Apple TV: Settings → Remotes and Devices → Remote App and Devices (keep this screen open).
-2. Mac: open `Wilderness.xcodeproj`, Window → Devices and Simulators → pair the Apple TV.
-3. Select the Wilderness target → Signing & Capabilities → choose your Apple ID team.
-4. Pick the Apple TV as the run destination and press Run.
+### The wall breathes
 
-A free Apple ID signs builds for 7 days; a paid developer account ($99/yr) makes them last a year
-and allows TestFlight.
+At rest, each traced region swells and eases on its own slow rhythm, between 7 and 11 seconds,
+with Christ the slowest at 12. Start offsets are spread evenly across the regions so no two ever
+pulse together; an early version hashed the names, and a test against the real outlines caught
+two regions breathing in step.
 
-## Projector settings (important)
+![Thirteen breathing rhythms](docs/media/breathing-rhythms.png)
 
-- Turn **off** auto keystone / "auto correction on movement" after setup. The app's calibration does
-  the geometric correction; the projector re-warping on its own would silently break alignment.
-- Leave digital keystone neutral if possible; the app's homography replaces it.
-- Recalibrate if the Apple TV's overscan or output resolution setting changes.
+Small glints drift and twinkle like shifting stars, landing on the painting's highlights and
+favouring whichever region is breathing in. Every few minutes a few soft beams of sunlight slant
+down from above, sweep across the canvas and fade.
 
-## Remote
+### Unfold and Context
 
-| Where | Arrows | Select | Hold Select (1 s) | Play/Pause | ‹ Back |
-|---|---|---|---|---|---|
-| Stillness | Explore (Christ) | nothing | Settings | Start Unfold | Leave the app |
-| Explore | Move to the nearest subject that way | Story and verses on/off (stays open as you move) | Settings | Start Unfold | Stillness |
-| Unfold | ← → previous / next beat | nothing | nothing | Pause / resume | Stillness |
-| Settings | ↑ ↓ choose | Open (Show painting: on/off) | | | Close |
-| Tune light | ↑ ↓ choose · ← → change | Reset (on its row) | | | Back to Settings |
-| Calibration | Move the corner | Next corner → review → save | | Coarse / fine | Cancel (first setup: leave the app) |
+**Unfold** is an eight-part story told across the painting, from Eden to the wilderness, with the
+light stepping through the figures as each beat names them. A content test fails if a beat ever
+names a figure it does not light.
 
-Settings → **Show painting** projects the painting under everything (debugging only; remembered until
-switched off). Explore, Settings and About return to Stillness after 45 s without a press; Tune light,
-the alignment pattern and a paused Unfold after 5 min. While the app is open the Apple TV's
-screensaver is held off; after 6 h without a press it is allowed to sleep again.
+**Context** is twelve short pages about the painting and the place: the Judean desert, the Mount
+of Temptation, Moretto's Brescia (sacked by the French in 1512, when he was about fourteen), the
+1988 restoration that uncovered the hidden angels, and where the painting hangs now. Maps are
+drawn from Natural Earth data as thin lines of light; photographs carry their licence credits.
 
-## Content
+![The twelve Context pages](docs/media/context-pages.jpg)
 
-All of it is data, validated by tests that load the shipped files:
+![Context pages turning on the wall](docs/media/demo-context.gif)
 
-- `App/Content/annotations.json`: each subject's text, evidence class, anchor, outline, and (after the
-  copy pass) `more`: one line of story plus Old and New Testament verses. Outlines are rough estimates
-  from the Met's reference image (`geometrySource: met-reference-estimate`) until traced on a photo of
-  the tapestry.
-- `App/Content/unfold.json`: the eight beats of Unfold (draft text until the copy pass).
-- `App/Content/glints.json`: where glints may appear; regenerate with
-  `python3 -I scripts/make_glints.py docs/reference/met-11.53-600x502.jpg App/Content/glints.json`.
-- `App/Content/notices.json`: Bible translation copyright notices (NIV, ESV, NLT), shown in
-  Settings → About. A test fails if a quoted translation has no notice.
+![Real maps drawn as light](docs/media/context-maps.jpg)
 
-Wall copy is reviewed and approved line by line by Matt before it ships.
+### Eight-point alignment
 
-## Visual checks
+A hanging tapestry is never quite flat. Four corners give a perspective mapping; four edge
+midpoints let each edge bow to follow the cloth. The bend is a small Metal shader that runs after
+the perspective step, so a calibration with straight edges renders exactly as before. Points can
+be dragged on the phone, and the wall follows live.
 
-`UITests/ScreenshotTour.swift` drives the remote and saves screenshots. It skips unless a folder is given:
+| The alignment pattern, two edges bent | The painting through the same bend |
+|---|---|
+| ![](docs/media/align-bent-edges.jpg) | ![](docs/media/align-bent-painting.jpg) |
 
-```bash
-TEST_RUNNER_SCREENSHOT_DIR=/path/to/folder xcodebuild test -project Wilderness.xcodeproj -scheme Wilderness -destination 'platform=tvOS Simulator,name=Apple TV 4K (4th generation) (at 1080p)' -only-testing:WildernessUITests/ScreenshotTour CODE_SIGNING_ALLOWED=NO
+### The phone
+
+The iPhone app finds the Apple TV on the home network (Bonjour), shows the painting with its
+traced outlines, and mirrors whatever the wall is saying. From it you can jump to any figure,
+page through Unfold and Context, tune the light, align the projection and start the demo.
+
+### A demo for filming
+
+Settings → Demo, or the phone, starts a three-minute loop that shows every feature once: the
+boot-up outlines, the wall at rest with glints and a pass of sun rays, six figures, four beats of
+Unfold, four Context pages. Any press ends it.
+
+![The boot-up: every outline draws itself, then fades](docs/media/demo-intro.gif)
+
+---
+
+## How it is built
+
+```mermaid
+flowchart LR
+  subgraph Core["WildernessCore (Swift package, pure logic)"]
+    M[Mode machine] --- A[Alignment & bend]
+    M --- L[Light timing, breathing, glints, sun rays]
+    M --- C[Content: figures, Unfold, Context, maps, text zones]
+    M --- P[Phone protocol]
+  end
+  TV["tvOS app (SwiftUI + Metal)"] --> Core
+  Phone["iPhone app (SwiftUI)"] --> Core
+  Phone <-- "Bonjour + TCP, newline JSON" --> TV
+  Scripts["Python tools: outlines, glints, maps, text zones, verse fetch"] --> Content[(App/Content)]
+  Content --> TV
 ```
 
-## Licensed Bible translations
+- **WildernessCore** holds everything that can be reasoned about without a screen: the mode
+  machine, calibration and the bend, light timing, the content model and the phone protocol.
+  Development was test-first; the package has 244 tests and the Python tools 158 more.
+- **The tvOS app** draws in the artwork's own coordinates and warps the whole layer onto the
+  tapestry with one homography, so every highlight and line of type is perspective-correct.
+- **The iPhone app** talks to the wall over the local network only. No accounts, no cloud.
+- **Content is data.** Figures, outlines, stories, Context pages, maps and text zones are JSON
+  files, each validated on load and checked against the real files by tests.
 
-Verses are written against the public-domain Berean Standard Bible (BSB), with the Douay-Rheims for
-the Latin-Bible references. The wall shows the NIV (or the NLT for chosen verses), fetched from
-API.Bible before every build by `scripts/refresh.sh`:
+Developer setup, signing and the tools are in [docs/DEVELOPING.md](docs/DEVELOPING.md).
 
-```bash
-/usr/bin/python3 -I scripts/fetch_verses.py          # fetch now; prints counts only
-/usr/bin/python3 -I scripts/fetch_verses.py --show   # print what each verse now says
-```
+## Scripture text
 
-It needs `APIBIBLE_KEY`, `NIV_BIBLE_ID` and `NLT_BIBLE_ID` in `scripts/refresh.conf`. For each verse it
-keeps the clause that matches the wall's BSB excerpt (`scripts/verse_align.py`); if the match is unsure
-it shows the whole verse and names it in the summary. To switch a verse to the NLT, or to always show it
-whole, edit `scripts/verse-choices.json`, e.g. `{"Psalm 91:11": {"translation": "NLT"}}` or
-`{"Genesis 2:9": {"full": true}}`. The fetched text goes to `App/Content/licensed-verses.json`, which git
-ignores (a fresh clone must run the fetch once before building), and the publisher's copyright line
-goes to `App/Content/notices.json`, shown in Settings → About. API.Bible requires cached text to be
-refreshed at least every 30 days; if fetching fails, the last good copy is kept for up to 30 days, then
-the BSB placeholders show. Native apps are exempt from API.Bible's FUMS usage reporting.
-`scripts/paste_verses.py` (paste wording by hand) still works, but the nightly fetch replaces its output.
+The app quotes the NIV on the wall through the API.Bible service, under its licence. That text is
+fetched at build time into a git-ignored file and is **not in this repository**. The wording
+committed here is the Berean Standard Bible and the Douay-Rheims, both public domain.
 
-Publisher terms checked 10 November 2026: Biblica (NIV) and Crossway (ESV) both allow up to 500 verses,
-never a whole book and under 25% of the work, without written permission, as long as the copyright
-notice is shown. Biblica also requires a license for any use of NIV text with AI tools, so the pasted
-wording is entered by hand here and never passed through Claude. Tyndale (NLT): check
-tyndale.com/permissions yourself.
+## Credits
 
-## Refresh (free Apple ID, 7-day signing)
+- **Painting:** Moretto da Brescia, *Christ in the Wilderness*, ca. 1515–20. The Metropolitan
+  Museum of Art, Rogers Fund, 1911 (11.53). Image public domain (Met Open Access).
+- **Maps:** Natural Earth (public domain). Place coordinates from Wikipedia.
+- **Photographs** (Context pages):
+  - Bahnfrend, CC BY-SA 4.0, via Wikimedia Commons (the Jordan at Qasr al-Yahud)
+  - Britchi Mirela, CC BY-SA 4.0, via Wikimedia Commons (Wadi Qelt)
+  - Dmitrij Rodionov, CC BY-SA 3.0, via Wikimedia Commons (Monastery of the Temptation)
+  - Wolfgang Moroder, CC BY-SA 3.0, via Wikimedia Commons (Brescia)
+  - Margaret L. Huggins, *Gio. Paolo Maggini: His Life and Works* (1894), public domain (old view of Brescia)
+  - Edward Lear, *Lago d'Iseo*, 1867, Yale Center for British Art, CC0
+  - Moretto da Brescia, *Christ Blessing Saint John the Baptist*, National Gallery, London (NG3096), public domain
+  - Yair Haklai, CC BY-SA 4.0, via Wikimedia Commons (The Met, Fifth Avenue)
+- **Fonts:** Cormorant Garamond and EB Garamond, SIL Open Font License.
+- **Research sources** for every Context page and figure are listed beside the text in
+  `App/Content/context.json` and `App/Content/annotations.json`.
 
-`scripts/refresh.sh` rebuilds and reinstalls daily via launchd (`scripts/com.mattmccoy.wilderness.refresh.plist`).
-Not yet enabled: needs `scripts/refresh.conf` (TEAM_ID, DEVICE_ID) and one supervised run.
-
-## iPhone companion
-
-`WildernessPhone` (Phone/) is Matt's hand on the piece: tap a figure on the painting to send the wall
-straight to it, read along with what the wall shows (larger, with the full story and verses), start
-Unfold or Context, and change light, edge line, glints, sound and the debug painting with real sliders.
-The Siri Remote keeps working exactly as before.
-
-- It finds the Apple TV on the home network over Bonjour (`_wilderness._tcp`); both must be on the same
-  Wi-Fi with the app open on the Apple TV. iOS asks once for local network access.
-- Free Apple ID signing: it installs only on registered devices (not guests' phones). `scripts/refresh.sh`
-  re-signs it nightly when `PHONE_ID` is set in `scripts/refresh.conf` and the phone is reachable.
-- Licensed verse text is never bundled on the phone; it arrives from the Apple TV's copy.
-- Simulators on this Mac cannot advertise over Bonjour, so tests connect directly: launch the Apple TV
-  app with `-companionPort 52741` and the phone tests use `-companionHost 127.0.0.1:52741`.
+Made by Matt McCoy, 2026.
