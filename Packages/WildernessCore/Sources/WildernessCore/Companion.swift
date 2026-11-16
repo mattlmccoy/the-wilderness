@@ -23,6 +23,10 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case align(AlignCommand)
     /// Start (true) or stop (false) the self-running demo.
     case demo(Bool)
+    /// Be still: start or end the seven-minute walk of light.
+    case beStill(Bool)
+    /// The dreamcoat: start it for its minute, or end it.
+    case dreamcoat(Bool)
 
     /// The remote-equivalent input, for commands that drive the mode machine.
     public var input: AppInput? {
@@ -89,6 +93,23 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
     public var textHidden: Bool? = nil
     /// Present only while the wall is calibrating.
     public var alignment: AlignmentState?
+    /// Be still is walking the light (nil = not running, or a wall built before 2026-11-16).
+    public var still: SlowProgress? = nil
+    public var dreamcoat: Bool? = nil
+    /// The seasons the wall is showing now.
+    public var seasons: [SeasonMode]? = nil
+    /// The self-running demo is playing.
+    public var demo: Bool? = nil
+
+    /// What is running on the wall, in words, for the phone's status line.
+    public var status: [String] {
+        var out: [String] = []
+        if demo == true { out.append("Demo") }
+        if let s = still { out.append("Be still · \(s.figure) of \(s.of)") }
+        if dreamcoat == true { out.append("Dreamcoat") }
+        out += (seasons ?? []).map(\.title)
+        return out
+    }
 
     public static func make(mode: Mode, library: AnnotationLibrary, script: UnfoldScript, context: ContextScript,
                             tuning: Tuning, soundOn: Bool, showPainting: Bool, textHidden: Bool = false) -> WallSnapshot {

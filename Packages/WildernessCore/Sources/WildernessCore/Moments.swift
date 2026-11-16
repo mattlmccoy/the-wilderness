@@ -57,6 +57,13 @@ public struct SecretCode: Equatable, Sendable {
     }
 }
 
+/// Where Be still has got to: figure n of m.
+public struct SlowProgress: Codable, Equatable, Sendable {
+    public var figure: Int
+    public var of: Int
+    public init(figure: Int, of: Int) { self.figure = figure; self.of = of }
+}
+
 /// Seven minutes of slow looking: Christ, then each figure, then Christ again, light only.
 public enum SlowLooking {
     public static let secondsPerFigure = 35.0

@@ -44,8 +44,8 @@ private func session(at row: TuningRow, _ t: Tuning = .defaults) -> TuningSessio
     var s = TuningSession(tuning: .defaults)
     s.handle(.up)
     #expect(s.row == .subjectStrength)
-    for _ in 0..<20 { s.handle(.down) }
-    #expect(s.row == .resetDefaults)
+    for _ in 0..<40 { s.handle(.down) }
+    #expect(s.row == TuningRow.allCases.last)
 }
 
 @Test func resetRestoresDefaults() {
@@ -94,4 +94,27 @@ private func session(at row: TuningRow, _ t: Tuning = .defaults) -> TuningSessio
     var t = Tuning.defaults; t.seasons = false; t.followDay = false
     let back = try JSONDecoder().decode(Tuning.self, from: JSONEncoder().encode(t))
     #expect(!back.seasons && !back.followDay)
+}
+
+// MARK: Through the year (docs/superpowers/plans/2026-11-16-thanksgiving-and-phone.md)
+
+@Test func eachSeasonRowCyclesAutoOnOff() {
+    var s = session(at: .thanksgiving)
+    #expect(s.rowLabel == "Thanksgiving · auto")
+    s.handle(.right); #expect(s.tuning.switchFor(.thanksgiving) == .on); #expect(s.rowLabel == "Thanksgiving · on")
+    s.handle(.right); #expect(s.tuning.switchFor(.thanksgiving) == .off)
+    s.handle(.right); #expect(s.tuning.switchFor(.thanksgiving) == .auto)
+    s.handle(.left); #expect(s.tuning.switchFor(.thanksgiving) == .off)
+}
+
+@Test func theSeasonsAndDayRowsToggle() {
+    var s = session(at: .seasons)
+    s.handle(.right); #expect(!s.tuning.seasons); #expect(s.rowLabel == "Seasons · off")
+    var d = session(at: .followDay)
+    d.handle(.left); #expect(!d.tuning.followDay); #expect(d.rowLabel == "Light follows the day · off")
+}
+
+@Test func theYearRowsFormTheSecondColumn() {
+    #expect(TuningRow.yearRows == [.seasons, .followDay, .advent, .christmas, .lent, .easter, .thanksgiving])
+    #expect(TuningRow.lightRows.last == .resetDefaults)
 }

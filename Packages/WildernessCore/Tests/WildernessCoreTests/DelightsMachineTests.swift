@@ -67,3 +67,23 @@ private extension ModeMachine {
     #expect(m.dreamcoat(now: t))
     #expect(m.mode == start)
 }
+
+// MARK: From the phone (docs/superpowers/plans/2026-11-16-thanksgiving-and-phone.md)
+
+@Test func thePhoneCanStartAndStopBeStill() {
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.startSlowLooking(now: 5, library: lib)
+    #expect(m.isSlowLooking && m.textHidden)
+    #expect(m.slowProgress(now: 6) == SlowProgress(figure: 1, of: SlowLooking.path(ids: ["christ", "stag", "lion"]).count))
+    #expect(m.slowProgress(now: 5 + SlowLooking.secondsPerFigure + 1)?.figure == 2)
+    m.stopSlowLooking()
+    #expect(!m.isSlowLooking && !m.textHidden && m.mode == .stillness)
+}
+
+@Test func thePhoneCanStartAndStopTheDreamcoat() {
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.setDreamcoat(true, now: 10)
+    #expect(m.dreamcoat(now: 11))
+    m.setDreamcoat(false, now: 12)
+    #expect(!m.dreamcoat(now: 13))
+}

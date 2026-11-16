@@ -83,6 +83,34 @@ public struct ModeMachine: Equatable, Sendable {
     private var slowIds: [String] = []
     public var isSlowLooking: Bool { slowLookingSince != nil }
 
+    /// Be still, from the menu or the phone.
+    public mutating func startSlowLooking(now: Double, library: AnnotationLibrary) {
+        slowIds = library.annotations.filter { $0.outline != nil }.map(\.id)
+        slowLookingSince = now
+        textHidden = true
+        lastInputAt = now
+        mode = .explore(id: "christ", expanded: false)
+    }
+
+    public mutating func stopSlowLooking() {
+        guard slowLookingSince != nil else { return }
+        slowLookingSince = nil
+        textHidden = false
+        mode = .stillness
+    }
+
+    /// Which figure of the walk the light is on (1-based), for the phone.
+    public func slowProgress(now: Double) -> SlowProgress? {
+        guard let start = slowLookingSince else { return nil }
+        let n = SlowLooking.path(ids: slowIds).count
+        return SlowProgress(figure: min(Int((now - start) / SlowLooking.secondsPerFigure) + 1, n), of: n)
+    }
+
+    /// The dreamcoat from the phone: on for its minute, or off at once.
+    public mutating func setDreamcoat(_ on: Bool, now: Double) {
+        dreamcoatUntil = on ? now + Self.dreamcoatSeconds : nil
+    }
+
     public mutating func startDemo(now: Double) {
         demoSince = now
         lastInputAt = now
@@ -164,10 +192,7 @@ public struct ModeMachine: Equatable, Sendable {
             e.handle(.move(.right), library: library)
             if case let .exploring(id, expanded) = e { mode = .explore(id: id, expanded: expanded); fromMenu = true }
         case (.menu(.still), .select):
-            slowIds = library.annotations.filter { $0.outline != nil }.map(\.id)
-            slowLookingSince = now
-            textHidden = true
-            mode = .explore(id: "christ", expanded: false)
+            startSlowLooking(now: now, library: library)
         case (.menu(.sound), .select):
             return .toggleSound
         case (.menu(.context), .select) where !context.pages.isEmpty:

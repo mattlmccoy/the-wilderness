@@ -20,6 +20,13 @@ public struct Tuning: Codable, Equatable, Sendable {
     public var seasons = true
     /// The light warms and dims with the time of day (sunrise and sunset at home).
     public var followDay = true
+    /// Per-season Auto / On / Off from Settings (missing = auto), keyed by `SeasonMode.rawValue`.
+    public var seasonSwitches: [String: SeasonSwitch] = [:]
+
+    public func switchFor(_ m: SeasonMode) -> SeasonSwitch { seasonSwitches[m.rawValue] ?? .auto }
+    public mutating func setSwitch(_ m: SeasonMode, _ v: SeasonSwitch) {
+        seasonSwitches[m.rawValue] = v == .auto ? nil : v
+    }
 
     public init() {}
     public static let defaults = Tuning()
@@ -28,7 +35,7 @@ public struct Tuning: Codable, Equatable, Sendable {
     /// A new field must be added here and in `init(from:)`, or it is silently not saved.
     enum CodingKeys: String, CodingKey {
         case subjectStrength, baseWash, exploreWashFactor, glintMeanInterval, glintBrightness, glintSizeInches, glintStyle
-        case edgeLine, breathing, passingLight, seasons, followDay
+        case edgeLine, breathing, passingLight, seasons, followDay, seasonSwitches
     }
 
     /// Tolerant of profiles saved before a field existed: a missing key takes that field's
@@ -48,6 +55,7 @@ public struct Tuning: Codable, Equatable, Sendable {
         passingLight = try c.decodeIfPresent(Bool.self, forKey: .passingLight) ?? d.passingLight
         seasons = try c.decodeIfPresent(Bool.self, forKey: .seasons) ?? d.seasons
         followDay = try c.decodeIfPresent(Bool.self, forKey: .followDay) ?? d.followDay
+        seasonSwitches = try c.decodeIfPresent([String: SeasonSwitch].self, forKey: .seasonSwitches) ?? d.seasonSwitches
     }
 
     /// Every value inside the range the wall's Tune screen allows (the phone sends whole Tunings).
@@ -74,6 +82,23 @@ public struct Tuning: Codable, Equatable, Sendable {
 
 public enum TuningRow: Int, CaseIterable, Sendable {
     case subjectStrength, baseWash, edgeLine, breathing, passingLight, glintFrequency, glintBrightness, glintSize, glintStyle, resetDefaults
+    /// Through the year: the second column of the Tune screen.
+    case seasons, followDay, advent, christmas, lent, easter, thanksgiving
+
+    public static var lightRows: [TuningRow] { allCases.filter { $0.rawValue <= TuningRow.resetDefaults.rawValue } }
+    public static var yearRows: [TuningRow] { allCases.filter { $0.rawValue > TuningRow.resetDefaults.rawValue } }
+
+    /// The season this row switches, if it is one.
+    public var season: SeasonMode? {
+        switch self {
+        case .advent: .advent
+        case .christmas: .christmas
+        case .lent: .lent
+        case .easter: .easter
+        case .thanksgiving: .thanksgiving
+        default: nil
+        }
+    }
 }
 
 /// The tuning screen's remote logic: up/down picks a row, left/right changes its value.
@@ -117,6 +142,12 @@ public struct TuningSession: Sendable {
             let i = f.firstIndex { $0.seconds == tuning.glintMeanInterval } ?? 1
             tuning.glintMeanInterval = f[min(max(i + Int(sign), 0), f.count - 1)].seconds
         case .resetDefaults: break
+        case .seasons: tuning.seasons.toggle()
+        case .followDay: tuning.followDay.toggle()
+        case .advent, .christmas, .lent, .easter, .thanksgiving:
+            guard let m = row.season else { break }
+            let order = SeasonSwitch.allCases, i = order.firstIndex(of: tuning.switchFor(m))!
+            tuning.setSwitch(m, order[(i + (sign > 0 ? 1 : order.count - 1)) % order.count])
         }
     }
 
@@ -136,6 +167,11 @@ public struct TuningSession: Sendable {
         case .glintSize: return "Glint size · \(String(format: "%.2f", t.glintSizeInches)) in"
         case .glintStyle: return "Glint style · " + (t.glintStyle == .thread ? "along a thread" : "pinpoint")
         case .resetDefaults: return "Reset to defaults"
+        case .seasons: return "Seasons · " + (t.seasons ? "on" : "off")
+        case .followDay: return "Light follows the day · " + (t.followDay ? "on" : "off")
+        case .advent, .christmas, .lent, .easter, .thanksgiving:
+            let m = row.season!
+            return "\(m.title) · \(t.switchFor(m).rawValue)"
         }
     }
 }

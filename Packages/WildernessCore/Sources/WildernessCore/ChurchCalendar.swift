@@ -44,6 +44,13 @@ public enum ChurchCalendar {
     public static func palmSunday(_ y: Int) -> CivilDate { easter(y).adding(days: -7) }
     public static func pentecost(_ y: Int) -> CivilDate { easter(y).adding(days: 49) }
 
+    /// US Thanksgiving: the fourth Thursday of November.
+    public static func thanksgiving(_ y: Int) -> CivilDate {
+        let first = CivilDate(year: y, month: 11, day: 1)
+        let toThursday = (5 - first.weekday + 7) % 7      // weekday 5 = Thursday
+        return first.adding(days: toThursday + 21)
+    }
+
     /// The fourth Sunday before Christmas.
     public static func adventSunday(_ y: Int) -> CivilDate {
         let christmas = CivilDate(year: y, month: 12, day: 25)
