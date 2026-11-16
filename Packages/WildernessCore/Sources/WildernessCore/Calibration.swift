@@ -19,6 +19,15 @@ public struct Calibration: Equatable, Codable, Sendable {
     public var artworkAspect: Double
     public var output: PixelSize
     public var corners: [Point<ProjectorSpace>]
+    /// Top, right, bottom, left: how far each edge's midpoint sits from where the 4-corner
+    /// perspective puts it (normalized projector units). Zero = a straight edge.
+    public var edgeOffsets: [Point<ProjectorSpace>] = Calibration.straightEdges
+
+    public static let straightEdges = [Point<ProjectorSpace>](repeating: .init(x: 0, y: 0), count: 4)
+    /// A bend larger than this is a mistake, not a sagging tapestry (8% of the frame).
+    public static let maxEdgeOffset = 0.08
+
+    enum CodingKeys: String, CodingKey { case version, createdAt, name, artworkAspect, output, corners, edgeOffsets }
 
     /// A starting quad: centred, 80% of the frame height, at the artwork's true aspect on the wall.
     public static func defaultFor(artworkAspect: Double, output: PixelSize) -> Calibration {
@@ -60,6 +69,69 @@ public struct Calibration: Equatable, Codable, Sendable {
     }
 }
 
+extension Calibration {
+    /// Saves from before eight-point alignment have no edgeOffsets: their edges stay straight.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(artworkAspect: try c.decode(Double.self, forKey: .artworkAspect),
+                  output: try c.decode(PixelSize.self, forKey: .output),
+                  corners: try c.decode([Point<ProjectorSpace>].self, forKey: .corners))
+        version = try c.decodeIfPresent(Int.self, forKey: .version) ?? Calibration.currentVersion
+        createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
+        name = try c.decodeIfPresent(String.self, forKey: .name) ?? "Default"
+        let offsets = try c.decodeIfPresent([Point<ProjectorSpace>].self, forKey: .edgeOffsets)
+        edgeOffsets = offsets?.count == 4 ? offsets! : Calibration.straightEdges
+    }
+
+    /// How far the bend moves an artwork point (u, v in 0…1), in normalized projector units.
+    /// Each edge bows by b(s) = 4s(1−s) — full at its midpoint, zero at the corners — and the
+    /// inside blends between the four edges.
+    public func bend(u: Double, v: Double) -> (dx: Double, dy: Double) {
+        let o = edgeOffsets.count == 4 ? edgeOffsets : Calibration.straightEdges
+        let bu = 4 * u * (1 - u), bv = 4 * v * (1 - v)
+        let (t, r, b, l) = (o[0], o[1], o[2], o[3])
+        let dx = (1 - v) * t.x * bu + v * b.x * bu + (1 - u) * l.x * bv + u * r.x * bv
+        let dy = (1 - v) * t.y * bu + v * b.y * bu + (1 - u) * l.y * bv + u * r.y * bv
+        return (dx, dy)
+    }
+
+    /// Where an artwork point lands in the projector frame: the perspective, then the bend.
+    public func projectorPoint(artwork p: Point<ArtworkSpace>) -> Point<ProjectorSpace> {
+        guard let h = artworkToProjector else { return .init(x: p.x, y: p.y) }
+        let q = h.apply(p), d = bend(u: p.x, v: p.y)
+        return .init(x: q.x + d.dx, y: q.y + d.dy)
+    }
+
+    /// Where a handle sits on the wall.
+    public func handle(_ point: AlignPoint) -> Point<ProjectorSpace> {
+        if let i = point.cornerIndex { return corners[i] }
+        return projectorPoint(artwork: point.artworkPosition)
+    }
+
+    /// True when any edge is bent (the renderer then adds the bend effect).
+    public var isBent: Bool { edgeOffsets.contains { $0.x != 0 || $0.y != 0 } }
+}
+
+public enum AlignEdge: Int, CaseIterable, Codable, Sendable { case top, right, bottom, left }
+
+/// The eight alignment handles, clockwise from top left.
+public enum AlignPoint: Int, CaseIterable, Codable, Sendable {
+    case topLeft, topMiddle, topRight, rightMiddle, bottomRight, bottomMiddle, bottomLeft, leftMiddle
+
+    public var label: String {
+        ["Top left", "Top middle", "Top right", "Right middle",
+         "Bottom right", "Bottom middle", "Bottom left", "Left middle"][rawValue]
+    }
+    /// Index into `corners` (TL, TR, BR, BL), or nil for a midpoint.
+    public var cornerIndex: Int? { [0, nil, 1, nil, 2, nil, 3, nil][rawValue] }
+    public var edge: AlignEdge? { [nil, .top, nil, .right, nil, .bottom, nil, .left][rawValue] }
+    /// The handle's place on the artwork (0…1).
+    public var artworkPosition: Point<ArtworkSpace> {
+        let xy: [(Double, Double)] = [(0, 0), (0.5, 0), (1, 0), (1, 0.5), (1, 1), (0.5, 1), (0, 1), (0, 0.5)]
+        return .init(x: xy[rawValue].0, y: xy[rawValue].1)
+    }
+}
+
 extension Homography {
     public static func scaling(_ sx: Double, _ sy: Double) -> Homography {
         Homography(matrix: .init(diagonal: SIMD3(sx, sy, 1)))
@@ -76,7 +148,7 @@ public enum NudgeStep: Sendable {
 /// Remote-driven corner editing. Pure state, no UI.
 public struct CornerAdjuster: Sendable {
     public var calibration: Calibration
-    public var selected: Corner = .topLeft
+    public var selected: AlignPoint = .topLeft
     public var step: NudgeStep = .coarse
 
     public init(calibration: Calibration) { self.calibration = calibration }
@@ -84,22 +156,33 @@ public struct CornerAdjuster: Sendable {
     public mutating func nudge(_ direction: NudgeDirection) {
         let dx = step.pixels / calibration.output.width
         let dy = step.pixels / calibration.output.height
-        var p = calibration.corners[selected.rawValue]
-        switch direction {
-        case .left: p.x -= dx
-        case .right: p.x += dx
-        case .up: p.y -= dy
-        case .down: p.y += dy
+        let (mx, my): (Double, Double) = switch direction {
+        case .left: (-dx, 0)
+        case .right: (dx, 0)
+        case .up: (0, -dy)
+        case .down: (0, dy)
         }
-        p.x = min(max(p.x, 0), 1)
-        p.y = min(max(p.y, 0), 1)
+        if let edge = selected.edge {
+            let m = Calibration.maxEdgeOffset
+            var o = calibration.edgeOffsets[edge.rawValue]
+            o.x = min(max(o.x + mx, -m), m)
+            o.y = min(max(o.y + my, -m), m)
+            calibration.edgeOffsets[edge.rawValue] = o
+            return
+        }
+        let i = selected.cornerIndex!
+        var p = calibration.corners[i]
+        p.x = min(max(p.x + mx, 0), 1)
+        p.y = min(max(p.y + my, 0), 1)
         var candidate = calibration
-        candidate.corners[selected.rawValue] = p
+        candidate.corners[i] = p
         if candidate.isConvex { calibration = candidate }
     }
 
+    public mutating func select(_ point: AlignPoint) { selected = point }
+
     public mutating func selectNext() {
-        selected = Corner(rawValue: (selected.rawValue + 1) % 4)!
+        selected = AlignPoint(rawValue: (selected.rawValue + 1) % AlignPoint.allCases.count)!
     }
 
     public mutating func toggleStep() {

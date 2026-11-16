@@ -6,18 +6,18 @@ private func session() -> CalibrationSession {
     CalibrationSession(start: .defaultFor(artworkAspect: 1.2, output: hd))
 }
 
-@Test func selectWalksTheFourCornersThenReview() {
+@Test func selectWalksTheEightHandlesThenReview() {
     var s = session()
     var phases: [CalibrationSession.Phase] = [s.phase]
-    for _ in 0..<4 { #expect(s.handle(.select) == nil); phases.append(s.phase) }
-    #expect(phases == [.corner(.topLeft), .corner(.topRight), .corner(.bottomRight), .corner(.bottomLeft), .review])
+    for _ in 0..<8 { #expect(s.handle(.select) == nil); phases.append(s.phase) }
+    #expect(phases == AlignPoint.allCases.map { .point($0) } + [.review])
 }
 
 @Test func selectOnReviewSavesTheAdjustedCalibration() {
     var s = session()
     s.handle(.move(.right))
     let adjusted = s.calibration
-    for _ in 0..<4 { s.handle(.select) }
+    for _ in 0..<8 { s.handle(.select) }
     #expect(s.handle(.select) == .save(adjusted))
 }
 
@@ -31,15 +31,15 @@ private func session() -> CalibrationSession {
     var s = session()
     s.handle(.move(.left))
     let adjusted = s.calibration
-    for _ in 0..<4 { s.handle(.select) }
+    for _ in 0..<8 { s.handle(.select) }
     #expect(s.handle(.back) == nil)
-    #expect(s.phase == .corner(.bottomLeft))
+    #expect(s.phase == .point(.leftMiddle))
     #expect(s.calibration == adjusted)
 }
 
 @Test func arrowsDoNothingOnReview() {
     var s = session()
-    for _ in 0..<4 { s.handle(.select) }
+    for _ in 0..<8 { s.handle(.select) }
     let before = s.calibration
     s.handle(.move(.up))
     #expect(s.calibration == before)
@@ -54,9 +54,9 @@ private func session() -> CalibrationSession {
 
 @Test func stepLabelNamesTheCornerAndProgress() {
     var s = session()
-    #expect(s.stepLabel == "Top left · 1 of 4")
-    for _ in 0..<3 { s.handle(.select) }
-    #expect(s.stepLabel == "Bottom left · 4 of 4")
+    #expect(s.stepLabel == "Top left · 1 of 8")
+    for _ in 0..<7 { s.handle(.select) }
+    #expect(s.stepLabel == "Left middle · 8 of 8")
     s.handle(.select)
     #expect(s.stepLabel == "Check the outline")
 }

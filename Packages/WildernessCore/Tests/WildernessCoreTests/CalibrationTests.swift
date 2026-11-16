@@ -53,8 +53,9 @@ private let hd = PixelSize(width: 1920, height: 1080)
 
 @Test func selectNextCyclesClockwise() {
     var adj = CornerAdjuster(calibration: .defaultFor(artworkAspect: 1.2, output: hd))
-    let order = (0..<5).map { _ in defer { adj.selectNext() }; return adj.selected }
-    #expect(order == [.topLeft, .topRight, .bottomRight, .bottomLeft, .topLeft])
+    let order = (0..<9).map { _ in defer { adj.selectNext() }; return adj.selected }
+    #expect(order == [.topLeft, .topMiddle, .topRight, .rightMiddle, .bottomRight, .bottomMiddle,
+                      .bottomLeft, .leftMiddle, .topLeft])
 }
 
 @Test func nudgeThatWouldFoldTheQuadIsRefused() {
