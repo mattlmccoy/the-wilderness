@@ -32,6 +32,12 @@ struct RootView: View {
     }()
     /// Measures the real time between ticks; a box, so updating it never redraws the view.
     @State private var clock = TickClockBox()
+    /// The last mode the sound answered (a box: updating it never redraws the view).
+    @State private var heard = HeardMode()
+    private static let cues: SoundCues? = {
+        guard case let .success(c) = content else { return nil }
+        return SoundCues(library: c.library)
+    }()
     /// When the wall started breathing, so glints can follow the breath.
     @State private var alive = AliveClock()
 
@@ -278,7 +284,11 @@ struct RootView: View {
         let now = Self.now
         let dt = clock.value.dt(now: now)
         m.tick(now: now, dt: dt, script: c.script, context: c.context)
-        sound.update(target: Soundscape.target(mode: m.mode, on: soundOn), dt: dt)
+        let breath = alive.since.map { SoundCues.swell(breathing: c.breathing, at: now, since: $0) } ?? 0.5
+        sound.update(target: Soundscape.target(mode: m.mode, on: soundOn), dt: dt, breath: breath)
+        // A new figure, Unfold beat or Context page rings the bowl at its own note.
+        if let last = heard.mode, let cue = Self.cues?.cue(from: last, to: m.mode, script: c.script) { sound.ring(cue) }
+        heard.mode = m.mode
         if m != machine { machine = m }
         updateIdleTimer()
     }
@@ -325,3 +335,6 @@ extension MoveCommandDirection {
 private extension Mode {
     var isIntro: Bool { if case .intro = self { return true }; return false }
 }
+
+/// What the sound last answered, so a change of figure rings once.
+final class HeardMode { var mode: Mode? }

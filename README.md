@@ -148,6 +148,8 @@ committed here is the Berean Standard Bible and the Douay-Rheims, both public do
   - Edward Lear, *Lago d'Iseo*, 1867, Yale Center for British Art, CC0
   - Moretto da Brescia, *Christ Blessing Saint John the Baptist*, National Gallery, London (NG3096), public domain
   - Yair Haklai, CC BY-SA 4.0, via Wikimedia Commons (The Met, Fifth Avenue)
+- **Sound:** CC0 recordings from Freesound: a meditation choir (zazz.sound.design), a pad
+  (PhonZz) and a Tibetan singing bowl (dersinnsspace). Details in `App/Sound/CREDITS.md`.
 - **Fonts:** Cormorant Garamond and EB Garamond, SIL Open Font License.
 - **Research sources** for every Context page and figure are listed beside the text in
   `App/Content/context.json` and `App/Content/annotations.json`.
