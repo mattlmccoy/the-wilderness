@@ -160,11 +160,16 @@ private let ids = ["christ", "angels", "basilisk", "lion", "stag", "fox", "bear"
     }
 }
 
-@Test func raysSweepSlowlyAndStayFaint() {
-    let start = SunRays.frame(at: 195.5, since: 0)!, end = SunRays.frame(at: 239.5, since: 0)!
-    #expect(abs(end.angleDegrees - start.angleDegrees) > 2 && abs(end.angleDegrees - start.angleDegrees) <= 12)
+@Test func raysShineAcrossTheCanvasDuringAPass() {
+    // Matt, 2026-11-15: "they don't really move — they should shine across the canvas".
+    for pass in 0..<6 {
+        let t0 = Double(pass) * 240 + 195.5, t1 = Double(pass) * 240 + 239.5
+        let a = SunRays.frame(at: t0, since: 0)!, b = SunRays.frame(at: t1, since: 0)!
+        #expect(abs(b.originX - a.originX) >= 0.4, "the light source travels across")
+        let swing = abs(b.angleDegrees - a.angleDegrees)
+        #expect(swing >= 15 && swing <= 30)
+    }
     let mid = SunRays.frame(at: 195 + 22.5, since: 0)!
-    // Visible on a lit tapestry, still well under a lit figure (0.44).
-    #expect(mid.intensity >= 0.12 && mid.intensity <= 0.16)
-    #expect(start.intensity < 0.01)
+    #expect(mid.intensity >= 0.28 && mid.intensity <= 0.32)    // visible on the real wall
+    #expect(SunRays.frame(at: 195.5, since: 0)!.intensity < 0.01)
 }

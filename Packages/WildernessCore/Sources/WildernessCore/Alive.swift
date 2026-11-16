@@ -83,7 +83,7 @@ public enum PassingLight {
 /// never at launch) comes from its own angle and point, sweeps a few degrees, and fades.
 public enum SunRays {
     /// Strongest beam at the middle of a pass: visible on a lit tapestry, well under a lit figure (0.44).
-    public static let peak = 0.14
+    public static let peak = 0.3
     public struct Beam: Equatable, Sendable {
         /// Angle relative to the pass's main angle, degrees.
         public var offsetDegrees: Double
@@ -110,14 +110,16 @@ public enum SunRays {
         let originX = Double.random(in: 0.1...0.9, using: &rng)
         // Lean back across the tapestry: from the left they slant right, and vice versa.
         let base = Double.random(in: 12...32, using: &rng) * (originX < 0.5 ? 1 : -1)
-        let sweep = Double.random(in: 4...8, using: &rng) * (Bool.random(using: &rng) ? 1 : -1)
+        let sweep = Double.random(in: 15...25, using: &rng) * (Bool.random(using: &rng) ? 1 : -1)
+        // The source travels across the tapestry the way the beams lean, so the light crosses it.
+        let drift = Double.random(in: 0.45...0.6, using: &rng) * (originX < 0.5 ? 1 : -1)
         let beams = (0..<Int.random(in: 3...5, using: &rng)).map { _ in
             Beam(offsetDegrees: Double.random(in: -12...12, using: &rng),
                  width: Double.random(in: 0.08...0.2, using: &rng),
                  strength: Double.random(in: 0.5...1, using: &rng))
         }
         let progress = (s.x + 0.3) / 1.6   // 0…1 through the pass
-        return Frame(originX: originX, angleDegrees: base + sweep * (progress - 0.5),
+        return Frame(originX: originX + drift * (progress - 0.5), angleDegrees: base + sweep * (progress - 0.5),
                      intensity: s.intensity / PassingLight.peak * peak, beams: beams)
     }
 }

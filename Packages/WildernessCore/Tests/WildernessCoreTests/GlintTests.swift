@@ -74,3 +74,7 @@ private func distinctGlints(seconds: Double, step: Double = 0.05, seed: UInt64 =
     for _ in 0..<100 { s.handle(.left) }
     #expect(abs(s.tuning.glintSizeInches - 0.05) < 1e-9)
 }
+
+@Test func glintsLastLongEnoughToCatchAcrossARoom() {
+    #expect(GlintParams().life == 1.2...2.2)
+}

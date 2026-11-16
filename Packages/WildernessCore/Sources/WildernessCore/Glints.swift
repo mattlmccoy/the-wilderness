@@ -19,7 +19,7 @@ public enum GlintStyle: String, Codable, Sendable { case thread, pinpoint }
 public struct GlintParams: Equatable, Sendable {
     public var meanInterval = 8.0
     public var minGap = 1.5
-    public var life: ClosedRange<Double> = 0.8...1.4
+    public var life: ClosedRange<Double> = 1.2...2.2
     public var peak: ClosedRange<Double> = 0.75...1.0
     public init() {}
 }

@@ -8,7 +8,7 @@ public struct Tuning: Codable, Equatable, Sendable {
     public var glintMeanInterval = 8.0
     public var glintBrightness = 1.0
     /// Matt's wall is ~17 projector px per inch: below ~0.1 in a glint is a pixel or two.
-    public var glintSizeInches = 0.15
+    public var glintSizeInches = 0.3
     public var glintStyle: GlintStyle = .thread
     /// Explore: strength of the thin line drawn around the chosen figure (0 = off).
     public var edgeLine = 0.8

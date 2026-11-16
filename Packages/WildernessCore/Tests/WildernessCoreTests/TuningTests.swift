@@ -5,7 +5,7 @@ import Testing
 @Test func defaultsMatchTheSpec() {
     let t = Tuning.defaults
     #expect(t.subjectStrength == 0.44 && t.baseWash == 0 && t.exploreWashFactor == 0.45)  // Matt: background completely black
-    #expect(t.glintMeanInterval == 8 && t.glintBrightness == 1.0 && t.glintSizeInches == 0.15)
+    #expect(t.glintMeanInterval == 8 && t.glintBrightness == 1.0 && t.glintSizeInches == 0.3)
     #expect(t.glintStyle == .thread)
     #expect(t.glintParams.meanInterval == 8 && t.glintParams.minGap == 1.5)
     #expect(Tuning.storageKey == "tuning.v1")
