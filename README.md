@@ -1,26 +1,60 @@
+<p align="center">
+  <img src="docs/media/hero.jpg" alt="The Wilderness: the painting in darkness, its figures traced in gold, Christ lit" width="100%">
+</p>
+
 # The Wilderness
 
-A projection-mapped tapestry of Moretto da Brescia's *Christ in the Wilderness* (about 1515–20,
-The Metropolitan Museum of Art), made for a living room. An Apple TV drives a projector aimed
-at a 60 × 50 inch tapestry print of the painting. Light finds each figure, the wall breathes at
-rest, and short texts tell the story beside the figures they describe. An iPhone app guides it
-from the sofa.
+Moretto da Brescia painted *Christ in the Wilderness* around 1515. It hangs in the Metropolitan
+Museum of Art. A 60 × 50 inch print of it hangs in my living room, and an Apple TV and a projector
+light it from across the room. Light finds each figure, the wall breathes when no one is touching
+it, and short texts tell the story on the cloth beside the figures they describe. An iPhone app
+guides it from the sofa.
 
-![The demo loop on the simulator](docs/media/demo-rest.gif)
+I designed it the way I would design a product: a fixed object, a room, a set of constraints the
+physics won't negotiate, and a person on a sofa who should never have to think about any of it.
 
-*The self-running demo in the tvOS simulator, with the painting shown under the light. On the
-real wall the painting is the tapestry itself and the projector adds only light.*
+![The self-running demo in the tvOS simulator](docs/media/demo-rest.gif)
+
+*The self-running demo in the tvOS simulator, with the painting drawn under the light. On the real
+wall the painting is the cloth itself and the projector adds only light.*
 
 ---
 
-## What it does
+## The brief
 
-### Explore: light finds each figure
+![System elevation: the 60 × 50 in tapestry with its traced figures, the projector, Apple TV and iPhone](docs/media/spec.png)
 
-Thirteen figures in the painting are traced by hand. Press an arrow on the remote, or tap a
-figure on the phone, and soft light gathers on that figure while the rest of the tapestry falls
-back. A short line appears near it; press Select for the story and two verses, one from each
-Testament.
+Four constraints shaped every decision.
+
+1. **A projector can only add light.** There is no black paint and no shadow to draw. Everything
+   on the wall is light added to a printed cloth, so dark is simply the absence of light, and
+   ivory type only reads over the painting's dark, quiet passages.
+2. **There is no wall beside the tapestry.** The print fills the projector's frame. Every word the
+   wall says, from a figure's story to the alignment instructions, has to sit on the painting.
+3. **A hanging cloth is never flat.** It bows, it sags at the corners, and the printer trimmed a
+   sliver off the top. The light has to land on the cloth, not where the cloth should be.
+4. **It lives in a living room.** It is read from the sofa, in the dark, by people who did not come
+   to operate software. It should be calm by default and rewarding when you lean in.
+
+## Design language
+
+![Palette, type and the five rules the light obeys](docs/media/design-language.png)
+
+The palette is four values: ivory for type and light, gold for outlines and the chosen figure,
+stone for quiet labels, and black, which on a projector means *no light at all*. The type is
+Cormorant Garamond for titles and EB Garamond for text, set to fit its calm zone and never below a
+size readable from the sofa. The phone uses the same black, Garamond and gold, so the two feel
+like one object.
+
+---
+
+## On the wall
+
+### Light finds each figure
+
+Thirteen figures are traced by hand. Press an arrow on the remote, or tap a figure on the phone,
+and soft, heavily feathered light gathers on that figure while the rest of the tapestry falls
+back. A short line appears near it; press Select for the story and a verse from each Testament.
 
 ![The thirteen traced figures](docs/media/traced-figures.jpg)
 
@@ -31,105 +65,130 @@ lion and the serpent to Psalm 91:13, so those are marked documented. Nobody name
 or the animal coming down the rocks, so the wall says so and reads them from what the painting
 shows: a raven, perhaps, and an animal that bows its head toward Christ.
 
-### Text that sits on the painting
+### Type that sits on the painting
 
-The wall has no room beside the tapestry for text, so text sits on the painting itself. A
-projector can only add light, which means ivory type reads well only over dark, calm passages.
-`scripts/make_text_zones.py` scores every card-sized window of the painting for darkness and
-calm, and keeps the best ones. The app then puts each figure's text in the nearest zone that
-covers neither that figure nor Christ.
+Because the light can only add, type has to find the painting's dark, calm passages.
+`scripts/make_text_zones.py` scores every card-sized window of the painting for darkness and calm
+and keeps the best ones. Each figure's text goes in the nearest zone that covers neither that
+figure nor Christ, with a two-inch margin from the edge of the cloth and type scaled to fit.
 
-![Calm zones scored on the painting](docs/media/calm-zones.jpg)
+| Calm zones scored on the painting | The raven's text on the shadowed rock |
+|---|---|
+| ![](docs/media/calm-zones.jpg) | ![](docs/media/explore-on-canvas.jpg) |
 
-![The raven's text set on the shadowed rock face](docs/media/explore-on-canvas.jpg)
-
-### The wall breathes
+### The wall breathes, and the light drifts
 
 At rest, each traced region swells and eases on its own slow rhythm, between 7 and 11 seconds,
-with Christ the slowest at 12. Start offsets are spread evenly across the regions so no two ever
-pulse together; an early version hashed the names, and a test against the real outlines caught
-two regions breathing in step.
+with Christ the slowest at 12. Start offsets are spread so no two regions ever pulse together; an
+early version hashed the names, and a test against the real outlines caught two breathing in step.
 
 ![Thirteen breathing rhythms](docs/media/breathing-rhythms.png)
 
-Small glints drift and twinkle like shifting stars, landing on the painting's highlights and
-favouring whichever region is breathing in. Every few minutes a few soft beams of sunlight slant
-down from above, sweep across the canvas and fade.
+Over the breathing, a soft light drifts from figure to figure, forty seconds on each and fifteen
+to ease into the next. It always moves to the nearest figure it hasn't visited, so it travels
+across the painting instead of jumping about. Small glints land on the painting's highlights, and
+every few minutes a few soft beams of sunlight slant down from above and fade.
 
-Exploring can also be light only: press Play/Pause twice and the text goes away, so the figures
-can be looked at without words until the same double press brings it back.
+**Be still** turns that into seven minutes of slow looking: no words, just the light walking from
+Christ through every figure and back to him, each one dissolving into the next.
+
+![Be still, light only, as the wall sees it](docs/media/be-still.gif)
+
+*Be still, light only, as the wall sees it (3× speed): Christ, then the serpent at his feet.*
 
 ### Unfold and Context
 
-**Unfold** is an eight-part story told across the painting, from Eden to the wilderness, with the
-light stepping through the figures as each beat names them. A content test fails if a beat ever
-names a figure it does not light.
+**Unfold** is an eight-part story told across the painting, from Eden to the wilderness, the light
+stepping through the figures as each beat names them. A content test fails if a beat ever names a
+figure it does not light.
 
-**Context** is twelve short pages about the painting and the place: the Judean desert, the Mount
-of Temptation, Moretto's Brescia (sacked by the French in 1512, when he was about fourteen), the
-1988 restoration that uncovered the hidden angels, and where the painting hangs now. Maps are
-drawn from Natural Earth data as thin lines of light; photographs carry their licence credits.
+**Context** is twelve short pages about the painting and the place: the Judean desert, the Mount of
+Temptation, Moretto's Brescia (sacked by the French in 1512, when he was about fourteen), the 1988
+restoration that uncovered the hidden angels, and where the painting hangs now. Maps are drawn
+from Natural Earth data as thin lines of light. On the restoration page, the angels' outlines draw
+themselves in and then glow.
 
-![The twelve Context pages](docs/media/context-pages.jpg)
+| The restoration page | Real maps drawn as light |
+|---|---|
+| ![](docs/media/restoration.gif) | ![](docs/media/context-maps.jpg) |
 
-![Context pages turning on the wall](docs/media/demo-context.gif)
+---
 
-![Real maps drawn as light](docs/media/context-maps.jpg)
+## Through the year
 
-### Eight-point alignment
+![The year on the wall: the liturgical colour of the wash and the seasonal touches](docs/media/year-wheel.png)
 
-A hanging tapestry is never quite flat. Four corners give a perspective mapping; four edge
-midpoints let each edge bow to follow the cloth. The bend is a small Metal shader that runs after
-the perspective step, so a calibration with straight edges renders exactly as before. Points can
-be dragged on the phone, and the wall follows live.
+The wall keeps the church calendar: Easter by the Gregorian computus, everything else hung from it.
+The background wash takes the season's colour, and all the light warms and dims with the day, from
+sunrise and sunset at home.
+
+| Christmas | Thanksgiving | Easter morning |
+|---|---|---|
+| ![](docs/media/christmas.gif) | ![](docs/media/thanksgiving.gif) | ![](docs/media/easter-dawn.gif) |
+| Hats of soft red light on the lion, the stag, the bowing animal and the fox; snow; a star over the angels on Christmas Eve and at Epiphany. Advent candles count the Sundays. | From the Monday of the week before Thanksgiving through the day, a turkey trots along the far hill and, a little later, bolts through the foreground. | A gold dawn sweeps across the painting on Easter Sunday morning. In Lent the wall counts the forty days. |
+
+The hats and the star were placed by hand with a small drag-and-drop page that draws them exactly
+as the wall does. They are shaded in the painting's own vermilion and lit from the upper left,
+like the figures, so they look like they belong in it. Each season can be set to Auto, On or Off,
+from the wall's Tune screen or the phone.
+
+A few times an evening, at times that change every day, something small happens at rest: the stag
+leaps, the raven's eye catches the light, the angels brighten together. Late in the evening the
+wall settles to breathing only and lets the Apple TV sleep. And there is a code.
+
+![The dreamcoat](docs/media/dreamcoat.gif)
+
+---
+
+## The phone
+
+<img src="docs/media/phone.png" alt="The iPhone app at rest: the painting with its outlines, the wall's status, and the modes" width="300" align="right">
+
+The iPhone app finds the Apple TV on the home network, shows the painting with its traced
+outlines, and mirrors the wall: the line under the title always says what the wall is doing, and
+the mode that is running is lit gold.
+
+Everything the remote can do, the phone can do: explore any figure, Unfold, Context, Be still,
+hide the text, tune every light value and season, align the projection, show the alignment
+pattern, start the demo. It can also be a flashlight: drag a finger across the painting and a pool
+of light follows on the wall. Siri can start the demo, hide the text or turn on the flashlight.
+
+Every press is felt and seen. A press that cannot reach the wall says so, and the connection dot
+pulses whenever the wall answers.
+
+<br clear="right">
+
+---
+
+## Details that took the longest
+
+**Eight-point alignment.** Four corners give a perspective mapping; four edge midpoints let each edge
+bow to follow the cloth. The bend is a small Metal shader that runs after the perspective step, so
+a calibration with straight edges renders exactly as before. Handles can be dragged on the phone
+and the wall follows live.
 
 | The alignment pattern, two edges bent | The painting through the same bend |
 |---|---|
 | ![](docs/media/align-bent-edges.jpg) | ![](docs/media/align-bent-painting.jpg) |
 
-Printers rarely keep every edge of a picture. The print of this painting lost a sliver at the
-top, so outlines near the top sat low while the handles sat on the cloth's edge. The handles still
-mark the cloth; a per-edge *painting trim* (sixteenths of an inch, set from the phone while the
-figures' outlines are drawn on the wall) fits the painting inside it, and anything that would
-fall past the cloth is masked, so no light reaches the wall around it.
+**Painting trim.** The printer cut a sliver off the top of the painting, so the handles sat on the
+cloth's edge while the figures sat low. A per-edge trim, in sixteenths of an inch and set from the
+phone while the figures' outlines are drawn on the wall, fits the painting inside the cloth. Anything
+that would fall past the cloth is masked, so no light reaches the wall around it.
 
-### Sound that answers the wall
+**Light that adds.** Where two shapes overlap, a projector adds their light, so a turkey's tail
+feathers or a hat's fur would bloom into a bright smear. Each is drawn as one picture first and then
+added as light. Snow fell in faint diagonal rows until its scatter was replaced with a proper hash.
 
-The optional sound is made from real recordings, not synthesis: a meditation choir and a soft
-pad in D, looped at different lengths so they never line up the same way twice. The bed brightens
-and swells a little with Christ's twelve-second breath. Moving to a figure breathes the hum of a
-Tibetan singing bowl, its strike cut away, tuned so each figure has its own note of D major
-pentatonic: Christ is home, and the others rise from left to right across the painting.
+**Sound that answers the wall.** The optional sound is made from real recordings, not synthesis: a
+meditation choir and a soft pad in D, looped at different lengths so they never line up the same
+way twice. The bed brightens and swells a little with Christ's twelve-second breath. Moving to a
+figure breathes the hum of a Tibetan singing bowl with its strike cut away, tuned so each figure
+has its own note of D major pentatonic: Christ is home, and the others rise from left to right
+across the painting.
 
-### Through the year
-
-The wall keeps the church calendar (Easter by the Gregorian computus, everything else hung from
-it). Advent lights a candle on the canvas each Sunday; Lent counts its forty days; Christmas puts
-hats of soft red light on the lion, the stag, the bowing animal and the fox, lets snow fall and
-hangs a star over the angels on Christmas Eve and at Epiphany; Easter morning sends a gold dawn
-across the painting; and from the Monday of the week before Thanksgiving through the day itself, a turkey trots along the far hill now and then and bolts through the foreground. Each season can be set to Auto, On or Off, on the wall's Tune screen or the phone. The background wash takes the season's
-colour, and all the light warms and dims with the day, from sunrise and sunset at home.
-
-A few times an evening, at times that change every day, something small happens at rest: the stag
-leaps, the raven's eye catches the light, the angels brighten together. Menu → *Be still* walks
-the light slowly from figure to figure for seven minutes, each drifting into the next. At rest a
-softer light drifts round the painting the same way, from each figure to its nearest neighbour. Late in the evening the wall settles
-to breathing only and lets the Apple TV sleep. And there is a code.
-
-### The phone
-
-The iPhone app finds the Apple TV on the home network (Bonjour), shows the painting with its
-traced outlines, and mirrors whatever the wall is saying. From it you can jump to any figure,
-page through Unfold and Context, hide the text, tune the light, align the projection and start the
-demo, or become a flashlight: drag a finger across the painting and a pool of light follows on
-the wall. Siri can start the demo, hide the text or turn on the flashlight. Every press is felt and seen; a press that cannot reach the wall says so, and the
-connection dot pulses whenever the wall answers.
-
-### A demo for filming
-
-Settings → Demo, or the phone, starts a three-minute loop that shows every feature once: the
-boot-up outlines, the wall at rest with glints and a pass of sun rays, six figures, four beats of
-Unfold, four Context pages. Any press ends it.
+**A demo for filming.** Settings → Demo starts a three-minute loop that shows every feature once.
+Any press ends it.
 
 ![The boot-up: every outline draws itself, then fades](docs/media/demo-intro.gif)
 
@@ -141,25 +200,29 @@ Unfold, four Context pages. Any press ends it.
 flowchart LR
   subgraph Core["WildernessCore (Swift package, pure logic)"]
     M[Mode machine] --- A[Alignment & bend]
-    M --- L[Light timing, breathing, glints, sun rays]
+    M --- L[Light: timing, breathing, drift, glints, sun rays]
+    M --- S[Seasons, church calendar, day light]
     M --- C[Content: figures, Unfold, Context, maps, text zones]
     M --- P[Phone protocol]
   end
   TV["tvOS app (SwiftUI + Metal)"] --> Core
   Phone["iPhone app (SwiftUI)"] --> Core
   Phone <-- "Bonjour + TCP, newline JSON" --> TV
-  Scripts["Python tools: outlines, glints, maps, text zones, verse fetch"] --> Content[(App/Content)]
+  Scripts["Python tools: outlines, glints, maps, text zones, sound, README art"] --> Content[(App/Content)]
   Content --> TV
 ```
 
 - **WildernessCore** holds everything that can be reasoned about without a screen: the mode
-  machine, calibration and the bend, light timing, the content model and the phone protocol.
-  Development was test-first; the package has 290 tests and the Python tools 165 more.
-- **The tvOS app** draws in the artwork's own coordinates and warps the whole layer onto the
-  tapestry with one homography, so every highlight and line of type is perspective-correct.
+  machine, calibration and the bend, the light's timing and drift, the church calendar, the content
+  model and the phone protocol. It was built test-first: 321 tests, and 165 more for the Python tools.
+- **The tvOS app** draws in the artwork's own coordinates (1200 × 1000 units, twenty to the inch)
+  and warps the whole layer onto the tapestry, so every highlight and line of type lands
+  perspective-correct on the cloth.
 - **The iPhone app** talks to the wall over the local network only. No accounts, no cloud.
-- **Content is data.** Figures, outlines, stories, Context pages, maps and text zones are JSON
-  files, each validated on load and checked against the real files by tests.
+- **Content is data.** Figures, outlines, stories, Context pages, maps, text zones, hats and the
+  turkey's path are JSON files, each validated on load and checked against the real files by tests.
+- **The README's graphics** are drawn by `scripts/make_readme_art.py` from the same outlines,
+  palette, fonts and calendar rules the app uses.
 
 Developer setup, signing and the tools are in [docs/DEVELOPING.md](docs/DEVELOPING.md).
 
@@ -191,7 +254,7 @@ committed here is the Berean Standard Bible and the Douay-Rheims, both public do
 
 ## License
 
-The code is under the [MIT License](LICENSE). The painting, photographs, maps and fonts keep
-the licences listed under Credits; scripture text is not part of this repository.
+The code is under the [MIT License](LICENSE). The painting, photographs, maps and fonts keep the
+licences listed under Credits; scripture text is not part of this repository.
 
-Made by Matt McCoy, 2026.
+Designed and built by Matt McCoy, 2026.
