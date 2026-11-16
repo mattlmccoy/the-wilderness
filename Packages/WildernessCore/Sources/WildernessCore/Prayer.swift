@@ -121,3 +121,16 @@ public struct PrayerToday: Codable, Equatable, Sendable {
     public var line: PrayerLine?
     public init(period: Prayer.Period, line: PrayerLine?) { self.period = period; self.line = line }
 }
+
+/// Which Into the Quiet screen the phone shows, from what the wall reports.
+public enum PrayerScreen: Equatable, Sendable {
+    case start
+    case session(Prayer.Movement)
+    case closing(String)
+
+    public static func `for`(_ s: WallSnapshot) -> PrayerScreen {
+        if let p = s.prayer { return .session(p.movement) }
+        if let c = s.prayerClosing { return .closing(c) }
+        return .start
+    }
+}

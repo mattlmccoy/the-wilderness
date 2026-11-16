@@ -82,3 +82,19 @@ private extension ModeMachine {
         #expect(try JSONDecoder().decode(PhoneCommand.self, from: JSONEncoder().encode(c)) == c)
     }
 }
+
+// MARK: Which screen the phone shows
+
+@Test func thePhoneShowsTheSessionThenTheClosingThenTheStart() {
+    var s = WallSnapshot(mode: "rest", subjectId: nil, header: nil, title: nil, short: nil, story: nil,
+                         verses: [], paused: false, tuning: Tuning(), soundOn: false, showPainting: false)
+    #expect(PrayerScreen.for(s) == .start)
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.startPrayer(now: 0, minutes: 5, line: line, period: .morning, darkUntil: nil)
+    s.prayer = m.prayerStatus(now: 10)
+    #expect(PrayerScreen.for(s) == .session(.read))
+    s.prayer = m.prayerStatus(now: 100)
+    #expect(PrayerScreen.for(s) == .session(.reflect))
+    s.prayer = nil; s.prayerClosing = "Amen. Go in peace."
+    #expect(PrayerScreen.for(s) == .closing("Amen. Go in peace."))
+}

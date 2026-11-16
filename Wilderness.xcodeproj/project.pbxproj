@@ -72,6 +72,7 @@
 		BFE720624A796505DB6F1E67 /* unfold.json in Resources */ = {isa = PBXBuildFile; fileRef = 609CF14238C48DEAE944C3AC /* unfold.json */; };
 		C30A7F5606E2F4A061AFC73E /* PhoneViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D088259126199245FC8AD1E /* PhoneViews.swift */; };
 		CD05E8F3650DFC776F8BF9C9 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA1011679F17D8912C77D4 /* SoundPlayer.swift */; };
+		D1400243472E3A4B64A494F1 /* PrayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D481B30B1BE8DB5880724CE /* PrayerView.swift */; };
 		D52C0C38148E458A5BB06309 /* notices.json in Resources */ = {isa = PBXBuildFile; fileRef = 4685DA18E56C3A97752987DC /* notices.json */; };
 		DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */ = {isa = PBXBuildFile; fileRef = 4D8385225EF6CEFBD3D833AD /* licensed-verses.json */; };
 		DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */; };
@@ -160,6 +161,7 @@
 		949D7018FF5ACDAE3CF94E43 /* painting.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = painting.jpg; sourceTree = "<group>"; };
 		96443CC736D66435C0FEE8F1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		96CF398BB97A76EB16E643A2 /* context-wadi-qelt.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-wadi-qelt.jpg"; sourceTree = "<group>"; };
+		9D481B30B1BE8DB5880724CE /* PrayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerView.swift; sourceTree = "<group>"; };
 		A18B3E2EA582E0648A3FEFE7 /* pad.m4a */ = {isa = PBXFileReference; path = pad.m4a; sourceTree = "<group>"; };
 		A1D42FB33D87953C764C407B /* WildernessPhoneUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A272C4FC196DD9B6924B91E2 /* prayer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = prayer.json; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				00541C4509425B1002EE55BF /* CompanionClient.swift */,
 				C383264E565691887550532C /* Info.plist */,
 				4D088259126199245FC8AD1E /* PhoneViews.swift */,
+				9D481B30B1BE8DB5880724CE /* PrayerView.swift */,
 				5A079B8A4EA9D6259AF8F733 /* WildernessIntents.swift */,
 				06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */,
 			);
@@ -573,6 +576,7 @@
 				46B57182DBBB10CCE8DD6425 /* AlignView.swift in Sources */,
 				1DC8D6B1048D207A6E9D3339 /* CompanionClient.swift in Sources */,
 				C30A7F5606E2F4A061AFC73E /* PhoneViews.swift in Sources */,
+				D1400243472E3A4B64A494F1 /* PrayerView.swift in Sources */,
 				E32E79FE6DFBA2B5FB8076CD /* WildernessIntents.swift in Sources */,
 				1A3E825D8DF9C1766804B19B /* WildernessPhoneApp.swift in Sources */,
 			);

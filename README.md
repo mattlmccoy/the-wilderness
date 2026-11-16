@@ -96,6 +96,15 @@ Christ through every figure and back to him, each one dissolving into the next.
 
 *Be still, light only, as the wall sees it (3× speed): Christ, then the serpent at his feet.*
 
+### Into the quiet
+
+A way into contemplative prayer, morning or night, started from the phone. It follows the old
+shape of *lectio divina*: **Read** one short line of scripture, set large on the canvas, then
+**Reflect**, **Respond** and **Rest** in silence while only Christ's light remains, breathing once
+every fourteen seconds. The rest of the wall goes still: no glints, no drifting light, no seasons.
+A soft bowl breath marks each movement. The line changes each day, from a morning set and an
+evening set. After a late session the light fades out and the Apple TV is left to sleep.
+
 ### Unfold and Context
 
 **Unfold** is an eight-part story told across the painting, from Eden to the wilderness, the light

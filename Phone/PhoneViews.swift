@@ -6,6 +6,7 @@ import WildernessCore
 struct PhoneRootView: View {
     @StateObject private var client = CompanionClient()
     @State private var showSettings = false
+    @State private var showPrayer = false
     @State private var notConnected = false
     /// Flashlight mode: drag on the painting to move a pool of light on the wall.
     @State private var torch = false
@@ -56,6 +57,9 @@ struct PhoneRootView: View {
         // Siri / Shortcuts: act as soon as the wall is connected.
         .onReceive(NotificationCenter.default.publisher(for: IntentInbox.arrived)) { _ in deliverIntent() }
         .onChange(of: client.link) { deliverIntent() }
+        .fullScreenCover(isPresented: $showPrayer) { PrayerView(client: client) }
+        // A session started from another phone (or still running) opens the dark screen here too.
+        .onChange(of: client.snapshot?.prayer != nil) { _, running in if running { showPrayer = true } }
         .sheet(isPresented: $showSettings) {
             SettingsSheet(client: client)
                 .presentationDetents([.medium, .large])
@@ -84,6 +88,10 @@ struct PhoneRootView: View {
                 .phaseAnimator([1.0, 1.9, 1.0], trigger: client.heardCount) { dot, scale in dot.scaleEffect(scale) }
                     animation: { _ in .easeOut(duration: 0.18) }
                 .accessibilityLabel(client.link == .connected ? "Connected" : "Not connected")
+            // Into the Quiet: a prayer session, started here (the wall has no button for it).
+            Button { showPrayer = true } label: { Image(systemName: "hands.and.sparkles") }
+                .disabled(client.link != .connected)
+                .accessibilityLabel("Into the quiet")
             Button { showSettings = true } label: { Image(systemName: "gearshape") }
                 .disabled(client.link != .connected)
                 .accessibilityLabel("Settings")
