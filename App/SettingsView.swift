@@ -27,16 +27,17 @@ struct SettingsView: View {
                     hint("↑ ↓ choose   ·   ← → change   ·   ‹ done")
                 }
             case .about:
-                ForEach(notices.notices.keys.sorted(), id: \.self) { k in hint(notices.notices[k]!) }
-                if notices.notices.isEmpty { hint("Bible translation notices: none yet (no translation is quoted).") }
-                hint("Image: The Metropolitan Museum of Art, 11.53, public domain.")
-                hint("Fonts: Cormorant Garamond and EB Garamond, SIL Open Font License.")
-                ForEach(credits, id: \.self) { hint($0) }
+                // Two columns, every credit wrapped in full (Matt, 2026-11-16: lines were cut off).
+                LazyVGrid(columns: [GridItem(.fixed(500), spacing: 50, alignment: .topLeading),
+                                    GridItem(.fixed(500), alignment: .topLeading)],
+                          alignment: .leading, spacing: 16) {
+                    ForEach(aboutLines, id: \.self) { hint($0) }
+                }
             default:
                 EmptyView()
             }
         }
-        .frame(width: 560, alignment: .leading)
+        .frame(width: mode == .about ? 1060 : 560, alignment: .leading)
         .padding(.leading, 60).padding(.top, 140)
     }
 
@@ -53,13 +54,23 @@ struct SettingsView: View {
 
     private func row(_ s: String, focused: Bool) -> some View {
         Text(s)
-            .font(Typography.text(Typography.Size.short))
-            .foregroundStyle(Palette.ivory.opacity(focused ? 0.92 : 0.4))
+            .font(Typography.text(Typography.Size.row))
+            .foregroundStyle(Palette.ivory.opacity(focused ? 1 : 0.55))
+    }
+
+    private var aboutLines: [String] {
+        let n = notices.notices.keys.sorted().map { notices.notices[$0]! }
+        return (n.isEmpty ? ["Bible translation notices: none yet (no translation is quoted)."] : n)
+            + ["Image: The Metropolitan Museum of Art, 11.53, public domain.",
+               "Fonts: Cormorant Garamond and EB Garamond, SIL Open Font License.",
+               "Sound: CC0 recordings from Freesound (zazz.sound.design, PhonZz, dersinnsspace)."]
+            + credits
     }
 
     private func hint(_ s: String) -> some View {
         Text(s)
+            .fixedSize(horizontal: false, vertical: true)
             .font(Typography.text(Typography.Size.citation + 2)).tracking(0.5).lineSpacing(4)
-            .foregroundStyle(Palette.ivory.opacity(0.55))
+            .foregroundStyle(Palette.ivory.opacity(0.8))
     }
 }

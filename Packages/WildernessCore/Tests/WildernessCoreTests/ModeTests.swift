@@ -41,8 +41,11 @@ private extension ModeMachine {
     var m = machine()
     m.press(.playPause)
     #expect(m.mode == .unfold(.start))
+    // In Explore a single press waits a moment (it may be the first of a double press: hide text).
     var e = machine(.explore(id: "angels", expanded: true))
-    e.press(.playPause)
+    e.press(.playPause, at: 1)
+    #expect(e.mode == .explore(id: "angels", expanded: true))
+    e.tick(now: 1 + ModeMachine.doublePressWindow + 0.05, dt: 0.25, script: script)
     #expect(e.mode == .unfold(.start))
 }
 

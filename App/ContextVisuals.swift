@@ -122,7 +122,7 @@ struct ContextPhoto: View {
                 Text(caption).font(Typography.text(Typography.Size.citation, italic: true))
                     .foregroundStyle(Palette.ivory.opacity(0.7))
             }
-            Text(image.credit).font(Typography.text(Typography.Size.citation * 0.7))
+            Text(image.credit).font(Typography.text(Typography.Size.citation * 0.75))
                 .foregroundStyle(Palette.ivory.opacity(0.4))
         }
         .opacity(shown ? 1 : 0)

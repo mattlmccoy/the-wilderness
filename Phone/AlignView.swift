@@ -38,6 +38,9 @@ struct AlignView: View {
         .foregroundStyle(PhonePalette.ivory)
         .background(Color.black.ignoresSafeArea())
         .disabled(state == nil)
+        .buttonStyle(PressStyle())
+        .sensoryFeedback(.impact(weight: .light), trigger: client.sentCount)
+        .sensoryFeedback(.error, trigger: client.refusedCount)
         .onAppear { client.send(.align(.start)) }
     }
 
@@ -116,7 +119,8 @@ struct AlignView: View {
         let inches = state?.trimInches ?? Calibration.noTrim
         return VStack(spacing: 6) {
             Text("Painting trim").font(PhoneType.text(15, italic: true)).foregroundStyle(PhonePalette.stone)
-            Grid(horizontalSpacing: 18, verticalSpacing: 6) {
+                .padding(.bottom, 2)
+            Grid(horizontalSpacing: 14, verticalSpacing: 4) {
                 ForEach([[AlignEdge.top, .bottom], [.left, .right]], id: \.self) { row in
                     GridRow {
                         ForEach(row, id: \.self) { edge in trimStepper(edge, inches: inches[edge.rawValue]) }
@@ -124,20 +128,22 @@ struct AlignView: View {
                 }
             }
         }
+        .padding(.horizontal, 12)
     }
 
     private func trimStepper(_ edge: AlignEdge, inches: Double) -> some View {
-        HStack(spacing: 8) {
-            Text(["Top", "Right", "Bottom", "Left"][edge.rawValue]).frame(width: 56, alignment: .leading)
+        HStack(spacing: 2) {
+            Text(["Top", "Right", "Bottom", "Left"][edge.rawValue]).frame(width: 50, alignment: .leading)
             Button { client.send(.align(.trim(edge, -1))) } label: { Image(systemName: "minus.circle") }
                 .buttonRepeatBehavior(.enabled)
                 .accessibilityLabel("Less \(edge) trim")
-            Text(String(format: "%.2f\u{2033}", inches)).monospacedDigit().frame(width: 50)
+            Text(String(format: "%.2f\u{2033}", inches)).monospacedDigit().frame(width: 44)
             Button { client.send(.align(.trim(edge, 1))) } label: { Image(systemName: "plus.circle") }
                 .buttonRepeatBehavior(.enabled)
                 .accessibilityLabel("More \(edge) trim")
         }
-        .font(PhoneType.text(16))
+        .font(PhoneType.text(15))
+        .lineLimit(1)
     }
 
     private var arrows: some View {

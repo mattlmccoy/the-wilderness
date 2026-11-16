@@ -15,6 +15,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case setTuning(Tuning)
     case setSound(Bool)
     case setShowPainting(Bool)
+    /// Explore with the light only (same as a double press of Play/Pause on the remote).
+    case setTextHidden(Bool)
     /// Alignment from the phone (the same session the remote drives).
     case align(AlignCommand)
     /// Start (true) or stop (false) the self-running demo.
@@ -81,15 +83,18 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
     public var tuning: Tuning
     public var soundOn: Bool
     public var showPainting: Bool
+    /// Explore with the light only (nil from walls built before 2026-11-16 = shown).
+    public var textHidden: Bool? = nil
     /// Present only while the wall is calibrating.
     public var alignment: AlignmentState?
 
     public static func make(mode: Mode, library: AnnotationLibrary, script: UnfoldScript, context: ContextScript,
-                            tuning: Tuning, soundOn: Bool, showPainting: Bool) -> WallSnapshot {
+                            tuning: Tuning, soundOn: Bool, showPainting: Bool, textHidden: Bool = false) -> WallSnapshot {
         var s = WallSnapshot(mode: Self.name(mode), subjectId: nil,
                              header: mode.wayfinding(library: library, script: script, context: context),
                              title: nil, short: nil, story: nil, verses: [], paused: false,
                              tuning: tuning, soundOn: soundOn, showPainting: showPainting)
+        s.textHidden = textHidden
         switch mode {
         case let .explore(id, _):
             guard let a = library.annotations.first(where: { $0.id == id }) else { break }

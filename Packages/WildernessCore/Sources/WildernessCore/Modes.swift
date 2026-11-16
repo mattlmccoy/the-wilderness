@@ -61,6 +61,15 @@ public struct ModeMachine: Equatable, Sendable {
     public private(set) var demoSince: Double?
     public var isDemo: Bool { demoSince != nil }
 
+    /// Explore with the light only (Matt, 2026-11-16): double-press Play/Pause in Explore, or the
+    /// phone. Stays as you move from figure to figure, until toggled again.
+    public private(set) var textHidden = false
+    /// A single Play/Pause in Explore waits this long in case it is the first of a double press.
+    public static let doublePressWindow = 0.4
+    private var pendingPlayAt: Double?
+
+    public mutating func setTextHidden(_ hidden: Bool) { textHidden = hidden }
+
     public mutating func startDemo(now: Double) {
         demoSince = now
         lastInputAt = now
@@ -77,6 +86,17 @@ public struct ModeMachine: Equatable, Sendable {
             return nil
         }
         lastInputAt = now
+        // Play/Pause in Explore: once = Unfold (after the window, in tick), twice = hide/show text.
+        if input == .playPause, case .explore = mode {
+            if let p = pendingPlayAt, now - p <= Self.doublePressWindow {
+                pendingPlayAt = nil
+                textHidden.toggle()
+            } else {
+                pendingPlayAt = now
+            }
+            return nil
+        }
+        pendingPlayAt = nil   // any other press cancels a waiting Play
         let before = mode
         var fromMenu = false
         defer {
@@ -203,6 +223,10 @@ public struct ModeMachine: Equatable, Sendable {
             return
         }
         if let h = hintUntil, now >= h { hintUntil = nil }
+        if let p = pendingPlayAt, now - p > Self.doublePressWindow {
+            pendingPlayAt = nil
+            if case .explore = mode { mode = .unfold(.start); hintUntil = nil; return }   // starts now, plays from the next tick
+        }
         let idle = now - lastInputAt
         switch mode {
         case .explore where idle >= Self.exploreIdleTimeout,

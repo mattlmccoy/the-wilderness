@@ -59,15 +59,15 @@ struct WallColumn<Content: View>: View {
 enum Wayfinding {
     static func header(_ s: String) -> some View {
         Text(s).font(Typography.text(Typography.Size.citation)).tracking(3)
-            .foregroundStyle(Palette.ivory.opacity(0.6))
+            .foregroundStyle(Palette.ivory.opacity(0.8))
     }
 
     static func hint(_ s: String) -> some View {
         Text(s).font(Typography.text(Typography.Size.citation, italic: true)).tracking(1)
-            .foregroundStyle(Palette.ivory.opacity(0.7))
+            .foregroundStyle(Palette.ivory.opacity(0.85))
     }
 
-    static let exploreHint = "Arrows to move  ·  Select for more\nBack to return"
+    static let exploreHint = "Arrows to move  ·  Select for more\n▶︎❙❙ twice to hide the text  ·  Back to return"
     static let unfoldHint = "Play/Pause to pause  ·  Arrows to skip\nBack to return"
     static let contextHint = "Arrows to turn the page\nBack to return"
 }

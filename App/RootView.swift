@@ -127,7 +127,8 @@ struct RootView: View {
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
                                     calibration: cal, showsHint: machine?.hintUntil != nil,
                                     edgeLine: wallTuning.edgeLine,
-                                    canvasZone: CanvasText.zone(for: id, library: content.library, zones: content.zones))
+                                    canvasZone: CanvasText.zone(for: id, library: content.library, zones: content.zones),
+                                    textHidden: machine?.textHidden ?? false)
                     case let .unfold(p):
                         UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal,
                                    header: mode.wayfinding(library: content.library, script: content.script),
@@ -192,7 +193,8 @@ struct RootView: View {
     private var snapshot: WallSnapshot? {
         guard let m = machine, case let .success(c) = Self.content else { return nil }
         var s = WallSnapshot.make(mode: m.mode, library: c.library, script: c.script, context: c.context,
-                                  tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting)
+                                  tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting,
+                                  textHidden: m.textHidden)
         if m.mode == .calibrating {
             s.alignment = (calSession ?? CalibrationSession(start: store.saved ?? startingCalibration(for: screenSize))).alignmentState
         }
@@ -243,6 +245,8 @@ struct RootView: View {
             soundOn = on
         case let .setShowPainting(on):
             showPainting = on
+        case let .setTextHidden(hidden):
+            machine?.setTextHidden(hidden)
         case let .align(a):
             handleAlign(a)
         case let .demo(on):

@@ -19,10 +19,10 @@ struct MenuView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text(item.name)
                                 .font(Typography.title())
-                                .foregroundStyle(Palette.ivory.opacity(on ? 1 : 0.4))
+                                .foregroundStyle(Palette.ivory.opacity(on ? 1 : 0.6))
                             Text(item.line)
                                 .font(Typography.text(Typography.Size.story, italic: true))
-                                .foregroundStyle(Palette.ivory.opacity(on ? 0.85 : 0.3))
+                                .foregroundStyle(Palette.ivory.opacity(on ? 0.95 : 0.6))
                         }
                         .accessibilityElement(children: .combine)
                         .accessibilityAddTraits(on ? .isSelected : [])
@@ -32,7 +32,7 @@ struct MenuView: View {
                 Text(soundLabel)
                     .font(Typography.text(Typography.Size.short))
                     .tracking(1)
-                    .foregroundStyle(Palette.ivory.opacity(focus == .sound ? 1 : 0.4))
+                    .foregroundStyle(Palette.ivory.opacity(focus == .sound ? 1 : 0.6))
                     .padding(.top, 44)
                     .accessibilityAddTraits(focus == .sound ? .isSelected : [])
             }

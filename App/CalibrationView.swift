@@ -18,6 +18,10 @@ struct CalibrationView: View {
 
 
     private var reviewing: Bool { session.phase == .review }
+    /// The instructions block plus the title-safe margin, in points.
+    static let instructionsHeight: CGFloat = 140
+    /// The instructions' width when they stand beside a tapestry that fills the height.
+    static let sideWidth: CGFloat = 300
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -30,10 +34,19 @@ struct CalibrationView: View {
             if !reviewing {
                 ForEach(AlignPoint.allCases, id: \.self) { point in handle(for: point) }
             }
-            // Kept inside the TV title-safe margin (about 60 pt at 1080p) so it never falls off the wall.
-            instructions
-                .padding(.bottom, 60)
-                .frame(width: screen.width, height: screen.height, alignment: .bottom)
+            // Never on the tapestry (CalibrationLayout): below it if there is room, else above; kept
+            // inside the TV title-safe margin (about 60 pt at 1080p) so it never falls off the wall.
+            let place = CalibrationLayout.instructions(handles: AlignPoint.allCases.map(session.calibration.handle),
+                                                       height: Self.instructionsHeight / screen.height,
+                                                       width: (Self.sideWidth + 40) / screen.width)
+            let beside = place == .left || place == .right
+            instructions(stacked: beside)
+                .frame(width: beside ? Self.sideWidth : nil)
+                .padding(place == .below ? .bottom : place == .above ? .top : place == .left ? .leading : .trailing, beside ? 40 : 60)
+                .frame(width: screen.width, height: screen.height, alignment: {
+                    switch place { case .below: .bottom; case .above: .top; case .left: .leading; case .right: .trailing }
+                }())
+                .animation(.easeInOut(duration: 0.4), value: place)
         }
         .frame(width: screen.width, height: screen.height, alignment: .topLeading)
         .focusable()
@@ -73,12 +86,15 @@ struct CalibrationView: View {
         return "ARROWS  move   ·   SELECT  next   ·   ▶︎❙❙  \(step)   ·   ‹  \(canCancel ? "cancel" : "exit")"
     }
 
-    private var instructions: some View {
+    private func instructions(stacked: Bool) -> some View {
         VStack(spacing: 10) {
-            Text(session.stepLabel).font(.system(size: 22, weight: .regular, design: .serif))
-            Text(hints).font(.system(size: 15, weight: .medium)).tracking(1.5)
+            Text(session.stepLabel).font(.system(size: 32, weight: .regular, design: .serif))
+            // Beside the tapestry the hints stand one per line in a narrow column.
+            Text(stacked ? hints.replacingOccurrences(of: "   ·   ", with: "\n") : hints)
+                .font(.system(size: 22, weight: .medium)).tracking(1.5).lineSpacing(6)
         }
-        .foregroundStyle(Palette.ivory.opacity(0.55))
+        .multilineTextAlignment(.center)
+        .foregroundStyle(Palette.ivory.opacity(0.8))
     }
 }
 

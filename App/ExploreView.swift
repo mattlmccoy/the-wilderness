@@ -14,6 +14,8 @@ struct ExploreView: View {
     var edgeLine: Double = 0
     /// Where this figure's text goes when there is no room beside the tapestry.
     var canvasZone: TextZone? = nil
+    /// Light only: double-press Play/Pause (or the phone) hides the text while exploring.
+    var textHidden = false
 
     private var selected: (Annotation, Bool)? {
         guard case let .exploring(id, expanded) = state,
@@ -28,7 +30,7 @@ struct ExploreView: View {
                     .id(a.id + "-edge")
                     .transition(.opacity.animation(.easeOut(duration: LightTiming.textOut)))
             }
-            if case let (a, expanded)? = selected {
+            if !textHidden, case let (a, expanded)? = selected {
                 WallText(title: a.title, short: a.short, more: a.more,
                          expanded: expanded,
                          placement: TextColumnLayout.place(preferred: a.textSide, calibration: calibration, canvasZone: canvasZone),
@@ -41,6 +43,7 @@ struct ExploreView: View {
             }
         }
         .animation(.easeInOut(duration: LightTiming.textOut), value: state)
+        .animation(.easeInOut(duration: LightTiming.textOut), value: textHidden)
     }
 
 }

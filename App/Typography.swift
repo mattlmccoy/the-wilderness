@@ -11,7 +11,9 @@ enum Typography {
 
     enum Size {
         // Matt, first wall test: "a good bit larger, too hard to read". About 40% up from the first build.
-        static let title: CGFloat = 56, short: CGFloat = 32, story: CGFloat = 27, verse: CGFloat = 28, citation: CGFloat = 18
+        static let title: CGFloat = 56, short: CGFloat = 32, story: CGFloat = 27, verse: CGFloat = 28, citation: CGFloat = 24
+        // Matt, 2026-11-16: menus and hints too small to read from the sofa. 24 ≈ 1.2 in on the cloth is the floor.
+        static let row: CGFloat = 36
     }
 
     /// Registers every bundled .ttf for this process. Failures are logged, and SwiftUI falls

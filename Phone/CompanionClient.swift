@@ -12,6 +12,11 @@ final class CompanionClient: ObservableObject {
 
     @Published private(set) var link: Link = .searching
     @Published private(set) var snapshot: WallSnapshot?
+    /// Feedback for the person holding the phone: commands sent, refused (not connected), and
+    /// replies heard from the wall. Views turn these into haptics, a pulse and a message.
+    @Published private(set) var sentCount = 0
+    @Published private(set) var refusedCount = 0
+    @Published private(set) var heardCount = 0
 
     private nonisolated static let log = Logger(subsystem: "com.mattmccoy.wilderness.phone", category: "companion")
     private var browser: NWBrowser?
@@ -52,7 +57,11 @@ final class CompanionClient: ObservableObject {
     }
 
     func send(_ command: PhoneCommand) {
-        guard link == .connected, let connection, let data = try? LineFramer.frame(command) else { return }
+        guard link == .connected, let connection, let data = try? LineFramer.frame(command) else {
+            refusedCount += 1
+            return
+        }
+        sentCount += 1
         connection.send(content: data, completion: .contentProcessed { _ in })
     }
 
@@ -97,7 +106,7 @@ final class CompanionClient: ObservableObject {
                 guard let self, self.connection === c else { return }
                 if let data {
                     for line in self.framer.push(data) {
-                        if let s = try? JSONDecoder().decode(WallSnapshot.self, from: line) { self.snapshot = s }
+                        if let s = try? JSONDecoder().decode(WallSnapshot.self, from: line) { self.snapshot = s; self.heardCount += 1 }
                     }
                 }
                 if done || error != nil { self.drop() } else { self.receive(on: c) }

@@ -6,6 +6,7 @@ import WildernessCore
 struct PhoneRootView: View {
     @StateObject private var client = CompanionClient()
     @State private var showSettings = false
+    @State private var notConnected = false
     let library: AnnotationLibrary?
 
     var body: some View {
@@ -27,6 +28,23 @@ struct PhoneRootView: View {
         }
         .background(Color.black.ignoresSafeArea())
         .foregroundStyle(PhonePalette.ivory)
+        .buttonStyle(PressStyle())
+        // Every press is felt; a press that cannot reach the wall says so.
+        .sensoryFeedback(.impact(weight: .light), trigger: client.sentCount)
+        .sensoryFeedback(.error, trigger: client.refusedCount)
+        .overlay(alignment: .bottom) {
+            if notConnected {
+                Text(client.link == .searching ? "Looking for the wall…" : "Not connected to the wall")
+                    .font(PhoneType.text(16)).padding(.horizontal, 18).padding(.vertical, 10)
+                    .background(Capsule().fill(PhonePalette.stone.opacity(0.35)))
+                    .padding(.bottom, 78)   // just above the controls, clear of the painting and text
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .onChange(of: client.refusedCount) {
+            withAnimation(.easeOut(duration: 0.25)) { notConnected = true }
+            Task { try? await Task.sleep(for: .seconds(2.2)); withAnimation(.easeIn(duration: 0.4)) { notConnected = false } }
+        }
         .onAppear { client.start() }
         .sheet(isPresented: $showSettings) {
             SettingsSheet(client: client)
@@ -38,8 +56,11 @@ struct PhoneRootView: View {
         HStack {
             Text("The Wilderness").font(PhoneType.title(26))
             Spacer()
+            // Pulses each time the wall answers, so you can see it heard you.
             Circle().fill(client.link == .connected ? PhonePalette.gold : PhonePalette.stone)
                 .frame(width: 8, height: 8)
+                .phaseAnimator([1.0, 1.9, 1.0], trigger: client.heardCount) { dot, scale in dot.scaleEffect(scale) }
+                    animation: { _ in .easeOut(duration: 0.18) }
                 .accessibilityLabel(client.link == .connected ? "Connected" : "Not connected")
             Button { showSettings = true } label: { Image(systemName: "gearshape") }
                 .disabled(client.link != .connected)
@@ -49,15 +70,20 @@ struct PhoneRootView: View {
     }
 
     private var controls: some View {
-        HStack(spacing: 28) {
-            Button("Unfold") { client.send(.go(.unfold)) }
-            Button("Context") { client.send(.go(.context)) }
+        HStack(spacing: 18) {
+            Button("Unfold") { client.send(.go(.unfold)) }.lineLimit(1).fixedSize()
+            Button("Context") { client.send(.go(.context)) }.lineLimit(1).fixedSize()
             Spacer()
             if client.snapshot?.canStep == true {
                 Button { client.send(.move(.left)) } label: { Image(systemName: "chevron.left") }
                     .accessibilityLabel("Previous")
                 Button { client.send(.move(.right)) } label: { Image(systemName: "chevron.right") }
                     .accessibilityLabel("Next")
+            }
+            if client.snapshot?.mode == "explore" {
+                let hidden = client.snapshot?.textHidden ?? false
+                Button { client.send(.setTextHidden(!hidden)) } label: { Image(systemName: hidden ? "eye.slash" : "eye") }
+                    .accessibilityLabel(hidden ? "Show text on the wall" : "Hide text on the wall")
             }
             if client.snapshot?.canPause == true {
                 Button { client.send(.playPause) } label: {
@@ -71,7 +97,8 @@ struct PhoneRootView: View {
         .font(PhoneType.text(19))
         .tint(PhonePalette.gold)
         .padding(.horizontal, 20).padding(.vertical, 14)
-        .disabled(client.link != .connected)
+        // Never disabled: a press while disconnected answers with a message and a buzz instead of nothing.
+        .opacity(client.link == .connected ? 1 : 0.55)
     }
 }
 
@@ -202,6 +229,8 @@ struct SettingsSheet: View {
             .fullScreenCover(isPresented: $aligning) { AlignView(client: client) }
             .navigationBarTitleDisplayMode(.inline)
         }
+        .sensoryFeedback(.selection, trigger: client.sentCount)
+        .sensoryFeedback(.error, trigger: client.refusedCount)
         // Always edit the wall's real values (never defaults), and follow changes made on the wall.
         .disabled(client.snapshot == nil)
         .onAppear { if let t = client.snapshot?.tuning { tuning = t; loaded = true } }
@@ -216,5 +245,16 @@ struct SettingsSheet: View {
                                   set: { tuning[keyPath: key] = $0; client.send(.setTuning(tuning)) }),
                    in: range)
         }
+    }
+}
+
+/// Every control visibly answers the finger: it dips and glows gold while pressed.
+struct PressStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(6)
+            .background(Capsule().fill(PhonePalette.gold.opacity(configuration.isPressed ? 0.25 : 0)).padding(-4))
+            .scaleEffect(configuration.isPressed ? 0.88 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
