@@ -47,6 +47,7 @@ struct SettingsView: View {
         case .pattern: "Alignment pattern"
         case .painting: "Show painting"
         case .about: "About"
+        case .demo: "Demo"
         }
     }
 

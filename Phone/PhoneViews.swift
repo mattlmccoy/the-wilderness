@@ -192,6 +192,10 @@ struct SettingsSheet: View {
                 Section {
                     Button("Align to the tapestry…") { aligning = true }
                 }
+                Section(footer: Text("Plays every feature in a three-minute loop, for filming. Any press on the remote ends it.")) {
+                    Button("Start the demo") { client.send(.demo(true)) }
+                    Button("Stop the demo") { client.send(.demo(false)) }
+                }
                 Section { Button("Reset light to defaults") { tuning = .defaults; client.send(.setTuning(tuning)) } }
             }
             .navigationTitle("Settings")

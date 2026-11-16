@@ -17,6 +17,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case setShowPainting(Bool)
     /// Alignment from the phone (the same session the remote drives).
     case align(AlignCommand)
+    /// Start (true) or stop (false) the self-running demo.
+    case demo(Bool)
 
     /// The remote-equivalent input, for commands that drive the mode machine.
     public var input: AppInput? {

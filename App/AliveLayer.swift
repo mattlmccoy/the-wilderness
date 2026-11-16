@@ -10,6 +10,8 @@ struct AliveLayer: View {
     let tuning: Tuning
     let active: Bool
     let clock: AliveClock
+    /// The demo's start, if running: its rest segment always gets one pass of sun rays.
+    var demoSince: Double? = nil
 
     static let fade = 3.0
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
@@ -25,7 +27,7 @@ struct AliveLayer: View {
             }
             .opacity(tuning.breathing)
             }
-            if tuning.passingLight { PassingLightView(clock: clock, canvas: canvas) }
+            if tuning.passingLight { PassingLightView(clock: clock, canvas: canvas, demoSince: demoSince) }
         }
         .frame(width: canvas.width, height: canvas.height)
         .opacity(active ? 1 : 0)
@@ -70,12 +72,14 @@ private struct BreathingRegion: View {
 private struct PassingLightView: View {
     let clock: AliveClock
     let canvas: CGSize
+    var demoSince: Double? = nil
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 20)) { timeline in
             Canvas { ctx, size in
                 let now = timeline.date.timeIntervalSinceReferenceDate
-                guard let since = clock.since, let f = SunRays.frame(at: now, since: since) else { return }
+                let since = demoSince.map { DemoScript.raysSince(demoSince: $0, at: now) } ?? clock.since
+                guard let since, let f = SunRays.frame(at: now, since: since) else { return }
                 ctx.blendMode = .plusLighter
                 ctx.addFilter(.blur(radius: 9))
                 let origin = CGPoint(x: f.originX * size.width, y: -size.height * 0.35)

@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, painting, about }
+public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, painting, about, demo }
 /// The guest-facing front door: a short list beside the tapestry (Select at rest).
 public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold, context, sound }
 
@@ -57,9 +57,25 @@ public struct ModeMachine: Equatable, Sendable {
         lastInputAt = now
     }
 
+    /// The self-running demo (DemoScript): when it began, or nil.
+    public private(set) var demoSince: Double?
+    public var isDemo: Bool { demoSince != nil }
+
+    public mutating func startDemo(now: Double) {
+        demoSince = now
+        lastInputAt = now
+    }
+
     @discardableResult
     public mutating func handle(_ input: AppInput, now: Double, library: AnnotationLibrary,
                                 script: UnfoldScript, context: ContextScript = .empty) -> ModeEffect? {
+        // Any press during the demo ends it and leaves the wall at rest.
+        if demoSince != nil {
+            demoSince = nil
+            mode = .stillness
+            lastInputAt = now
+            return nil
+        }
         lastInputAt = now
         let before = mode
         var fromMenu = false
@@ -147,12 +163,16 @@ public struct ModeMachine: Equatable, Sendable {
             mode = .settings(focus: SettingsItem(rawValue: min(f.rawValue + 1, SettingsItem.allCases.count - 1))!)
         case (.settings(.painting), .select):
             return .togglePainting
+        case (.settings(.demo), .select):
+            demoSince = now
+            mode = .intro(startedAt: now)
         case (.settings(let f), .select):
             mode = switch f {
             case .calibrate: .calibrating
             case .tune: .tuning
             case .pattern, .painting: .pattern
             case .about: .about
+            case .demo: .stillness   // handled above
             }
         case (.tuning, .back):
             mode = .settings(focus: .tune)
@@ -176,7 +196,12 @@ public struct ModeMachine: Equatable, Sendable {
 
     /// Time passing: idle modes fall back to Stillness; a playing Unfold plays on to its end.
     /// Calibration never times out; the intro is never cut short, it simply ends.
-    public mutating func tick(now: Double, dt: Double, script: UnfoldScript) {
+    public mutating func tick(now: Double, dt: Double, script: UnfoldScript, context: ContextScript = .empty) {
+        if let start = demoSince {
+            mode = DemoScript.mode(at: now, since: start, script: script, context: context)
+            lastInputAt = now   // the demo is never idle
+            return
+        }
         if let h = hintUntil, now >= h { hintUntil = nil }
         let idle = now - lastInputAt
         switch mode {

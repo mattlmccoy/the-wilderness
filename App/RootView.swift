@@ -93,20 +93,20 @@ struct RootView: View {
                         Image(uiImage: img).resizable()
                             .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
                     }
-                    LightLayer(library: content.library, tuning: tuningStore.tuning,
+                    LightLayer(library: content.library, tuning: wallTuning,
                                targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script, context: content.context),
                                dark: mode.isIntro)
-                    AliveLayer(library: content.library, breathing: content.breathing, tuning: tuningStore.tuning,
-                               active: Breathing.isActive(mode), clock: alive)
+                    AliveLayer(library: content.library, breathing: content.breathing, tuning: wallTuning,
+                               active: Breathing.isActive(mode), clock: alive, demoSince: machine?.demoSince)
                     switch mode {
                     case let .intro(startedAt):
-                        IntroView(library: content.library, tuning: tuningStore.tuning, startedAt: startedAt)
+                        IntroView(library: content.library, tuning: wallTuning, startedAt: startedAt)
                             .transition(.opacity.animation(.easeOut(duration: 1.0)))
                     case .stillness:
-                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
+                        GlintLayer(points: content.glints, tuning: wallTuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"), bias: glintBias(content))
                     case let .menu(focus):
-                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
+                        GlintLayer(points: content.glints, tuning: wallTuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
                         MenuView(focus: focus, calibration: cal, soundOn: soundOn, soundAvailable: sound.available,
                                  canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones))
@@ -114,7 +114,7 @@ struct RootView: View {
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
                                     calibration: cal, showsHint: machine?.hintUntil != nil,
-                                    edgeLine: tuningStore.tuning.edgeLine,
+                                    edgeLine: wallTuning.edgeLine,
                                     canvasZone: CanvasText.zone(for: id, library: content.library, zones: content.zones))
                     case let .unfold(p):
                         UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal,
@@ -130,11 +130,11 @@ struct RootView: View {
                     case .pattern:
                         RegistrationTestPattern()
                     case .tuning:
-                        GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal, demo: true,
+                        GlintLayer(points: content.glints, tuning: wallTuning, calibration: cal, demo: true,
                                    bias: glintBias(content))
                         // Show the edge line on Christ while tuning it (and everything else).
                         if let christ = content.library.annotations.first(where: { $0.id == "christ" }) {
-                            EdgeLineView(annotation: christ, strength: tuningStore.tuning.edgeLine)
+                            EdgeLineView(annotation: christ, strength: wallTuning.edgeLine)
                         }
                         SettingsView(mode: mode, tuning: tuningSession, notices: content.notices, showPainting: showPainting)
                     case .settings, .about:
@@ -232,6 +232,9 @@ struct RootView: View {
             showPainting = on
         case let .align(a):
             handleAlign(a)
+        case let .demo(on):
+            if on, store.saved != nil { machine?.startDemo(now: Self.now) }
+            else if !on, machine?.isDemo == true { send(.back, c) }
         default:
             if let input = command.input { send(input, c) }
         }
@@ -247,6 +250,18 @@ struct RootView: View {
         }
     }
 
+    /// What the wall uses: the saved tuning, except during the demo, which makes sure glints and
+    /// sun rays actually appear on film.
+    private var wallTuning: Tuning {
+        var t = tuningStore.tuning
+        if machine?.isDemo == true {
+            t.passingLight = true
+            t.glintMeanInterval = 4
+            t.breathing = max(t.breathing, 0.12)
+        }
+        return t
+    }
+
     private func applyTuning() {
         if let t = tuningSession?.tuning, t != tuningStore.tuning { tuningStore.tuning = t }
     }
@@ -255,7 +270,7 @@ struct RootView: View {
         guard var m = machine, case let .success(c) = Self.content else { return }
         let now = Self.now
         let dt = clock.value.dt(now: now)
-        m.tick(now: now, dt: dt, script: c.script)
+        m.tick(now: now, dt: dt, script: c.script, context: c.context)
         sound.update(target: Soundscape.target(mode: m.mode, on: soundOn), dt: dt)
         if m != machine { machine = m }
         updateIdleTimer()
