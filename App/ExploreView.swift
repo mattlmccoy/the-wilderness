@@ -60,6 +60,9 @@ struct AppContent {
     let notices: Notices
     /// Hand-marked hats, the raven's eye and the star (seasons and Easter eggs).
     let delights: DelightsContent
+    /// Into the Quiet: the morning and evening lines, and the licensed wording that replaces them.
+    var prayer: PrayerContent = .empty
+    var licensed: LicensedVerses = .none
 
     /// Each traced region's breathing rhythm (cheap: a handful of entries).
     var breathing: Breathing { Breathing(ids: library.annotations.filter { $0.outline != nil }.map(\.id)) }
@@ -80,7 +83,9 @@ enum ContentLoader {
                               zones: try TextZones.decode(data("textzones")).zones,
                               glints: try GlintPoints.decode(data("glints")),
                               notices: try Notices.decode(data("notices")),
-                              delights: try DelightsContent.decode(data("delights")))
+                              delights: try DelightsContent.decode(data("delights")),
+                              prayer: try PrayerContent.decode(data("prayer")),
+                              licensed: licensed)
         }
     }
 

@@ -27,6 +27,7 @@
 		3389FBE42EA9B3BF20C111EF /* CREDITS.md in Resources */ = {isa = PBXBuildFile; fileRef = 789F2BB29490584A3B66B417 /* CREDITS.md */; };
 		3576D09A2B2003A03D056D30 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F06B70493ADCF9380EB26B7 /* Typography.swift */; };
 		36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393AF73F60A0DEC4D2325EBB /* MenuView.swift */; };
+		392BBB720CE3B390E73A772B /* prayer.json in Resources */ = {isa = PBXBuildFile; fileRef = A272C4FC196DD9B6924B91E2 /* prayer.json */; };
 		3D9872B60E300B60885C3D00 /* context-brescia-and-monte-guglielmo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9CB09035172BE7CF4119EDD /* context-brescia-and-monte-guglielmo.jpg */; };
 		45F67052610914C12403E339 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
 		46B57182DBBB10CCE8DD6425 /* AlignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE26A22216ED7EBD7036342 /* AlignView.swift */; };
@@ -83,6 +84,7 @@
 		F521A9BA1D56D0D09CFCAFA7 /* WildernessCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2573921B243044A441868503 /* WildernessCore */; };
 		F55E0385F25B73F4A6CA82D3 /* WallColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */; };
 		F9A3F21AD7E3FC1488A1CA1E /* context-jordan-river-qasr-al-yahud-wide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */; };
+		F9D53BC19B4F8F1EC1068895 /* PrayerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094886775B3B70A380C5972 /* PrayerLayer.swift */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
 		FECFDF91ECCC9166DAA6EFE5 /* context-brescia-17th-century-view.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DC561E73F08668C4B22C6C78 /* context-brescia-17th-century-view.jpg */; };
 		FEF66FFE1A0504963DCD9E0E /* DriftLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36823F915B93A13143BACBFF /* DriftLayer.swift */; };
@@ -116,6 +118,7 @@
 		0DFC4A231966E276EF87FE59 /* context-moretto-christ-blessing-john.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-moretto-christ-blessing-john.jpg"; sourceTree = "<group>"; };
 		0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		10055DBD8B0259D70A5114C9 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		1094886775B3B70A380C5972 /* PrayerLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerLayer.swift; sourceTree = "<group>"; };
 		1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-CormorantGaramond.txt"; sourceTree = "<group>"; };
 		28AA1011679F17D8912C77D4 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		29BA13ECF8A5F9A7660C4A71 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -159,6 +162,7 @@
 		96CF398BB97A76EB16E643A2 /* context-wadi-qelt.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-wadi-qelt.jpg"; sourceTree = "<group>"; };
 		A18B3E2EA582E0648A3FEFE7 /* pad.m4a */ = {isa = PBXFileReference; path = pad.m4a; sourceTree = "<group>"; };
 		A1D42FB33D87953C764C407B /* WildernessPhoneUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A272C4FC196DD9B6924B91E2 /* prayer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = prayer.json; sourceTree = "<group>"; };
 		A74D2F5DDD59CF8D8A86B42E /* WallColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallColumn.swift; sourceTree = "<group>"; };
 		A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		AC0C2043D85D5E257480B75E /* context.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = context.json; sourceTree = "<group>"; };
@@ -251,6 +255,7 @@
 				AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */,
 				393AF73F60A0DEC4D2325EBB /* MenuView.swift */,
 				34504EEACA619A61C36E1178 /* Palette.swift */,
+				1094886775B3B70A380C5972 /* PrayerLayer.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
 				71C1AD2F8C4F4ADBF42FD038 /* SelectPressDetector.swift */,
 				96443CC736D66435C0FEE8F1 /* SettingsView.swift */,
@@ -300,6 +305,7 @@
 				4819C180FAC10AFBD91FC9FD /* maps.json */,
 				4685DA18E56C3A97752987DC /* notices.json */,
 				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
+				A272C4FC196DD9B6924B91E2 /* prayer.json */,
 				400D1C002A2AD66C7B840729 /* textzones.json */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
 				EF96BD29AD8FCC6E195AB420 /* context-images */,
@@ -551,6 +557,7 @@
 				D52C0C38148E458A5BB06309 /* notices.json in Resources */,
 				57B51D0271F3939ED6FC100D /* pad.m4a in Resources */,
 				A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */,
+				392BBB720CE3B390E73A772B /* prayer.json in Resources */,
 				FF3CA8E3D6D2787175484F27 /* textzones.json in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
 			);
@@ -601,6 +608,7 @@
 				218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */,
 				36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */,
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
+				F9D53BC19B4F8F1EC1068895 /* PrayerLayer.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
 				625D02A0740A97DEDBB1E05C /* SelectPressDetector.swift in Sources */,
 				2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */,

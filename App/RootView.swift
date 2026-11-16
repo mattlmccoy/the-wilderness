@@ -124,19 +124,29 @@ struct RootView: View {
                                    dark: mode.isIntro, washColor: season.map { Self.washColor($0.tint) } ?? Palette.ivory)
                         drift(mode, content)
                         AliveLayer(library: content.library, breathing: content.breathing, tuning: wallTuning,
-                                   active: Breathing.isActive(mode) && windDown != .sleeping, clock: alive, demoSince: machine?.demoSince)
+                                   active: Breathing.isActive(mode) && windDown != .sleeping && !quietForPrayer, clock: alive, demoSince: machine?.demoSince)
                     }
                     .colorMultiply(Color(red: 1, green: 1 - 0.22 * day.warmth, blue: 1 - 0.45 * day.warmth))
                     .opacity(day.level)
                     .animation(.easeInOut(duration: 20), value: day)
+                    // After a late prayer session the wall fades out slowly, then the TV may sleep.
+                    .opacity(prayerDark ? 0 : 1)
+                    .animation(.easeInOut(duration: 30), value: prayerDark)
                     DelightsLayer(library: content.library, delights: content.delights,
-                                  seasons: Self.showsSeasons(mode) ? season : nil,
-                                  atRest: mode == .stillness && windDown != .sleeping,
+                                  seasons: Self.showsSeasons(mode) && !quietForPrayer ? season : nil,
+                                  atRest: mode == .stillness && windDown != .sleeping && !quietForPrayer,
                                   zone: CanvasText.instructionsZone(library: content.library, zones: content.zones),
-                                  dreamcoatUntil: machine?.dreamcoatUntil,
-                                  flashlight: flashlight?.point,
+                                  dreamcoatUntil: quietForPrayer ? nil : machine?.dreamcoatUntil,
+                                  flashlight: quietForPrayer ? nil : flashlight?.point,
                                   wallOffset: Self.previewOffset,
                                   revealSince: revealSince(mode, content))
+                    if let p = machine?.prayer {
+                        PrayerLayer(library: content.library, session: p,
+                                    placement: TextColumnLayout.place(preferred: .left, calibration: cal,
+                                                                      canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
+                                    strength: wallTuning.subjectStrength)
+                            .transition(.opacity.animation(.easeInOut(duration: 6)))
+                    }
                     if machine?.isSlowLooking == true, let since = machine?.slowLookingSince, Self.now - since < 9 {
                         WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: cal,
                                                                      canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
@@ -235,6 +245,9 @@ struct RootView: View {
         s.dreamcoat = m.dreamcoat(now: Self.now)
         s.seasons = seasons?.active ?? []
         s.demo = m.isDemo
+        s.prayer = m.prayerStatus(now: Self.now)
+        s.prayerToday = prayerToday(c)
+        s.prayerClosing = m.prayerClosing(now: Self.now)
         if m.mode == .calibrating {
             s.alignment = (calSession ?? CalibrationSession(start: store.saved ?? startingCalibration(for: screenSize))).alignmentState
         }
@@ -296,6 +309,13 @@ struct RootView: View {
             if on { machine?.startSlowLooking(now: Self.now, library: c.library) } else { machine?.stopSlowLooking() }
         case let .dreamcoat(on):
             machine?.setDreamcoat(on, now: Self.now)
+        case let .pray(minutes):
+            guard store.saved != nil, Prayer.lengths.contains(minutes) else { break }
+            let today = prayerToday(c)
+            machine?.startPrayer(now: Self.now, minutes: minutes, line: today.line, period: today.period,
+                                 darkUntil: prayerDarkUntil())
+        case .endPrayer:
+            machine?.endPrayer(now: Self.now)
         case let .show(screen):
             if store.saved != nil { machine?.openScreen(screen) }
         case let .demo(on):
@@ -324,6 +344,10 @@ struct RootView: View {
             t.passingLight = true
             t.glintMeanInterval = 4
             t.breathing = max(t.breathing, 0.12)
+        } else if machine?.isPraying == true {
+            // Into the Quiet: no glints, no sun rays.
+            t.passingLight = false
+            t.glintMeanInterval = 1_000_000
         } else if windDown != .awake, machine?.isSlowLooking != true {
             // Late evening: breathing only, no glints or sun rays.
             t.passingLight = false
@@ -346,6 +370,27 @@ struct RootView: View {
     private var windDown: WindDown.Phase {
         machine?.isDemo == true ? .awake : WindDown().phase(at: wallDate)
     }
+    /// Into the Quiet, or the dark after a late session: everything but the prayer's own light is off.
+    private var quietForPrayer: Bool { machine?.isPraying == true || prayerDark }
+    private var prayerDark: Bool { machine?.isAfterPrayerDark(now: Self.now) == true }
+
+    /// The day's line and period, for the phone's start screen and for starting a session.
+    private func prayerToday(_ c: AppContent) -> PrayerToday {
+        let hour = Calendar.current.component(.hour, from: wallDate)
+        let period = Prayer.period(hour: hour)
+        return PrayerToday(period: period, line: Prayer.line(on: CivilDate(wallDate), period: period,
+                                                              content: c.prayer, licensed: c.licensed))
+    }
+
+    /// For a late session, when the wall wakes after its fade: the next 05:00, in the wall's clock.
+    private func prayerDarkUntil() -> Double? {
+        let cal = Calendar.current, hour = cal.component(.hour, from: wallDate)
+        guard Prayer.sleepEnding(hour: hour) else { return nil }
+        var wake = cal.date(bySettingHour: 5, minute: 0, second: 0, of: wallDate)!
+        if wake <= wallDate { wake = cal.date(byAdding: .day, value: 1, to: wake)! }
+        return Self.now + wake.timeIntervalSince(wallDate)
+    }
+
     /// The seasons decorate the painting, never the intro, alignment or settings screens (their text).
     static func showsSeasons(_ mode: Mode) -> Bool {
         switch mode {
@@ -374,11 +419,18 @@ struct RootView: View {
         let dt = clock.value.dt(now: now)
         m.tick(now: now, dt: dt, script: c.script, context: c.context)
         let breath = alive.since.map { SoundCues.swell(breathing: c.breathing, at: now, since: $0) } ?? 0.5
-        let quiet = windDown == .sleeping ? 0.0 : windDown == .settling ? 0.5 : 1.0   // wind-down hushes the sound too
+        var quiet = windDown == .sleeping ? 0.0 : windDown == .settling ? 0.5 : 1.0   // wind-down hushes the sound too
+        if m.isPraying { quiet = 0.5 }                       // prayer: the bed, softly, whatever the hour
+        if m.isAfterPrayerDark(now: now) { quiet = 0 }
         sound.update(target: Soundscape.target(mode: m.mode, on: soundOn) * quiet, dt: dt, breath: breath)
         // A new figure, Unfold beat or Context page rings the bowl at its own note.
         if let last = heard.mode, let cue = Self.cues?.cue(from: last, to: m.mode, script: c.script) { sound.ring(cue) }
         if heard.mode != m.mode, case .context = m.mode { heard.contextSince = now }
+        // Into the Quiet: one bowl breath, Christ's note, at each new movement.
+        let movement = m.prayerStatus(now: now)?.movement
+        if movement != heard.prayerMovement, movement != nil, movement != .read,
+           let cue = Self.cues?.cue(from: .stillness, to: .explore(id: "christ", expanded: false), script: c.script) { sound.ring(cue) }
+        heard.prayerMovement = movement
         heard.mode = m.mode
         if let f = flashlight, now - f.at > 3 { flashlight = nil }
         // Once a minute: the day light, seasons and wind-down follow the clock even at rest.
@@ -393,6 +445,8 @@ struct RootView: View {
         var keep = AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: Self.now)
         // Wind-down: late at night, ten minutes after the last press, the Apple TV may sleep.
         if windDown == .sleeping, Self.now - m.lastInputAt > 600 { keep = false }
+        // After a late prayer session has faded out, the Apple TV may sleep.
+        if m.isAfterPrayerDark(now: Self.now), Self.now - m.lastInputAt > 35 { keep = false }
         if UIApplication.shared.isIdleTimerDisabled != keep { UIApplication.shared.isIdleTimerDisabled = keep }
     }
 
@@ -405,7 +459,7 @@ struct RootView: View {
                        dwell: SlowLooking.secondsPerFigure, fade: Drift.stillFade, loops: false,
                        strength: wallTuning.subjectStrength)
         } else {
-            let resting = mode == .stillness && windDown == .awake && machine?.isDemo != true
+            let resting = mode == .stillness && windDown == .awake && machine?.isDemo != true && !quietForPrayer
             DriftLayer(library: c.library, path: tour, since: resting ? 0 : nil,
                        dwell: Drift.restDwell, fade: Drift.restFade, loops: true,
                        strength: wallTuning.subjectStrength * wallTuning.drift)
@@ -421,7 +475,7 @@ struct RootView: View {
 
     private func lightTargets(_ mode: Mode, _ c: AppContent) -> Set<String> {
         // Be still: the drift draws the light (DriftLayer), so the figure's own light stays off.
-        if machine?.isSlowLooking == true { return [] }
+        if machine?.isSlowLooking == true || quietForPrayer { return [] }
         return switch mode {
         case let .explore(id, _): [id]
         case let .unfold(p): UnfoldView.targets(c.script, p)
@@ -463,4 +517,6 @@ final class HeardMode {
     var mode: Mode?
     /// When the current Context page appeared (for the restoration reveal).
     var contextSince: Double?
+    /// The prayer movement last heard, so each new one breathes the bowl once.
+    var prayerMovement: Prayer.Movement?
 }
