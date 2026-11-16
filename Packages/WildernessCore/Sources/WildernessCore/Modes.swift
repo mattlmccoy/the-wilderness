@@ -28,9 +28,14 @@ public enum AppInput: Sendable {
 /// Where the phone can send the wall directly (no stepping through the menu).
 public enum Destination: Codable, Equatable, Sendable {
     case explore(String)
+    /// Explore from its start, as the menu's Explore does (the phone's Explore button).
+    case exploreStart
     case unfold
     case context
 }
+
+/// Settings screens the phone can put on the wall.
+public enum WallScreen: String, Codable, Sendable { case pattern, about }
 public enum ModeEffect: Equatable, Sendable {
     case exitApp
     /// Debug: show or hide the painting projected under everything (Settings → Show painting).
@@ -85,7 +90,7 @@ public struct ModeMachine: Equatable, Sendable {
 
     /// Be still, from the menu or the phone.
     public mutating func startSlowLooking(now: Double, library: AnnotationLibrary) {
-        slowIds = library.annotations.filter { $0.outline != nil }.map(\.id)
+        slowIds = Drift.tour(library)   // the light travels across the painting, not back and forth
         slowLookingSince = now
         textHidden = true
         lastInputAt = now
@@ -104,6 +109,11 @@ public struct ModeMachine: Equatable, Sendable {
         guard let start = slowLookingSince else { return nil }
         let n = SlowLooking.path(ids: slowIds).count
         return SlowProgress(figure: min(Int((now - start) / SlowLooking.secondsPerFigure) + 1, n), of: n)
+    }
+
+    /// The alignment pattern or About, from the phone.
+    public mutating func openScreen(_ screen: WallScreen) {
+        mode = screen == .pattern ? .pattern : .about
     }
 
     /// The dreamcoat from the phone: on for its minute, or off at once.
@@ -169,6 +179,10 @@ public struct ModeMachine: Equatable, Sendable {
                 var keepOpen = false
                 if case let .explore(_, expanded) = mode { keepOpen = expanded }
                 mode = .explore(id: id, expanded: keepOpen)
+            case .exploreStart:
+                var e = ExploreState.idle
+                e.handle(.move(.right), library: library)
+                if case let .exploring(id, expanded) = e { mode = .explore(id: id, expanded: expanded); fromMenu = true }
             case .unfold:
                 mode = .unfold(.start)
             case .context where !context.pages.isEmpty:

@@ -112,8 +112,8 @@ private let ids = ["christ", "angels", "basilisk", "lion", "stag", "fox", "bear"
     #expect(s.tuning.breathing == 0 && s.rowLabel == "Breathing · off")
     for _ in 0..<40 { s.handle(.right) }
     #expect(s.tuning.breathing == 0.3)
-    s.handle(.down)
-    #expect(s.row == .passingLight && s.rowLabel == "Passing light · off")
+    while s.row != .passingLight { s.handle(.down) }   // Drifting light sits between them now
+    #expect(s.rowLabel == "Passing light · off")
     s.handle(.right)
     #expect(s.tuning.passingLight && s.rowLabel == "Passing light · on")
 }

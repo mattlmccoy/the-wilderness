@@ -16,6 +16,9 @@ public struct Tuning: Codable, Equatable, Sendable {
     public var breathing = 0.06
     /// At rest: a soft band of light crossing the tapestry every few minutes. See `PassingLight`.
     public var passingLight = false
+    /// At rest: a soft light drifting slowly from figure to figure, as a share of the subject light
+    /// (0 = off). See `Drift`.
+    public var drift = 0.5
     /// Christmas hats, Advent candles, the Easter dawn and the rest of the church year (2026-11-16).
     public var seasons = true
     /// The light warms and dims with the time of day (sunrise and sunset at home).
@@ -35,7 +38,7 @@ public struct Tuning: Codable, Equatable, Sendable {
     /// A new field must be added here and in `init(from:)`, or it is silently not saved.
     enum CodingKeys: String, CodingKey {
         case subjectStrength, baseWash, exploreWashFactor, glintMeanInterval, glintBrightness, glintSizeInches, glintStyle
-        case edgeLine, breathing, passingLight, seasons, followDay, seasonSwitches
+        case edgeLine, breathing, passingLight, seasons, followDay, seasonSwitches, drift
     }
 
     /// Tolerant of profiles saved before a field existed: a missing key takes that field's
@@ -55,6 +58,7 @@ public struct Tuning: Codable, Equatable, Sendable {
         passingLight = try c.decodeIfPresent(Bool.self, forKey: .passingLight) ?? d.passingLight
         seasons = try c.decodeIfPresent(Bool.self, forKey: .seasons) ?? d.seasons
         followDay = try c.decodeIfPresent(Bool.self, forKey: .followDay) ?? d.followDay
+        drift = try c.decodeIfPresent(Double.self, forKey: .drift) ?? d.drift
         seasonSwitches = try c.decodeIfPresent([String: SeasonSwitch].self, forKey: .seasonSwitches) ?? d.seasonSwitches
     }
 
@@ -67,6 +71,7 @@ public struct Tuning: Codable, Equatable, Sendable {
         t.exploreWashFactor = c(exploreWashFactor, 0...1)
         t.edgeLine = c(edgeLine, 0...1)
         t.breathing = c(breathing, 0...0.3)
+        t.drift = c(drift, 0...1)
         t.glintBrightness = c(glintBrightness, 0.2...1)
         t.glintSizeInches = c(glintSizeInches, 0.05...0.6)
         t.glintMeanInterval = c(glintMeanInterval, 4...16)
@@ -81,7 +86,7 @@ public struct Tuning: Codable, Equatable, Sendable {
 }
 
 public enum TuningRow: Int, CaseIterable, Sendable {
-    case subjectStrength, baseWash, edgeLine, breathing, passingLight, glintFrequency, glintBrightness, glintSize, glintStyle, resetDefaults
+    case subjectStrength, baseWash, edgeLine, breathing, drift, passingLight, glintFrequency, glintBrightness, glintSize, glintStyle, resetDefaults
     /// Through the year: the second column of the Tune screen.
     case seasons, followDay, advent, christmas, lent, easter, thanksgiving
 
@@ -134,6 +139,7 @@ public struct TuningSession: Sendable {
         case .edgeLine: tuning.edgeLine = step(tuning.edgeLine, 0.05, 0...1)
         case .breathing: tuning.breathing = step(tuning.breathing, 0.02, 0...0.3)
         case .passingLight: tuning.passingLight.toggle()
+        case .drift: tuning.drift = step(tuning.drift, 0.05, 0...1)
         case .glintBrightness: tuning.glintBrightness = step(tuning.glintBrightness, 0.05, 0.2...1)
         case .glintSize: tuning.glintSizeInches = step(tuning.glintSizeInches, 0.05, 0.05...0.6)
         case .glintStyle: tuning.glintStyle = tuning.glintStyle == .thread ? .pinpoint : .thread
@@ -161,6 +167,7 @@ public struct TuningSession: Sendable {
         case .edgeLine: return "Edge line · " + (t.edgeLine == 0 ? "off" : pct(t.edgeLine))
         case .breathing: return "Breathing · " + (t.breathing == 0 ? "off" : pct(t.breathing))
         case .passingLight: return "Passing light · " + (t.passingLight ? "on" : "off")
+        case .drift: return "Drifting light · " + (t.drift == 0 ? "off" : pct(t.drift))
         case .glintFrequency:
             return "Glints · " + (frequencies.first { $0.seconds == t.glintMeanInterval }?.name ?? "\(t.glintMeanInterval) s")
         case .glintBrightness: return "Glint brightness · \(pct(t.glintBrightness))"

@@ -38,7 +38,8 @@ private extension ModeMachine {
     #expect(m.mode == .explore(id: "christ", expanded: false))
     #expect(m.textHidden)
     m.tick(now: 10 + SlowLooking.secondsPerFigure + 1, dt: 0.25, script: script)
-    #expect(m.mode == .explore(id: "stag", expanded: false))
+    // The nearest figure next (Drift.tour): the lion beside Christ, not the stag across the painting.
+    #expect(m.mode == .explore(id: "lion", expanded: false))
 }
 
 @Test func anyPressEndsSlowLookingAndBringsTheTextBack() {
@@ -86,4 +87,27 @@ private extension ModeMachine {
     #expect(m.dreamcoat(now: 11))
     m.setDreamcoat(false, now: 12)
     #expect(!m.dreamcoat(now: 13))
+}
+
+// MARK: Parity (docs/superpowers/plans/2026-11-16-drift-and-parity.md)
+
+@Test func exploreFromThePhoneStartsWhereTheRemotesExploreStarts() {
+    var fromMenu = ModeMachine(calibrated: true, now: 0, intro: false)
+    fromMenu.force(.menu(focus: .explore))
+    fromMenu.press(.select, at: 1)
+    var fromPhone = ModeMachine(calibrated: true, now: 0, intro: false)
+    fromPhone.press(.go(.exploreStart), at: 1)
+    #expect(fromPhone.mode == fromMenu.mode)
+    if case .explore = fromPhone.mode {} else { Issue.record("not exploring: \(fromPhone.mode)") }
+}
+
+@Test func thePhoneCanPutThePatternAndAboutOnTheWall() throws {
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.openScreen(.pattern)
+    #expect(m.mode == .pattern)
+    m.openScreen(.about)
+    #expect(m.mode == .about)
+    for c: PhoneCommand in [.show(.pattern), .show(.about), .go(.exploreStart)] {
+        #expect(try JSONDecoder().decode(PhoneCommand.self, from: JSONEncoder().encode(c)) == c)
+    }
 }

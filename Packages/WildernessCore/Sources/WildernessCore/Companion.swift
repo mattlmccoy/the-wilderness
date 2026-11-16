@@ -27,6 +27,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case beStill(Bool)
     /// The dreamcoat: start it for its minute, or end it.
     case dreamcoat(Bool)
+    /// Put a settings screen on the wall (the alignment pattern, About).
+    case show(WallScreen)
 
     /// The remote-equivalent input, for commands that drive the mode machine.
     public var input: AppInput? {

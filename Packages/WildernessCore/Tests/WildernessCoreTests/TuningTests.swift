@@ -118,3 +118,12 @@ private func session(at row: TuningRow, _ t: Tuning = .defaults) -> TuningSessio
     #expect(TuningRow.yearRows == [.seasons, .followDay, .advent, .christmas, .lent, .easter, .thanksgiving])
     #expect(TuningRow.lightRows.last == .resetDefaults)
 }
+
+@Test func driftingLightIsOnTheTuneScreen() {
+    var s = session(at: .drift)
+    #expect(s.rowLabel == "Drifting light · 50%")
+    s.handle(.left); #expect(abs(s.tuning.drift - 0.45) < 1e-9)
+    for _ in 0..<20 { s.handle(.left) }
+    #expect(s.rowLabel == "Drifting light · off")
+    #expect(TuningRow.lightRows.contains(.drift))
+}
