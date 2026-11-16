@@ -7,6 +7,9 @@ import WildernessCore
 struct MappedCanvas<Content: View>: View {
     let calibration: Calibration
     let screen: CGSize
+    /// Fit the painting inside the cloth by the calibration's trim (off only for the alignment
+    /// pattern, which marks the cloth's own edges).
+    var fitsPainting = true
     @ViewBuilder var content: () -> Content
 
     var body: some View {
@@ -19,10 +22,32 @@ struct MappedCanvas<Content: View>: View {
                 Color.clear
                 content()
                     .frame(width: canvas.width, height: canvas.height, alignment: .topLeading)
+                    .modifier(PaintingTrim(calibration: calibration, canvas: canvas, active: fitsPainting))
                     .projectionEffect(ProjectionTransform(h.rowVectorElements))
             }
             .frame(width: screen.width, height: screen.height, alignment: .topLeading)
             .modifier(BendEffect(calibration: calibration, screen: screenSize))
+        }
+    }
+}
+
+/// Painting trim (Calibration+Trim): stretch the painting so the part the print kept fills the
+/// cloth, and mask off what falls outside, so no light (wash included) lands on the wall.
+private struct PaintingTrim: ViewModifier {
+    let calibration: Calibration
+    let canvas: PixelSize
+    let active: Bool
+
+    func body(content: Content) -> some View {
+        if active, calibration.isTrimmed {
+            let t = calibration.trimTransform
+            content
+                .scaleEffect(x: t.scaleX, y: t.scaleY, anchor: .topLeading)
+                .offset(x: t.offsetX * canvas.width, y: t.offsetY * canvas.height)
+                .frame(width: canvas.width, height: canvas.height, alignment: .topLeading)
+                .clipped()
+        } else {
+            content
         }
     }
 }

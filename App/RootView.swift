@@ -25,6 +25,11 @@ struct RootView: View {
     /// Decoded once per process, not on every RootView re-creation. A failure is kept too,
     /// so the visible "Content failed to load" message still shows.
     private static let content = ContentLoader.load()
+    /// Every traced figure, for checking the alignment against the print.
+    private static let outlines: [[Point<ArtworkSpace>]] = {
+        guard case let .success(c) = content else { return [] }
+        return c.library.annotations.compactMap(\.outline)
+    }()
     /// Measures the real time between ticks; a box, so updating it never redraws the view.
     @State private var clock = TickClockBox()
     /// When the wall started breathing, so glints can follow the breath.
@@ -46,7 +51,8 @@ struct RootView: View {
                                              set: { calSession = $0 }),
                             screen: geo.size,
                             canCancel: store.saved != nil,
-                            onFinish: { finishCalibration($0) })
+                            onFinish: { finishCalibration($0) },
+                            outlines: Self.outlines)
                     } else if let cal = store.saved {
                         artwork(cal, screen: geo.size)
                     }
@@ -210,6 +216,7 @@ struct RootView: View {
         case let .move(d): session.handle(.move(d))
         case let .place(p, at): session.handle(.place(p, at))
         case .toggleFine: session.handle(.playPause)
+        case let .trim(edge, steps): session.handle(.trim(edge, steps))
         case .save: finishCalibration(.save(session.calibration)); return
         case .cancel:
             if store.saved != nil { finishCalibration(.cancel) }

@@ -13,14 +13,19 @@ struct CalibrationView: View {
     /// False on first setup: there is nothing to return to, so Back leaves the app as tvOS expects.
     let canCancel: Bool
     let onFinish: (CalibrationSession.Outcome) -> Void
+    /// Every traced figure, drawn over the pattern so you can see whether the light meets the print.
+    var outlines: [[Point<ArtworkSpace>]] = []
 
 
     private var reviewing: Bool { session.phase == .review }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            MappedCanvas(calibration: session.calibration, screen: screen) {
+            MappedCanvas(calibration: session.calibration, screen: screen, fitsPainting: false) {
                 RegistrationTestPattern()
+            }
+            MappedCanvas(calibration: session.calibration, screen: screen) {
+                FigureOutlines(outlines: outlines)
             }
             if !reviewing {
                 ForEach(AlignPoint.allCases, id: \.self) { point in handle(for: point) }
@@ -74,5 +79,22 @@ struct CalibrationView: View {
             Text(hints).font(.system(size: 15, weight: .medium)).tracking(1.5)
         }
         .foregroundStyle(Palette.ivory.opacity(0.55))
+    }
+}
+
+/// The traced figures as thin lines, in canvas units: line them up with the printed figures.
+struct FigureOutlines: View {
+    let outlines: [[Point<ArtworkSpace>]]
+
+    var body: some View {
+        Canvas { ctx, size in
+            for o in outlines where o.count > 2 {
+                var p = Path()
+                p.addLines(o.map { CGPoint(x: $0.x * size.width, y: $0.y * size.height) })
+                p.closeSubpath()
+                ctx.stroke(p, with: .color(Palette.gold.opacity(0.8)), lineWidth: 2.5)
+            }
+        }
+        .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
     }
 }

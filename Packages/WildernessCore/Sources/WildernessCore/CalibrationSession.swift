@@ -10,6 +10,8 @@ public struct CalibrationSession: Sendable {
         case move(NudgeDirection), select, back, playPause, pick(AlignPoint)
         /// Drag from the phone: this handle, at this projector point.
         case place(AlignPoint, Point<ProjectorSpace>)
+        /// (phone) How much painting the print lost at an edge, in sixteenths of an inch.
+        case trim(AlignEdge, Int)
     }
     public enum Outcome: Equatable, Sendable { case save(Calibration), cancel }
 
@@ -25,7 +27,7 @@ public struct CalibrationSession: Sendable {
     public var alignmentState: AlignmentState {
         let c = adjuster.calibration
         return AlignmentState(handles: AlignPoint.allCases.map(c.handle), selected: phase == .review ? nil : adjuster.selected,
-                              fine: adjuster.step == .fine, reviewing: phase == .review)
+                              fine: adjuster.step == .fine, reviewing: phase == .review, trimInches: c.trimInches)
     }
 
     @discardableResult
@@ -52,6 +54,8 @@ public struct CalibrationSession: Sendable {
             phase = .point(adjuster.selected)
         case (.back, .point):
             return .cancel
+        case let (.trim(edge, steps), _):
+            adjuster.calibration.trim(edge, steps: steps)
         case (.playPause, _):
             adjuster.toggleStep()
         }

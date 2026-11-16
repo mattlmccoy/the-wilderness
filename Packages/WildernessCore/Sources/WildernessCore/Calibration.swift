@@ -22,12 +22,14 @@ public struct Calibration: Equatable, Codable, Sendable {
     /// Top, right, bottom, left: how far each edge's midpoint sits from where the 4-corner
     /// perspective puts it (normalized projector units). Zero = a straight edge.
     public var edgeOffsets: [Point<ProjectorSpace>] = Calibration.straightEdges
+    /// Top, right, bottom, left: inches of painting the print lost at each edge (Calibration+Trim).
+    public var trimInches: [Double] = Calibration.noTrim
 
     public static let straightEdges = [Point<ProjectorSpace>](repeating: .init(x: 0, y: 0), count: 4)
     /// A bend larger than this is a mistake, not a sagging tapestry (8% of the frame).
     public static let maxEdgeOffset = 0.08
 
-    enum CodingKeys: String, CodingKey { case version, createdAt, name, artworkAspect, output, corners, edgeOffsets }
+    enum CodingKeys: String, CodingKey { case version, createdAt, name, artworkAspect, output, corners, edgeOffsets, trimInches }
 
     /// A starting quad: centred, 80% of the frame height, at the artwork's true aspect on the wall.
     public static func defaultFor(artworkAspect: Double, output: PixelSize) -> Calibration {
@@ -81,6 +83,8 @@ extension Calibration {
         name = try c.decodeIfPresent(String.self, forKey: .name) ?? "Default"
         let offsets = try c.decodeIfPresent([Point<ProjectorSpace>].self, forKey: .edgeOffsets)
         edgeOffsets = offsets?.count == 4 ? offsets! : Calibration.straightEdges
+        let trim = try c.decodeIfPresent([Double].self, forKey: .trimInches)
+        trimInches = trim?.count == 4 ? trim! : Calibration.noTrim
     }
 
     /// How far the bend moves an artwork point (u, v in 0…1), in normalized projector units.

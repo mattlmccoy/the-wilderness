@@ -19,10 +19,11 @@ struct AlignView: View {
             diagram
                 .aspectRatio(16.0 / 9.0, contentMode: .fit)
                 .padding(.horizontal, 12)
-            Text("Drag a point until the line on the wall sits on the edge of the weave; use the arrows for the last few pixels. The diamonds bend an edge.")
+            Text("Drag the points onto the edge of the cloth; the diamonds bend an edge. If the gold outlines miss the printed figures, trim that edge below.")
                 .font(PhoneType.text(15, italic: true)).foregroundStyle(PhonePalette.stone)
                 .multilineTextAlignment(.center).padding(.horizontal, 24)
             arrows
+            trim
             Toggle("Fine steps", isOn: Binding(get: { state?.fine ?? false },
                                                set: { _ in client.send(.align(.toggleFine)) }))
                 .padding(.horizontal, 40)
@@ -107,6 +108,36 @@ struct AlignView: View {
             }
         }
         .accessibilityLabel(point.label)
+    }
+
+    /// Painting trim: how much painting the print lost at each edge. The handles stay on the
+    /// cloth; this fits the painting inside it. Watch the gold outlines on the wall meet the print.
+    private var trim: some View {
+        let inches = state?.trimInches ?? Calibration.noTrim
+        return VStack(spacing: 6) {
+            Text("Painting trim").font(PhoneType.text(15, italic: true)).foregroundStyle(PhonePalette.stone)
+            Grid(horizontalSpacing: 18, verticalSpacing: 6) {
+                ForEach([[AlignEdge.top, .bottom], [.left, .right]], id: \.self) { row in
+                    GridRow {
+                        ForEach(row, id: \.self) { edge in trimStepper(edge, inches: inches[edge.rawValue]) }
+                    }
+                }
+            }
+        }
+    }
+
+    private func trimStepper(_ edge: AlignEdge, inches: Double) -> some View {
+        HStack(spacing: 8) {
+            Text(["Top", "Right", "Bottom", "Left"][edge.rawValue]).frame(width: 56, alignment: .leading)
+            Button { client.send(.align(.trim(edge, -1))) } label: { Image(systemName: "minus.circle") }
+                .buttonRepeatBehavior(.enabled)
+                .accessibilityLabel("Less \(edge) trim")
+            Text(String(format: "%.2f\u{2033}", inches)).monospacedDigit().frame(width: 50)
+            Button { client.send(.align(.trim(edge, 1))) } label: { Image(systemName: "plus.circle") }
+                .buttonRepeatBehavior(.enabled)
+                .accessibilityLabel("More \(edge) trim")
+        }
+        .font(PhoneType.text(16))
     }
 
     private var arrows: some View {

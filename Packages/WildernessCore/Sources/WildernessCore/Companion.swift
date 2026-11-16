@@ -37,6 +37,8 @@ public enum AlignCommand: Codable, Equatable, Sendable {
     case start, pick(AlignPoint), move(NudgeDirection), toggleFine, save, cancel
     /// A handle dragged on the phone, to this normalized projector point.
     case place(AlignPoint, Point<ProjectorSpace>)
+    /// How much painting the print lost at an edge, in sixteenths of an inch (+ more, − less).
+    case trim(AlignEdge, Int)
 }
 
 /// What the phone needs to draw the alignment diagram while the wall is calibrating.
@@ -46,8 +48,12 @@ public struct AlignmentState: Codable, Equatable, Sendable {
     public var selected: AlignPoint?
     public var fine: Bool
     public var reviewing: Bool
-    public init(handles: [Point<ProjectorSpace>], selected: AlignPoint?, fine: Bool, reviewing: Bool) {
+    /// Painting trim, inches: top, right, bottom, left.
+    public var trimInches: [Double]
+    public init(handles: [Point<ProjectorSpace>], selected: AlignPoint?, fine: Bool, reviewing: Bool,
+                trimInches: [Double] = Calibration.noTrim) {
         self.handles = handles; self.selected = selected; self.fine = fine; self.reviewing = reviewing
+        self.trimInches = trimInches
     }
 }
 
