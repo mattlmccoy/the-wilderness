@@ -58,6 +58,20 @@ def trim_strike(x: np.ndarray, rate: int, max_seconds: float, fade_seconds: floa
     return y
 
 
+def bloom(x: np.ndarray, rate: int, skip_seconds: float, rise_seconds: float,
+          length_seconds: float, fall_seconds: float) -> np.ndarray:
+    """A breath, not a ring: the strike is cut away (start `skip_seconds` after the hit) and the
+    bowl's sustained hum swells in over `rise_seconds`, then breathes out over `fall_seconds`."""
+    x = trim_strike(np.array(x, dtype=float), rate, max_seconds=skip_seconds + length_seconds + 1, fade_seconds=0.01)
+    y = x[int(skip_seconds * rate):int(skip_seconds * rate) + int(length_seconds * rate)].copy()
+    n, r, f = len(y), int(rise_seconds * rate), int(fall_seconds * rate)
+    env = np.ones(n)
+    env[:r] = np.sin(np.linspace(0, np.pi / 2, r)) ** 2          # slow, soft rise from silence
+    env[n - f:] *= np.cos(np.linspace(0, np.pi / 2, f)) ** 2     # long breath out
+    env[0] = env[-1] = 0
+    return y * (env if y.ndim == 1 else env[:, None])
+
+
 def retune_ratio(f0: float, target: float) -> float:
     """Playback-rate ratio that moves `f0` onto `target` (varispeed: pitch and time together)."""
     return target / f0
@@ -94,7 +108,9 @@ def main() -> int:
     pad = set_level(loop_crossfade(pad, RATE, fade_seconds=16), rms_db=-23, peak=0.6)
     # The bowl: "Tibetan bowl_center hit" (Freesound 421829, dersinnsspace, CC0), 276 Hz → D4.
     bowl = load(STAGING / "ev/421829.mp3", ratio=retune_ratio(276.0, D4))
-    bowl = set_level(trim_strike(bowl, RATE, max_seconds=14, fade_seconds=4), rms_db=-22, peak=0.85)
+    # Matt: "more of a breath or a pulse rather than a startling ring": the hum only, swelling in.
+    bowl = set_level(bloom(bowl, RATE, skip_seconds=1.2, rise_seconds=1.5, length_seconds=7, fall_seconds=4.5),
+                     rms_db=-24, peak=0.6)
     for name, x in [("choir", choir), ("pad", pad), ("bowl", bowl)]:
         write_m4a(x, OUT / f"{name}.m4a")
         print(f"wrote {OUT / name}.m4a  {len(x) / RATE:5.1f} s")

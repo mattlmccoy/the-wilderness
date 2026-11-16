@@ -6,8 +6,8 @@ import WildernessCore
 /// built by scripts/make_soundscape.py:
 ///   bed   = a choir and a pad in D, two loops of different lengths (so they never line up the
 ///           same way twice), through a soft low-pass that opens with Christ's breath, then a hall.
-///   bowl  = one recorded singing bowl tuned to D, rung per figure at its own note (SoundCues),
-///           four voices so notes can overlap, with a longer cathedral tail.
+///   bowl  = one recorded singing bowl tuned to D, its hum only (no strike), swelling in like a
+///           breath at each figure's own note (SoundCues), with a longer cathedral tail.
 /// Everything is decoded once into memory and looped from there (no gap at the loop point).
 /// Volume only ever fades (Soundscape.step).
 @MainActor
@@ -86,18 +86,41 @@ final class SoundPlayer {
         if volume == 0, target == 0, running { stop() }
     }
 
-    /// Ring the bowl for a cue (a new figure, Unfold beat or Context page), only while sound is on.
+    /// Breathe the bowl's hum for a cue (a new figure, Unfold beat or Context page), only while
+    /// sound is on. Moving on quickly never piles breaths up: the one before eases out.
     func ring(_ cue: SoundCue) {
         guard running, volume > 0, let bowl, !bowls.isEmpty else { return }
-        let voice = bowls[nextBowl]
+        if let previous = lastVoice { fadeOut(bowls[previous].node, seconds: 0.8) }
+        let i = nextBowl
         nextBowl = (nextBowl + 1) % bowls.count
+        let voice = bowls[i]
+        fades[i]?.cancel()
         voice.pitch.rate = Float(pow(2, Double(cue.semitones) / 12))
         // As loud as the bed is allowed to be right now, so it dips under Unfold with it.
         voice.node.volume = Float(cue.gain * min(volume / Soundscape.ambient, 1) * 0.8)
         voice.node.stop()
         voice.node.scheduleBuffer(bowl, at: nil)
         voice.node.play()
-        Self.log.debug("bowl \(cue.semitones) semitones, gain \(cue.gain, format: .fixed(precision: 2))")
+        lastVoice = i
+        Self.log.debug("bowl breath \(cue.semitones) semitones, gain \(cue.gain, format: .fixed(precision: 2))")
+    }
+
+    private var lastVoice: Int?
+    private var fades: [Int: Task<Void, Never>] = [:]
+
+    /// A short, smooth fade (20 steps), then silence.
+    private func fadeOut(_ node: AVAudioPlayerNode, seconds: Double) {
+        guard let i = bowls.firstIndex(where: { $0.node === node }) else { return }
+        fades[i]?.cancel()
+        let start = node.volume
+        fades[i] = Task { @MainActor in
+            for step in 1...20 {
+                try? await Task.sleep(for: .seconds(seconds / 20))
+                if Task.isCancelled { return }
+                node.volume = start * Float(1 - Double(step) / 20)
+            }
+            node.stop()
+        }
     }
 
     /// After the app returns to the foreground, restart the engine if tvOS stopped it.

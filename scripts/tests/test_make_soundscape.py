@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from make_soundscape import loop_crossfade, retune_ratio, set_level, trim_strike  # noqa: E402
+from make_soundscape import bloom, loop_crossfade, retune_ratio, set_level, trim_strike  # noqa: E402
 
 SR = 8000
 
@@ -57,3 +57,27 @@ def test_set_level_hits_the_target_and_never_clips():
 def test_set_level_holds_back_for_the_peak():
     y = set_level(_big_noise(), rms_db=-3, peak=0.5)
     assert abs(np.max(np.abs(y)) - 0.5) < 1e-9
+
+
+def _strike():
+    t = np.arange(12 * SR) / SR
+    return np.exp(-t / 3) * np.sin(2 * np.pi * 300 * t)      # a hit at t=0, then the ring
+
+
+def _envelope(y, seconds=0.1):
+    w = int(seconds * SR)
+    return np.sqrt(np.convolve(y ** 2, np.ones(w) / w, "valid"))
+
+
+def test_a_bloom_has_no_strike_it_swells_in():
+    y = bloom(_strike(), SR, skip_seconds=1.0, rise_seconds=1.5, length_seconds=7, fall_seconds=4)
+    env = _envelope(y)
+    peak_at = np.argmax(env) / SR
+    assert peak_at > 1.0                                       # the loudest moment is well after the start
+    assert env[int(0.1 * SR)] < 0.2 * env.max()                # it begins almost silent
+
+
+def test_a_bloom_breathes_out_to_silence():
+    y = bloom(_strike(), SR, skip_seconds=1.0, rise_seconds=1.5, length_seconds=7, fall_seconds=4)
+    assert len(y) == 7 * SR
+    assert abs(y[-1]) < 1e-9 and abs(y[0]) < 1e-9
