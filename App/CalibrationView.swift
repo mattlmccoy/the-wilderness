@@ -15,13 +15,11 @@ struct CalibrationView: View {
     let onFinish: (CalibrationSession.Outcome) -> Void
     /// Every traced figure, drawn over the pattern so you can see whether the light meets the print.
     var outlines: [[Point<ArtworkSpace>]] = []
+    /// Where the instructions sit on the cloth (CanvasText.instructionsZone).
+    var instructionsZone: TextZone = .fallback
 
 
     private var reviewing: Bool { session.phase == .review }
-    /// The instructions block plus the title-safe margin, in points.
-    static let instructionsHeight: CGFloat = 140
-    /// The instructions' width when they stand beside a tapestry that fills the height.
-    static let sideWidth: CGFloat = 300
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -34,19 +32,14 @@ struct CalibrationView: View {
             if !reviewing {
                 ForEach(AlignPoint.allCases, id: \.self) { point in handle(for: point) }
             }
-            // Never on the tapestry (CalibrationLayout): below it if there is room, else above; kept
-            // inside the TV title-safe margin (about 60 pt at 1080p) so it never falls off the wall.
-            let place = CalibrationLayout.instructions(handles: AlignPoint.allCases.map(session.calibration.handle),
-                                                       height: Self.instructionsHeight / screen.height,
-                                                       width: (Self.sideWidth + 40) / screen.width)
-            let beside = place == .left || place == .right
-            instructions(stacked: beside)
-                .frame(width: beside ? Self.sideWidth : nil)
-                .padding(place == .below ? .bottom : place == .above ? .top : place == .left ? .leading : .trailing, beside ? 40 : 60)
-                .frame(width: screen.width, height: screen.height, alignment: {
-                    switch place { case .below: .bottom; case .above: .top; case .left: .leading; case .right: .trailing }
-                }())
-                .animation(.easeInOut(duration: 0.4), value: place)
+            // On the cloth itself, in its calm reading zone, drawn through the live alignment so it
+            // moves with the cloth: Matt's wall has no room beside, above or below the tapestry.
+            MappedCanvas(calibration: session.calibration, screen: screen, fitsPainting: false) {
+                WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: session.calibration,
+                                                             canvasZone: instructionsZone),
+                           anchorY: 0) { instructions }
+                    .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight, alignment: .topLeading)
+            }
         }
         .frame(width: screen.width, height: screen.height, alignment: .topLeading)
         .focusable()
@@ -86,15 +79,14 @@ struct CalibrationView: View {
         return "ARROWS  move   ·   SELECT  next   ·   ▶︎❙❙  \(step)   ·   ‹  \(canCancel ? "cancel" : "exit")"
     }
 
-    private func instructions(stacked: Bool) -> some View {
-        VStack(spacing: 10) {
-            Text(session.stepLabel).font(.system(size: 32, weight: .regular, design: .serif))
-            // Beside the tapestry the hints stand one per line in a narrow column.
-            Text(stacked ? hints.replacingOccurrences(of: "   ·   ", with: "\n") : hints)
-                .font(.system(size: 22, weight: .medium)).tracking(1.5).lineSpacing(6)
+    /// In the wall's own type, sized for the sofa; the hints one per line so the column stays narrow.
+    private var instructions: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(session.stepLabel).font(Typography.text(Typography.Size.short))
+            Text(hints.replacingOccurrences(of: "   ·   ", with: "\n"))
+                .font(Typography.text(Typography.Size.citation)).tracking(1.5).lineSpacing(6)
         }
-        .multilineTextAlignment(.center)
-        .foregroundStyle(Palette.ivory.opacity(0.8))
+        .foregroundStyle(Palette.ivory.opacity(0.85))
     }
 }
 

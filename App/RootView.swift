@@ -25,6 +25,11 @@ struct RootView: View {
     /// Decoded once per process, not on every RootView re-creation. A failure is kept too,
     /// so the visible "Content failed to load" message still shows.
     private static let content = ContentLoader.load()
+    /// Where the alignment instructions sit on the cloth.
+    private static let instructionsZone: TextZone = {
+        guard case let .success(c) = content else { return .fallback }
+        return CanvasText.instructionsZone(library: c.library, zones: c.zones)
+    }()
     /// Every traced figure, for checking the alignment against the print.
     private static let outlines: [[Point<ArtworkSpace>]] = {
         guard case let .success(c) = content else { return [] }
@@ -58,7 +63,8 @@ struct RootView: View {
                             screen: geo.size,
                             canCancel: store.saved != nil,
                             onFinish: { finishCalibration($0) },
-                            outlines: Self.outlines)
+                            outlines: Self.outlines,
+                            instructionsZone: Self.instructionsZone)
                     } else if let cal = store.saved {
                         artwork(cal, screen: geo.size)
                     }

@@ -5,6 +5,8 @@ import Foundation
 public struct TextZone: Codable, Equatable, Sendable {
     public var x, y, w, h: Double
     public var score: Double
+    /// Used only if no calm zone is known: the dark bush at the lower left, on the tapestry.
+    public static let fallback = TextZone(x: 0.0, y: 0.70, w: 0.34, h: 0.26, score: 0)
     public init(x: Double, y: Double, w: Double, h: Double, score: Double) {
         self.x = x; self.y = y; self.w = w; self.h = h; self.score = score
     }
@@ -39,6 +41,11 @@ public enum CanvasText {
     }
 
     /// Context and Unfold: one steady place, the best zone that does not cover Christ.
+    /// The alignment screen's instructions: the reading place, or the fallback, never off the cloth.
+    public static func instructionsZone(library: AnnotationLibrary, zones: [TextZone]) -> TextZone {
+        readingZone(library: library, zones: zones) ?? .fallback
+    }
+
     public static func readingZone(library: AnnotationLibrary, zones: [TextZone]) -> TextZone? {
         let christ = library.annotations.first { $0.id == "christ" }?.outline
         return zones.first { z in !(christ.map { overlaps(z, $0) } ?? false) } ?? zones.first

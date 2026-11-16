@@ -4,7 +4,7 @@ import os
 
 private let canvasTextLog = Logger(subsystem: "com.mattmccoy.wilderness", category: "text")
 
-/// Places a column of wall text beside the tapestry (or over its lower edge on a narrow wall),
+/// Places a column of wall text on the tapestry, in a calm zone (there is no room beside it),
 /// in artwork canvas units. Shared by WallText and the menu so both sit in the same place.
 struct WallColumn<Content: View>: View {
     let placement: ColumnPlacement
@@ -19,15 +19,6 @@ struct WallColumn<Content: View>: View {
 
     var body: some View {
         switch placement.position {
-        case .beside(let side):
-            let x = side == .right ? canvas.width + TextColumnLayout.gap * Self.unitsPerInch
-                                   : -TextColumnLayout.gap * Self.unitsPerInch - column
-            // Start level with the anchor, but move up as far as needed to keep the whole
-            // column on the tapestry's height (bigger type makes it tall).
-            content
-                .frame(width: column, alignment: .leading)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
-                .offset(x: x, y: max(0, min(anchorY * canvas.height - 90, canvas.height - columnHeight)))
         case .onCanvas(let z):
             // On the painting, in a calm dark zone, clear of the tapestry's edges; type shrinks
             // when the text is taller than the tapestry allows (CanvasTextFrame), so it all fits.
@@ -45,12 +36,6 @@ struct WallColumn<Content: View>: View {
                 }
                 .scaleEffect(f.scale, anchor: .topLeading)
                 .offset(x: f.x * u, y: f.y * u)
-        case .overLowerEdge:
-            content
-                .frame(width: column, alignment: .leading)
-                .frame(width: canvas.width - 2 * Self.unitsPerInch, height: canvas.height - Self.unitsPerInch,
-                       alignment: .bottomLeading)
-                .offset(x: Self.unitsPerInch, y: 0)
         }
     }
 }

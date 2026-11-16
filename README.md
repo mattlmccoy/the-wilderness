@@ -56,6 +56,9 @@ Small glints drift and twinkle like shifting stars, landing on the painting's hi
 favouring whichever region is breathing in. Every few minutes a few soft beams of sunlight slant
 down from above, sweep across the canvas and fade.
 
+Exploring can also be light only: press Play/Pause twice and the text goes away, so the figures
+can be looked at without words until the same double press brings it back.
+
 ### Unfold and Context
 
 **Unfold** is an eight-part story told across the painting, from Eden to the wilderness, with the
@@ -84,11 +87,27 @@ be dragged on the phone, and the wall follows live.
 |---|---|
 | ![](docs/media/align-bent-edges.jpg) | ![](docs/media/align-bent-painting.jpg) |
 
+Printers rarely keep every edge of a picture. The print of this painting lost a sliver at the
+top, so outlines near the top sat low while the handles sat on the cloth's edge. The handles still
+mark the cloth; a per-edge *painting trim* (sixteenths of an inch, set from the phone while the
+figures' outlines are drawn on the wall) fits the painting inside it, and anything that would
+fall past the cloth is masked, so no light reaches the wall around it.
+
+### Sound that answers the wall
+
+The optional sound is made from real recordings, not synthesis: a meditation choir and a soft
+pad in D, looped at different lengths so they never line up the same way twice. The bed brightens
+and swells a little with Christ's twelve-second breath. Moving to a figure breathes the hum of a
+Tibetan singing bowl, its strike cut away, tuned so each figure has its own note of D major
+pentatonic: Christ is home, and the others rise from left to right across the painting.
+
 ### The phone
 
 The iPhone app finds the Apple TV on the home network (Bonjour), shows the painting with its
 traced outlines, and mirrors whatever the wall is saying. From it you can jump to any figure,
-page through Unfold and Context, tune the light, align the projection and start the demo.
+page through Unfold and Context, hide the text, tune the light, align the projection and start the
+demo. Every press is felt and seen; a press that cannot reach the wall says so, and the
+connection dot pulses whenever the wall answers.
 
 ### A demo for filming
 
@@ -119,7 +138,7 @@ flowchart LR
 
 - **WildernessCore** holds everything that can be reasoned about without a screen: the mode
   machine, calibration and the bend, light timing, the content model and the phone protocol.
-  Development was test-first; the package has 244 tests and the Python tools 158 more.
+  Development was test-first; the package has 264 tests and the Python tools 165 more.
 - **The tvOS app** draws in the artwork's own coordinates and warps the whole layer onto the
   tapestry with one homography, so every highlight and line of type is perspective-correct.
 - **The iPhone app** talks to the wall over the local network only. No accounts, no cloud.

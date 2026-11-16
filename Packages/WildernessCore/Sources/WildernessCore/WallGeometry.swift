@@ -24,7 +24,6 @@ public enum WallGeometry {
 }
 
 public enum ColumnPosition: Equatable, Sendable {
-    case beside(TextSide), overLowerEdge
     /// On the painting itself, in a calm dark zone (Matt's wall has no room beside it).
     case onCanvas(TextZone)
 }
@@ -37,22 +36,12 @@ public struct ColumnPlacement: Equatable, Sendable {
     }
 }
 
-/// Where the wall text goes: beside the tapestry if a side has room, else over its lower edge.
+/// Where the wall text goes: always on the painting (Matt: there is no room beside, above or below
+/// the tapestry on his wall), in a calm zone, or the fallback zone if none is known.
 public enum TextColumnLayout {
-    // Option A (Matt): Matt's wall leaves 13.5 in each side, so the column narrows to ~11 in.
-    public static let maxWidth = 19.0, minWidth = 10.0, gap = 2.0, margin = 0.5
-
     public static func place(preferred: TextSide, calibration: Calibration,
                              canvasZone: TextZone? = nil) -> ColumnPlacement {
-        // Matt's wall: text belongs on the painting, in a calm zone, whenever one is known.
-        if let z = canvasZone {
-            return ColumnPlacement(position: .onCanvas(z), widthInches: z.w * 60)   // the tapestry is 60 in wide
-        }
-        let other: TextSide = preferred == .left ? .right : .left
-        for side in [preferred, other] {
-            let width = min(maxWidth, WallGeometry.wallInches(calibration, side: side) - gap - margin)
-            if width >= minWidth { return ColumnPlacement(position: .beside(side), widthInches: width) }
-        }
-        return ColumnPlacement(position: .overLowerEdge, widthInches: maxWidth)
+        let z = canvasZone ?? .fallback
+        return ColumnPlacement(position: .onCanvas(z), widthInches: z.w * Calibration.tapestryInches.w)
     }
 }
