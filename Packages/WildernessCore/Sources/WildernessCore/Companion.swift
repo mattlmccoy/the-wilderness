@@ -29,6 +29,9 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case dreamcoat(Bool)
     /// Put a settings screen on the wall (the alignment pattern, About).
     case show(WallScreen)
+    /// Into the Quiet: start a session of this many minutes, or end it.
+    case pray(minutes: Int)
+    case endPrayer
 
     /// The remote-equivalent input, for commands that drive the mode machine.
     public var input: AppInput? {
@@ -102,11 +105,17 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
     public var seasons: [SeasonMode]? = nil
     /// The self-running demo is playing.
     public var demo: Bool? = nil
+    /// Into the Quiet: the running session, today's line for the start screen, and the closing line
+    /// for a minute after a session ends.
+    public var prayer: PrayerStatus? = nil
+    public var prayerToday: PrayerToday? = nil
+    public var prayerClosing: String? = nil
 
     /// What is running on the wall, in words, for the phone's status line.
     public var status: [String] {
         var out: [String] = []
         if demo == true { out.append("Demo") }
+        if let p = prayer { out.append("Into the quiet · \(p.movement.title)") }
         if let s = still { out.append("Be still · \(s.figure) of \(s.of)") }
         if dreamcoat == true { out.append("Dreamcoat") }
         out += (seasons ?? []).map(\.title)

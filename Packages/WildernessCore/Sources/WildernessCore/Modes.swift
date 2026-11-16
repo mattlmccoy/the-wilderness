@@ -111,6 +111,59 @@ public struct ModeMachine: Equatable, Sendable {
         return SlowProgress(figure: min(Int((now - start) / SlowLooking.secondsPerFigure) + 1, n), of: n)
     }
 
+    // MARK: Into the Quiet (docs/superpowers/specs/2026-11-16-prayer-mode-design.md)
+
+    public private(set) var prayer: PrayerSession?
+    public private(set) var prayerPeriod: Prayer.Period = .morning
+    private var prayerDarkUntil: Double?
+    private var prayerSleeps = false
+    private var prayerEndedAt: Double?
+    public var isPraying: Bool { prayer != nil }
+
+    /// Starts a session from the phone. `darkUntil`: for a late session, when the wall wakes after
+    /// its fade (the next 05:00); nil for a session that ends back at rest.
+    public mutating func startPrayer(now: Double, minutes: Int, line: PrayerLine?, period: Prayer.Period, darkUntil: Double?) {
+        slowLookingSince = nil
+        demoSince = nil
+        dreamcoatUntil = nil
+        textHidden = false
+        prayerDarkUntil = nil
+        prayerEndedAt = nil
+        prayerPeriod = period
+        prayerSleeps = darkUntil != nil
+        prayer = PrayerSession(startedAt: now, minutes: minutes, line: line, sleeps: darkUntil != nil)
+        pendingDark = darkUntil
+        mode = .stillness
+        lastInputAt = now
+    }
+    private var pendingDark: Double?
+
+    /// Ends the session (the phone's End, a remote press, or the time running out).
+    public mutating func endPrayer(now: Double) {
+        guard prayer != nil else { return }
+        prayer = nil
+        prayerEndedAt = now
+        prayerDarkUntil = prayerSleeps ? pendingDark : nil
+        mode = .stillness
+        lastInputAt = now
+    }
+
+    /// After a late session the wall stays dark until a press or its wake time.
+    public func isAfterPrayerDark(now: Double) -> Bool { prayerDarkUntil.map { now < $0 } ?? false }
+
+    /// The closing line, for a minute after a session ends.
+    public func prayerClosing(now: Double) -> String? {
+        guard let e = prayerEndedAt, now - e < 60 else { return nil }
+        return prayerSleeps ? "Amen. Sleep in peace." : "Amen. Go in peace."
+    }
+
+    /// What the phone shows while a session runs.
+    public func prayerStatus(now: Double) -> PrayerStatus? {
+        guard let p = prayer, let m = p.movement(at: now) else { return nil }
+        return PrayerStatus(movement: m.movement, index: m.index, of: m.of, minutes: p.minutes, line: p.line,
+                            secondsLeft: max(0, p.duration - (now - p.startedAt)))
+    }
+
     /// The alignment pattern or About, from the phone.
     public mutating func openScreen(_ screen: WallScreen) {
         mode = screen == .pattern ? .pattern : .about
@@ -137,6 +190,9 @@ public struct ModeMachine: Equatable, Sendable {
             return nil
         }
         lastInputAt = now
+        // Any press ends a prayer session; after a late one, the first press wakes the wall. Used up.
+        if prayer != nil { endPrayer(now: now); return nil }
+        if isAfterPrayerDark(now: now) { prayerDarkUntil = nil; return nil }
         // Any press ends slow looking and leaves the wall at rest, words back on.
         if slowLookingSince != nil {
             slowLookingSince = nil
@@ -295,6 +351,11 @@ public struct ModeMachine: Equatable, Sendable {
             lastInputAt = now   // the demo is never idle
             return
         }
+        if let p = prayer {
+            if p.isFinished(at: now) { endPrayer(now: now) } else { lastInputAt = now }   // never idle while praying
+            return
+        }
+        if let d = prayerDarkUntil, now >= d { prayerDarkUntil = nil }
         if let start = slowLookingSince {
             if let id = SlowLooking.figure(at: now - start, ids: slowIds) {
                 mode = .explore(id: id, expanded: false)

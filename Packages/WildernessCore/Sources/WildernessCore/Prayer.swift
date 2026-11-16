@@ -104,3 +104,20 @@ public struct PrayerSession: Codable, Equatable, Sendable {
         return nil
     }
 }
+
+/// A running session, as the phone sees it.
+public struct PrayerStatus: Codable, Equatable, Sendable {
+    public var movement: Prayer.Movement
+    public var index: Int
+    public var of: Int
+    public var minutes: Int
+    public var line: PrayerLine?
+    public var secondsLeft: Double
+}
+
+/// What the phone's start screen shows: the period and today's line.
+public struct PrayerToday: Codable, Equatable, Sendable {
+    public var period: Prayer.Period
+    public var line: PrayerLine?
+    public init(period: Prayer.Period, line: PrayerLine?) { self.period = period; self.line = line }
+}
