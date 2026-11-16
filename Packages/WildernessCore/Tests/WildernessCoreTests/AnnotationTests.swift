@@ -62,8 +62,8 @@ private func libraryJSON(more: String?) -> Data {
 @Test func decodesMoreWithVerses() throws {
     let more = #"""
     {"story":"Israel wandered forty years.","connection":"inScripture","draft":true,"verses":[
-      {"ref":"Deuteronomy 8:3","text":"People do not live by bread alone.","testament":"old","translation":"NIV"},
-      {"ref":"Matthew 4:4","text":"Man shall not live by bread alone.","testament":"new","translation":"ESV"}]}
+      {"ref":"Deuteronomy 8:3","text":"Placeholder old testament text.","testament":"old","translation":"NIV"},
+      {"ref":"Matthew 4:4","text":"Placeholder new testament text.","testament":"new","translation":"ESV"}]}
     """#
     let lib = try AnnotationLibrary.decode(libraryJSON(more: more))
     #expect(lib.annotations[0].more?.verses.map(\.testament) == [.old, .new])
