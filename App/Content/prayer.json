@@ -1,0 +1,119 @@
+{
+ "_note": "Into the Quiet: one line a day, morning (04:00-14:59) and evening. Berean Standard Bible clauses (public domain, bereanbible.com/bsb.txt) as placeholders; the NIV is fetched at build time by scripts/fetch_verses.py. Clauses chosen by Claude, approved by Matt 2026-11-16.",
+ "morning": [
+  {
+   "ref": "Psalm 5:3",
+   "text": "In the morning, O LORD, You hear my voice"
+  },
+  {
+   "ref": "Psalm 143:8",
+   "text": "Let me hear Your loving devotion in the morning, for I have put my trust in You"
+  },
+  {
+   "ref": "Lamentations 3:23",
+   "text": "They are new every morning; great is Your faithfulness!"
+  },
+  {
+   "ref": "Psalm 46:10",
+   "text": "Be still and know that I am God"
+  },
+  {
+   "ref": "Isaiah 40:31",
+   "text": "those who wait upon the LORD will renew their strength"
+  },
+  {
+   "ref": "Psalm 90:14",
+   "text": "Satisfy us in the morning with Your loving devotion"
+  },
+  {
+   "ref": "Psalm 118:24",
+   "text": "This is the day that the LORD has made; we will rejoice and be glad in it."
+  },
+  {
+   "ref": "Psalm 59:16",
+   "text": "But I will sing of Your strength and proclaim Your loving devotion in the morning"
+  },
+  {
+   "ref": "Isaiah 26:3",
+   "text": "You will keep in perfect peace the steadfast of mind, because he trusts in You."
+  },
+  {
+   "ref": "Psalm 62:1",
+   "text": "In God alone my soul finds rest; my salvation comes from Him"
+  },
+  {
+   "ref": "Psalm 27:4",
+   "text": "to gaze on the beauty of the LORD and seek Him in His temple"
+  },
+  {
+   "ref": "Psalm 16:11",
+   "text": "You will fill me with joy in Your presence"
+  },
+  {
+   "ref": "John 14:27",
+   "text": "Peace I leave with you; My peace I give to you"
+  },
+  {
+   "ref": "Matthew 11:28",
+   "text": "Come to Me, all you who are weary and burdened, and I will give you rest."
+  }
+ ],
+ "evening": [
+  {
+   "ref": "Psalm 4:8",
+   "text": "I will lie down and sleep in peace, for You alone, O LORD, make me dwell in safety."
+  },
+  {
+   "ref": "Psalm 91:1",
+   "text": "He who dwells in the shelter of the Most High will abide in the shadow of the Almighty."
+  },
+  {
+   "ref": "Psalm 121:4",
+   "text": "Behold, the Protector of Israel will neither slumber nor sleep."
+  },
+  {
+   "ref": "Psalm 139:12",
+   "text": "even the darkness is not dark to You, but the night shines like the day"
+  },
+  {
+   "ref": "Psalm 63:6",
+   "text": "When I remember You on my bed, I think of You through the watches of the night."
+  },
+  {
+   "ref": "Psalm 23:2",
+   "text": "He makes me lie down in green pastures; He leads me beside quiet waters."
+  },
+  {
+   "ref": "Psalm 131:2",
+   "text": "Surely I have stilled and quieted my soul"
+  },
+  {
+   "ref": "Philippians 4:7",
+   "text": "And the peace of God, which surpasses all understanding, will guard your hearts"
+  },
+  {
+   "ref": "Psalm 62:5",
+   "text": "Rest in God alone, O my soul, for my hope comes from Him."
+  },
+  {
+   "ref": "Psalm 116:7",
+   "text": "Return to your rest, O my soul, for the LORD has been good to you."
+  },
+  {
+   "ref": "Isaiah 30:15",
+   "text": "your strength would lie in quiet confidence"
+  },
+  {
+   "ref": "Psalm 42:8",
+   "text": "at night His song is with me"
+  },
+  {
+   "ref": "1 Peter 5:7",
+   "text": "Cast all your anxiety on Him, because He cares for you."
+  },
+  {
+   "ref": "Psalm 3:5",
+   "text": "I lie down and sleep; I wake again, for the LORD sustains me."
+  }
+ ]
+}

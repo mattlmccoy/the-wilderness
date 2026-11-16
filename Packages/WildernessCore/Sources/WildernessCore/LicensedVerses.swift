@@ -22,7 +22,7 @@ public struct LicensedVerses: Codable, Equatable, Sendable {
     }
 
     /// Replaces a verse when real pasted text exists for its reference.
-    func apply(to v: Verse) -> Verse {
+    public func apply(to v: Verse) -> Verse {
         guard let l = verses.first(where: { $0.ref == v.ref }),
               !l.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return v }
         var out = v
