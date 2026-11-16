@@ -131,3 +131,15 @@ private func snap(_ m: Mode) -> WallSnapshot {
     #expect(c.glintBrightness == 0.2 && c.glintSizeInches == 0.6 && c.glintMeanInterval == 4)
     #expect(Tuning.defaults.clamped == .defaults)
 }
+
+// MARK: Picking which advertised wall to join (2026-11-15: a stale simulator on the Mac was
+// always first in the list, so the phone retried it forever and never reached the Apple TV)
+
+@Test func thePhoneSkipsAWallThatJustFailedWhenAnotherIsAdvertised() {
+    let found = ["The Wilderness", "The Wilderness (2)"]
+    #expect(WallPicker.pick(found, recentlyFailed: []) == "The Wilderness")
+    #expect(WallPicker.pick(found, recentlyFailed: ["The Wilderness"]) == "The Wilderness (2)")
+    // If every advertised wall failed recently, try the one that failed longest ago (list order).
+    #expect(WallPicker.pick(found, recentlyFailed: ["The Wilderness (2)", "The Wilderness"]) == "The Wilderness (2)")
+    #expect(WallPicker.pick([], recentlyFailed: []) == nil)
+}

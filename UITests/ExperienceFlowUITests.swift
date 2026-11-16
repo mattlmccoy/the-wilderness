@@ -95,13 +95,13 @@ final class ExperienceFlowUITests: XCTestCase {
         remote.press(.select)
         XCTAssertTrue(app.staticTexts["Context"].waitForExistence(timeout: 3))
         remote.press(.down); remote.press(.down); remote.press(.select)
-        XCTAssertTrue(app.staticTexts["The Painter"].waitForExistence(timeout: 5))
-        XCTAssertTrue(text(app, containing: "CONTEXT · 1 of 5").exists)
+        XCTAssertTrue(app.staticTexts["Into the Wilderness"].waitForExistence(timeout: 5))
+        XCTAssertTrue(text(app, containing: "CONTEXT · 1 of 12").exists)
         remote.press(.right)
-        XCTAssertTrue(app.staticTexts["Its Real Size"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["The Judean Desert"].waitForExistence(timeout: 5))
         remote.press(.menu)
         XCTAssertTrue(app.staticTexts["Context"].waitForExistence(timeout: 3))
-        XCTAssertFalse(app.staticTexts["Its Real Size"].exists)
+        XCTAssertFalse(app.staticTexts["The Judean Desert"].exists)
     }
 
     func testSoundTogglesFromTheMenuAndTheMenuStaysOpen() {

@@ -170,3 +170,13 @@ public enum FigureHitTest {
         return abs(s) / 2
     }
 }
+
+/// Which advertised wall the phone joins: the first one that hasn't just failed. A stale or
+/// asleep server (e.g. a simulator left running on a Mac) must not hide the real Apple TV.
+public enum WallPicker {
+    /// `recentlyFailed` is oldest first. If every wall failed, retry the one that failed longest ago.
+    public static func pick(_ found: [String], recentlyFailed: [String]) -> String? {
+        if let fresh = found.first(where: { !recentlyFailed.contains($0) }) { return fresh }
+        return recentlyFailed.first(where: found.contains)
+    }
+}

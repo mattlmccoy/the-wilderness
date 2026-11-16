@@ -17,6 +17,9 @@ final class CompanionClient: ObservableObject {
     private var browser: NWBrowser?
     private var connection: NWConnection?
     private var framer = LineFramer()
+    /// Walls that dropped or never answered, oldest first (see WallPicker).
+    private var recentlyFailed: [String] = []
+    private var currentName: String?
 
     func start() {
         guard browser == nil, connection == nil else { return }
@@ -30,8 +33,15 @@ final class CompanionClient: ObservableObject {
         let b = NWBrowser(for: .bonjour(type: "_wilderness._tcp", domain: nil), using: .tcp)
         b.browseResultsChangedHandler = { [weak self] results, _ in
             Task { @MainActor in
-                guard let self, self.connection == nil, let first = results.first else { return }
-                self.connect(to: first.endpoint)
+                guard let self, self.connection == nil else { return }
+                let named = results.compactMap { r -> (String, NWEndpoint)? in
+                    if case let .service(name, _, _, _) = r.endpoint { return (name, r.endpoint) }
+                    return nil
+                }
+                guard let name = WallPicker.pick(named.map(\.0), recentlyFailed: self.recentlyFailed),
+                      let endpoint = named.first(where: { $0.0 == name })?.1 else { return }
+                self.currentName = name
+                self.connect(to: endpoint)
             }
         }
         b.stateUpdateHandler = { state in
@@ -67,6 +77,7 @@ final class CompanionClient: ObservableObject {
                 switch state {
                 case .ready:
                     self.link = .connected
+                    if let n = self.currentName { self.recentlyFailed.removeAll { $0 == n } }
                     self.send(.hello)
                 case .failed, .cancelled, .waiting:
                     // .waiting: the Apple TV refused or is gone; drop and browse again.
@@ -96,6 +107,11 @@ final class CompanionClient: ObservableObject {
 
     /// Lost the Apple TV: forget it and look again (a fresh browse finds it when it returns).
     private func drop() {
+        if let n = currentName {
+            recentlyFailed.removeAll { $0 == n }
+            recentlyFailed.append(n)
+            currentName = nil
+        }
         connection?.cancel()
         connection = nil
         snapshot = nil

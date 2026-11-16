@@ -22,7 +22,6 @@ struct RootView: View {
     /// Decoded once per process, not on every RootView re-creation. A failure is kept too,
     /// so the visible "Content failed to load" message still shows.
     private static let content = ContentLoader.load()
-    private let ticker = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
     /// Measures the real time between ticks; a box, so updating it never redraws the view.
     @State private var clock = TickClockBox()
     /// When the wall started breathing, so glints can follow the breath.
@@ -64,7 +63,13 @@ struct RootView: View {
         }
         // Every phone sees what the wall shows, and the settings it can change, as they change.
         .onChange(of: snapshot) { _, s in if let s { companion.broadcast(s) } }
-        .onReceive(ticker) { _ in tick() }
+        // Four ticks a second drive timed modes (intro, Unfold, hints, idle).
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(250))
+                tick()
+            }
+        }
         // Waking the Apple TV (or dismissing its screensaver) is use, even though the press
         // never reaches the app: hold the screensaver off again for the next 6 hours.
         .onChange(of: scenePhase) { _, phase in
