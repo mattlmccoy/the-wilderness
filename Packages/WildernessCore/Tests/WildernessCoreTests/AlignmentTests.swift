@@ -83,3 +83,46 @@ private func near(_ a: Point<ProjectorSpace>, _ b: Point<ProjectorSpace>, _ tol:
     s.handle(.move(.right))
     #expect(s.calibration.edgeOffsets[AlignEdge.right.rawValue].x > 0)
 }
+
+@Test func theShaderCanMapAScreenPointBackToTheArtwork() throws {
+    let c = cal(), screen = PixelSize(width: 1920, height: 1080)
+    let rows = try #require(c.screenToArtworkRows(screen: screen))
+    func back(_ x: Double, _ y: Double) -> (Double, Double) {
+        let p = SIMD3(x, y, 1), w = (rows[2] * p).sum()
+        return ((rows[0] * p).sum() / w, (rows[1] * p).sum() / w)
+    }
+    let tl = c.corners[0], br = c.corners[2]
+    let a = back(tl.x * 1920, tl.y * 1080), b = back(br.x * 1920, br.y * 1080)
+    #expect(abs(a.0) < 1e-9 && abs(a.1) < 1e-9)
+    #expect(abs(b.0 - 1) < 1e-9 && abs(b.1 - 1) < 1e-9)
+}
+
+// MARK: Aligning from the phone
+
+@Test func alignCommandsTravelOverTheWire() throws {
+    let all: [PhoneCommand] = [.align(.start), .align(.pick(.bottomMiddle)), .align(.move(.left)),
+                               .align(.toggleFine), .align(.save), .align(.cancel)]
+    for c in all {
+        let back = try JSONDecoder().decode(PhoneCommand.self, from: LineFramer.frame(c).dropLast())
+        #expect(back == c)
+    }
+}
+
+@Test func theSessionTellsThePhoneWhereEveryHandleIs() {
+    var s = CalibrationSession(start: cal())
+    s.handle(.pick(.rightMiddle)); s.handle(.playPause)
+    let a = s.alignmentState
+    #expect(a.handles.count == 8 && a.selected == .rightMiddle && a.fine && !a.reviewing)
+    #expect(near(a.handles[AlignPoint.topLeft.rawValue], cal().corners[0]))
+}
+
+@Test func thePhoneCanStartAlignmentFromAnywhereButSettingsFlowsStayIntact() {
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.beginCalibration()
+    #expect(m.mode == .calibrating)
+    var e = ModeMachine(calibrated: true, now: 0, intro: false)
+    e.handle(.move(.right), now: 1, library: AnnotationLibrary(artworkAspect: 1.2, annotations: []),
+             script: UnfoldScript(beats: []), context: .empty)
+    e.beginCalibration()
+    #expect(e.mode == .calibrating)
+}

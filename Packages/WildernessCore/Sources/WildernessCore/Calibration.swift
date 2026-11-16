@@ -108,6 +108,16 @@ extension Calibration {
         return projectorPoint(artwork: point.artworkPosition)
     }
 
+    /// Rows of the screen → artwork (0…1) homography, for the bend shader: the shader works out
+    /// which artwork point each screen pixel shows, then how far the bend moved it.
+    public func screenToArtworkRows(screen: PixelSize) -> [SIMD3<Double>]? {
+        guard let h = artworkToProjector else { return nil }
+        let toScreen = Homography<ProjectorSpace, ScreenSpace>.scaling(screen.width, screen.height) * h
+        guard let inv = toScreen.inverted() else { return nil }
+        let m = inv.matrix
+        return (0..<3).map { r in SIMD3(m[0][r], m[1][r], m[2][r]) }
+    }
+
     /// True when any edge is bent (the renderer then adds the bend effect).
     public var isBent: Bool { edgeOffsets.contains { $0.x != 0 || $0.y != 0 } }
 }

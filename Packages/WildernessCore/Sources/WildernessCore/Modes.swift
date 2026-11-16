@@ -204,6 +204,11 @@ public struct ModeMachine: Equatable, Sendable {
     /// Never starts the intro again: that plays only on launch and after a calibration is saved.
     public mutating func noteActivity(now: Double) { lastInputAt = now }
 
+    /// The phone's Align: straight into calibration from wherever the wall is.
+    public mutating func beginCalibration() {
+        mode = .calibrating
+    }
+
     /// Leaves calibration: into the intro when a calibration was just saved (and intros are
     /// not skipped), otherwise straight to Stillness.
     public mutating func finishCalibration(now: Double, playIntro: Bool) {

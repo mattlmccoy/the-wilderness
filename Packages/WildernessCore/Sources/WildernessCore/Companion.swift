@@ -15,6 +15,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case setTuning(Tuning)
     case setSound(Bool)
     case setShowPainting(Bool)
+    /// Alignment from the phone (the same session the remote drives).
+    case align(AlignCommand)
 
     /// The remote-equivalent input, for commands that drive the mode machine.
     public var input: AppInput? {
@@ -29,6 +31,22 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
 }
 
 /// Apple TV → phone: what the wall is showing now, plus the settings the phone edits.
+public enum AlignCommand: Codable, Equatable, Sendable {
+    case start, pick(AlignPoint), move(NudgeDirection), toggleFine, save, cancel
+}
+
+/// What the phone needs to draw the alignment diagram while the wall is calibrating.
+public struct AlignmentState: Codable, Equatable, Sendable {
+    /// The eight handles, in AlignPoint order, in normalized projector coordinates.
+    public var handles: [Point<ProjectorSpace>]
+    public var selected: AlignPoint?
+    public var fine: Bool
+    public var reviewing: Bool
+    public init(handles: [Point<ProjectorSpace>], selected: AlignPoint?, fine: Bool, reviewing: Bool) {
+        self.handles = handles; self.selected = selected; self.fine = fine; self.reviewing = reviewing
+    }
+}
+
 public struct WallSnapshot: Codable, Equatable, Sendable {
     /// Left/right step through something here (Unfold beats, Context pages, Explore figures).
     public var canStep: Bool { ["unfold", "context", "explore"].contains(mode) }
@@ -53,6 +71,8 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
     public var tuning: Tuning
     public var soundOn: Bool
     public var showPainting: Bool
+    /// Present only while the wall is calibrating.
+    public var alignment: AlignmentState?
 
     public static func make(mode: Mode, library: AnnotationLibrary, script: UnfoldScript, context: ContextScript,
                             tuning: Tuning, soundOn: Bool, showPainting: Bool) -> WallSnapshot {

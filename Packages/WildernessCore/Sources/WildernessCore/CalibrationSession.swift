@@ -18,6 +18,12 @@ public struct CalibrationSession: Sendable {
     public var step: NudgeStep { adjuster.step }
     public var selected: AlignPoint { adjuster.selected }
 
+    public var alignmentState: AlignmentState {
+        let c = adjuster.calibration
+        return AlignmentState(handles: AlignPoint.allCases.map(c.handle), selected: phase == .review ? nil : adjuster.selected,
+                              fine: adjuster.step == .fine, reviewing: phase == .review)
+    }
+
     @discardableResult
     public mutating func handle(_ input: Input) -> Outcome? {
         switch (input, phase) {
