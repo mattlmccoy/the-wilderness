@@ -114,6 +114,8 @@ struct RootView: View {
                     if showPainting, let img = Self.painting {
                         Image(uiImage: img).resizable()
                             .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
+                            .opacity(prayerDark ? 0 : 1)
+                            .animation(.easeInOut(duration: 30), value: prayerDark)
                     }
                     let _ = wallMinute   // read, so the minute tick redraws the wall
                     let day = dayLight, season = seasons
@@ -121,10 +123,19 @@ struct RootView: View {
                     ZStack(alignment: .topLeading) {
                         LightLayer(library: content.library, tuning: wallTuning,
                                    targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script, context: content.context),
-                                   dark: mode.isIntro, washColor: season.map { Self.washColor($0.tint) } ?? Palette.ivory)
+                                   dark: mode.isIntro || quietForPrayer, washColor: season.map { Self.washColor($0.tint) } ?? Palette.ivory)
                         drift(mode, content)
                         AliveLayer(library: content.library, breathing: content.breathing, tuning: wallTuning,
                                    active: Breathing.isActive(mode) && windDown != .sleeping && !quietForPrayer, clock: alive, demoSince: machine?.demoSince)
+                        // Into the Quiet: inside the day-light group, so it warms and dims with the room.
+                        if let p = machine?.prayer {
+                            PrayerLayer(library: content.library, session: p,
+                                        placement: TextColumnLayout.place(preferred: .left, calibration: cal,
+                                                                          canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
+                                        strength: wallTuning.subjectStrength)
+                                // A late session's light leaves as slowly as the rest of the wall (30 s).
+                                .transition(.opacity.animation(.easeInOut(duration: p.sleeps ? 30 : 6)))
+                        }
                     }
                     .colorMultiply(Color(red: 1, green: 1 - 0.22 * day.warmth, blue: 1 - 0.45 * day.warmth))
                     .opacity(day.level)
@@ -140,13 +151,6 @@ struct RootView: View {
                                   flashlight: quietForPrayer ? nil : flashlight?.point,
                                   wallOffset: Self.previewOffset,
                                   revealSince: revealSince(mode, content))
-                    if let p = machine?.prayer {
-                        PrayerLayer(library: content.library, session: p,
-                                    placement: TextColumnLayout.place(preferred: .left, calibration: cal,
-                                                                      canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
-                                    strength: wallTuning.subjectStrength)
-                            .transition(.opacity.animation(.easeInOut(duration: 6)))
-                    }
                     if machine?.isSlowLooking == true, let since = machine?.slowLookingSince, Self.now - since < 9 {
                         WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: cal,
                                                                      canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
@@ -160,8 +164,10 @@ struct RootView: View {
                         IntroView(library: content.library, tuning: wallTuning, startedAt: startedAt)
                             .transition(.opacity.animation(.easeOut(duration: 1.0)))
                     case .stillness:
-                        GlintLayer(points: content.glints, tuning: wallTuning, calibration: cal,
-                                   demo: UserDefaults.standard.bool(forKey: "glintDemo"), bias: glintBias(content))
+                        if !quietForPrayer {
+                            GlintLayer(points: content.glints, tuning: wallTuning, calibration: cal,
+                                       demo: UserDefaults.standard.bool(forKey: "glintDemo"), bias: glintBias(content))
+                        }
                     case let .menu(focus):
                         GlintLayer(points: content.glints, tuning: wallTuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
@@ -217,7 +223,7 @@ struct RootView: View {
                 onHold: { send(.holdSelect, content) }))
             .onPlayPauseCommand { send(.playPause, content) }
             // In Stillness, pass Back through so tvOS returns to the home screen.
-            .onExitCommand(perform: mode == .stillness ? nil : { send(.back, content) })
+            .onExitCommand(perform: mode == .stillness && !quietForPrayer ? nil : { send(.back, content) })
         }
     }
 
@@ -290,6 +296,10 @@ struct RootView: View {
     private func handlePhone(_ command: PhoneCommand) {
         guard case let .success(c) = Self.content else { return }
         switch command {
+        case .hello, .setTuning, .setSound, .setShowPainting, .pray, .endPrayer: break
+        default: machine?.wakeFromPrayerDark()
+        }
+        switch command {
         case .hello:
             if let s = snapshot { companion.broadcast(s) }
         case let .setTuning(t):
@@ -344,7 +354,7 @@ struct RootView: View {
             t.passingLight = true
             t.glintMeanInterval = 4
             t.breathing = max(t.breathing, 0.12)
-        } else if machine?.isPraying == true {
+        } else if quietForPrayer {
             // Into the Quiet: no glints, no sun rays.
             t.passingLight = false
             t.glintMeanInterval = 1_000_000

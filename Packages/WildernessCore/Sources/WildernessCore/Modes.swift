@@ -90,6 +90,7 @@ public struct ModeMachine: Equatable, Sendable {
 
     /// Be still, from the menu or the phone.
     public mutating func startSlowLooking(now: Double, library: AnnotationLibrary) {
+        prayer = nil   // one quiet thing at a time: Be still replaces a prayer session
         slowIds = Drift.tour(library)   // the light travels across the painting, not back and forth
         slowLookingSince = now
         textHidden = true
@@ -123,6 +124,7 @@ public struct ModeMachine: Equatable, Sendable {
     /// Starts a session from the phone. `darkUntil`: for a late session, when the wall wakes after
     /// its fade (the next 05:00); nil for a session that ends back at rest.
     public mutating func startPrayer(now: Double, minutes: Int, line: PrayerLine?, period: Prayer.Period, darkUntil: Double?) {
+        guard mode != .calibrating else { return }   // never abandons an alignment in progress
         slowLookingSince = nil
         demoSince = nil
         dreamcoatUntil = nil
@@ -148,6 +150,9 @@ public struct ModeMachine: Equatable, Sendable {
         lastInputAt = now
     }
 
+    /// Any phone command but a setting wakes the wall from the post-prayer dark.
+    public mutating func wakeFromPrayerDark() { prayerDarkUntil = nil }
+
     /// After a late session the wall stays dark until a press or its wake time.
     public func isAfterPrayerDark(now: Double) -> Bool { prayerDarkUntil.map { now < $0 } ?? false }
 
@@ -160,8 +165,8 @@ public struct ModeMachine: Equatable, Sendable {
     /// What the phone shows while a session runs.
     public func prayerStatus(now: Double) -> PrayerStatus? {
         guard let p = prayer, let m = p.movement(at: now) else { return nil }
-        return PrayerStatus(movement: m.movement, index: m.index, of: m.of, minutes: p.minutes, line: p.line,
-                            secondsLeft: max(0, p.duration - (now - p.startedAt)))
+        // No running clock in here: the snapshot changes only when the movement does.
+        return PrayerStatus(movement: m.movement, index: m.index, of: m.of, minutes: p.minutes, line: p.line)
     }
 
     /// The alignment pattern or About, from the phone.
@@ -175,6 +180,7 @@ public struct ModeMachine: Equatable, Sendable {
     }
 
     public mutating func startDemo(now: Double) {
+        prayer = nil; prayerDarkUntil = nil   // the demo replaces a prayer session
         demoSince = now
         lastInputAt = now
     }

@@ -61,3 +61,19 @@ off. After: the closing line. Status line shows the session. Screenshots only of
 ### Task 6: Verify and finish
 Core, Python, TV UI and phone UI suites; a simulator clip of a 5-minute session from Reflect on;
 README section; commit; ask Matt before install.
+
+## Final review (fresh reviewer, 2026-11-16) — fixed
+- C1 Menu during prayer / its dark fell through to tvOS: fixed; PrayerRemoteUITests RED (old handling) → GREEN.
+- I1 phone screen-on for a phone that opens mid-session: `onChange(initial: true)`.
+- I2 wash during prayer: LightLayer `dark` while praying (near-darkness).
+- I3 prayer glow outside the day-light group: moved inside; a late session's glow leaves over 30 s.
+- I4 glints / debug painting in the post-prayer dark: hidden; checked 0 brightness over 15 s.
+- I5 phone commands didn't wake the post-prayer dark: `wakeFromPrayerDark` (test) on any non-setting command.
+- Minors fixed: Be still / demo end a prayer; no prayer during alignment (tests); no per-tick snapshot churn
+  (removed `secondsLeft`); a Wi-Fi blip keeps the phone's dark session screen.
+
+## Deferred minors
+- fetch_verses.py doesn't report over-long NIV lines (the wall skips them silently, as designed).
+- The sleep ending is decided by the start hour (a 20:45 30-minute session ends at rest at 21:15).
+- Begin/End taps give the phone's usual light haptic (user-initiated).
+- Line fit uses a 100-character proxy, not the real zone geometry.

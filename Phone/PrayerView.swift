@@ -9,7 +9,13 @@ struct PrayerView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("prayer.minutes") private var minutes = 10
 
-    private var screen: PrayerScreen { client.snapshot.map(PrayerScreen.for) ?? .start }
+    /// The last screen the wall reported: a Wi-Fi blip keeps the dark session screen instead of
+    /// flashing back to the start.
+    @State private var lastScreen: PrayerScreen = .start
+    private var screen: PrayerScreen {
+        guard client.link == .connected, let s = client.snapshot else { return lastScreen }
+        return PrayerScreen.for(s)
+    }
 
     var body: some View {
         ZStack {
@@ -23,7 +29,9 @@ struct PrayerView: View {
         .foregroundStyle(PhonePalette.ivory)
         .animation(.easeInOut(duration: 1.2), value: screen)
         // The screen stays on (and black) through a session, so the closing line is seen.
-        .onChange(of: screen) { _, s in
+        // initial: true, so a phone that opens mid-session (a second phone, a relaunch) keeps its screen on.
+        .onChange(of: screen, initial: true) { _, s in
+            lastScreen = s
             if case .session = s { UIApplication.shared.isIdleTimerDisabled = true }
             else { UIApplication.shared.isIdleTimerDisabled = false }
             if case .closing = s { Task { try? await Task.sleep(for: .seconds(20)); dismiss() } }

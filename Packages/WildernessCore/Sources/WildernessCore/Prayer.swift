@@ -112,7 +112,6 @@ public struct PrayerStatus: Codable, Equatable, Sendable {
     public var of: Int
     public var minutes: Int
     public var line: PrayerLine?
-    public var secondsLeft: Double
 }
 
 /// What the phone's start screen shows: the period and today's line.

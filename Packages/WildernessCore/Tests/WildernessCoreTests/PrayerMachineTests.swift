@@ -98,3 +98,33 @@ private extension ModeMachine {
     s.prayer = nil; s.prayerClosing = "Amen. Go in peace."
     #expect(PrayerScreen.for(s) == .closing("Amen. Go in peace."))
 }
+
+// MARK: Review fixes (final review, 2026-11-16)
+
+@Test func aPhoneCommandWakesTheWallFromThePostPrayerDark() {
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.startPrayer(now: 10, minutes: 5, line: line, period: .evening, darkUntil: 5000)
+    m.run(to: 310)
+    #expect(m.isAfterPrayerDark(now: 320))
+    m.wakeFromPrayerDark()
+    #expect(!m.isAfterPrayerDark(now: 321))
+}
+
+@Test func beStillOrTheDemoEndsAPrayerRatherThanRunningBeside() {
+    let figures = AnnotationLibrary(artworkAspect: 1.2, annotations: [])
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.startPrayer(now: 1, minutes: 5, line: line, period: .morning, darkUntil: nil)
+    m.startSlowLooking(now: 2, library: figures)
+    #expect(!m.isPraying)
+    var d = ModeMachine(calibrated: true, now: 0, intro: false)
+    d.startPrayer(now: 1, minutes: 5, line: line, period: .morning, darkUntil: nil)
+    d.startDemo(now: 2)
+    #expect(!d.isPraying)
+}
+
+@Test func prayerCannotInterruptAlignment() {
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    m.beginCalibration()
+    m.startPrayer(now: 1, minutes: 5, line: line, period: .morning, darkUntil: nil)
+    #expect(!m.isPraying && m.mode == .calibrating)
+}
