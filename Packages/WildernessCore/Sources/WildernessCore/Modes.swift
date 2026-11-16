@@ -2,7 +2,7 @@ import Foundation
 
 public enum SettingsItem: Int, CaseIterable, Sendable { case calibrate, tune, pattern, painting, about, demo }
 /// The guest-facing front door: a short list beside the tapestry (Select at rest).
-public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold, context, sound }
+public enum MenuItem: Int, CaseIterable, Sendable { case explore, unfold, context, still, sound }
 
 /// Everything the app can be showing (spec §5).
 public enum Mode: Equatable, Sendable {
@@ -70,6 +70,17 @@ public struct ModeMachine: Equatable, Sendable {
 
     public mutating func setTextHidden(_ hidden: Bool) { textHidden = hidden }
 
+    /// ↑ ↑ ↓ ↓ ← → ← → Select: every outline cycles the rainbow for a minute (the dreamcoat).
+    public static let dreamcoatSeconds = 60.0
+    private var code = SecretCode()
+    private var dreamcoatUntil: Double?
+    public func dreamcoat(now: Double) -> Bool { dreamcoatUntil.map { now < $0 } ?? false }
+
+    /// Menu → Be still: seven minutes of slow looking, light only (SlowLooking).
+    public private(set) var slowLookingSince: Double?
+    private var slowIds: [String] = []
+    public var isSlowLooking: Bool { slowLookingSince != nil }
+
     public mutating func startDemo(now: Double) {
         demoSince = now
         lastInputAt = now
@@ -86,6 +97,18 @@ public struct ModeMachine: Equatable, Sendable {
             return nil
         }
         lastInputAt = now
+        // Any press ends slow looking and leaves the wall at rest, words back on.
+        if slowLookingSince != nil {
+            slowLookingSince = nil
+            textHidden = false
+            mode = .stillness
+            return nil
+        }
+        // The secret code's last press is used up: it opens nothing else.
+        if code.feed(input) {
+            dreamcoatUntil = now + Self.dreamcoatSeconds
+            return nil
+        }
         // Play/Pause in Explore: once = Unfold (after the window, in tick), twice = hide/show text.
         if input == .playPause, case .explore = mode {
             if let p = pendingPlayAt, now - p <= Self.doublePressWindow {
@@ -134,6 +157,11 @@ public struct ModeMachine: Equatable, Sendable {
             var e = ExploreState.idle
             e.handle(.move(.right), library: library)
             if case let .exploring(id, expanded) = e { mode = .explore(id: id, expanded: expanded); fromMenu = true }
+        case (.menu(.still), .select):
+            slowIds = library.annotations.filter { $0.outline != nil }.map(\.id)
+            slowLookingSince = now
+            textHidden = true
+            mode = .explore(id: "christ", expanded: false)
         case (.menu(.sound), .select):
             return .toggleSound
         case (.menu(.context), .select) where !context.pages.isEmpty:
@@ -220,6 +248,17 @@ public struct ModeMachine: Equatable, Sendable {
         if let start = demoSince {
             mode = DemoScript.mode(at: now, since: start, script: script, context: context)
             lastInputAt = now   // the demo is never idle
+            return
+        }
+        if let start = slowLookingSince {
+            if let id = SlowLooking.figure(at: now - start, ids: slowIds) {
+                mode = .explore(id: id, expanded: false)
+                lastInputAt = now   // never idle while it walks
+            } else {
+                slowLookingSince = nil
+                textHidden = false
+                mode = .stillness
+            }
             return
         }
         if let h = hintUntil, now >= h { hintUntil = nil }

@@ -17,6 +17,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
     case setShowPainting(Bool)
     /// Explore with the light only (same as a double press of Play/Pause on the remote).
     case setTextHidden(Bool)
+    /// The phone as a flashlight: a soft pool of light at this point of the painting; nil ends it.
+    case flashlight(Point<ArtworkSpace>?)
     /// Alignment from the phone (the same session the remote drives).
     case align(AlignCommand)
     /// Start (true) or stop (false) the self-running demo.

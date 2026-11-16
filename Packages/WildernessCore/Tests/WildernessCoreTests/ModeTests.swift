@@ -246,9 +246,10 @@ private extension ModeMachine {
     m.press(.move(.up)); #expect(m.mode == .menu(focus: .explore))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .unfold))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .context))
+    m.press(.move(.down)); #expect(m.mode == .menu(focus: .still))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .sound))
     m.press(.move(.down)); #expect(m.mode == .menu(focus: .sound))
-    m.press(.move(.up)); #expect(m.mode == .menu(focus: .context))
+    m.press(.move(.up)); #expect(m.mode == .menu(focus: .still))
 }
 
 @Test func selectInTheMenuEntersTheFocusedMode() {
