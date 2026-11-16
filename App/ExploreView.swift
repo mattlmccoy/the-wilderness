@@ -12,6 +12,8 @@ struct ExploreView: View {
     var showsHint: Bool = false
     /// Tune light → Edge line (0 = off).
     var edgeLine: Double = 0
+    /// Where this figure's text goes when there is no room beside the tapestry.
+    var canvasZone: TextZone? = nil
 
     private var selected: (Annotation, Bool)? {
         guard case let .exploring(id, expanded) = state,
@@ -29,7 +31,7 @@ struct ExploreView: View {
             if case let (a, expanded)? = selected {
                 WallText(title: a.title, short: a.short, more: a.more,
                          expanded: expanded,
-                         placement: TextColumnLayout.place(preferred: a.textSide, calibration: calibration),
+                         placement: TextColumnLayout.place(preferred: a.textSide, calibration: calibration, canvasZone: canvasZone),
                          anchorY: a.anchor.y, header: "EXPLORE",
                          hint: showsHint ? Wayfinding.exploreHint : nil)
                     .id(a.id)
@@ -49,6 +51,8 @@ struct AppContent {
     let script: UnfoldScript
     let context: ContextScript
     let maps: ContextMaps
+    /// Calm places on the painting for text when there is no room beside it.
+    let zones: [TextZone]
     let glints: GlintPoints
     let notices: Notices
 
@@ -68,6 +72,7 @@ enum ContentLoader {
                               script: try UnfoldScript.decode(data("unfold"), library: library).applying(licensed),
                               context: try ContextScript.decode(data("context"), library: library, maps: maps),
                               maps: maps,
+                              zones: try TextZones.decode(data("textzones")).zones,
                               glints: try GlintPoints.decode(data("glints")),
                               notices: try Notices.decode(data("notices")))
         }

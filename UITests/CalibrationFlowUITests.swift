@@ -13,8 +13,8 @@ final class CalibrationFlowUITests: XCTestCase {
     func testSelectWalksCornersThenSaves() {
         let app = launchUncalibrated()
         let remote = XCUIRemote.shared
-        XCTAssertTrue(app.staticTexts["Top left · 1 of 4"].waitForExistence(timeout: 10))
-        for _ in 0..<4 { remote.press(.select) }
+        XCTAssertTrue(app.staticTexts["Top left · 1 of 8"].waitForExistence(timeout: 10))
+        for _ in 0..<8 { remote.press(.select) }
         XCTAssertTrue(app.staticTexts["Check the outline"].waitForExistence(timeout: 3))
         remote.press(.select)
         XCTAssertFalse(app.staticTexts["Check the outline"].waitForExistence(timeout: 2), "Select on review should save and close")
@@ -24,11 +24,11 @@ final class CalibrationFlowUITests: XCTestCase {
     func testBackOnReviewReturnsToLastCorner() {
         let app = launchUncalibrated()
         let remote = XCUIRemote.shared
-        XCTAssertTrue(app.staticTexts["Top left · 1 of 4"].waitForExistence(timeout: 10))
-        for _ in 0..<4 { remote.press(.select) }
+        XCTAssertTrue(app.staticTexts["Top left · 1 of 8"].waitForExistence(timeout: 10))
+        for _ in 0..<8 { remote.press(.select) }
         XCTAssertTrue(app.staticTexts["Check the outline"].waitForExistence(timeout: 3))
         remote.press(.menu)
-        XCTAssertTrue(app.staticTexts["Bottom left · 4 of 4"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.staticTexts["Left middle · 8 of 8"].waitForExistence(timeout: 3))
         XCTAssertEqual(app.state, .runningForeground)
     }
 
@@ -44,8 +44,8 @@ final class CalibrationFlowUITests: XCTestCase {
         remote.press(.select, forDuration: 1.2)
         XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3), "Settings did not open")
         remote.press(.select)
-        XCTAssertTrue(app.staticTexts["Top left · 1 of 4"].waitForExistence(timeout: 5), "Calibrate did not open")
-        for _ in 0..<4 { remote.press(.select) }
+        XCTAssertTrue(app.staticTexts["Top left · 1 of 8"].waitForExistence(timeout: 5), "Calibrate did not open")
+        for _ in 0..<8 { remote.press(.select) }
         let review = app.staticTexts["Check the outline"]
         XCTAssertTrue(review.waitForExistence(timeout: 3))
         remote.press(.select)   // save

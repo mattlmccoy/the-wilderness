@@ -48,3 +48,16 @@ private let zones = [
     let z = try TextZones.decode(Data(contentsOf: url))
     #expect(z.zones.count >= 5)
 }
+
+@Test func withNoRoomBesideTheTapestryTextGoesOnTheCanvas() {
+    // Matt's wall: the tapestry fills the frame side to side.
+    let full = Calibration(artworkAspect: 1.2, output: PixelSize(width: 1920, height: 1080), corners: [
+        .init(x: 0.01, y: 0.02), .init(x: 0.99, y: 0.02), .init(x: 0.99, y: 0.98), .init(x: 0.01, y: 0.98)])
+    let z = TextZone(x: 0.14, y: 0.3, w: 0.34, h: 0.24, score: 0.8)
+    #expect(TextColumnLayout.place(preferred: .left, calibration: full, canvasZone: z).position == .onCanvas(z))
+    // A wall with room beside it keeps the side column.
+    let roomy = Calibration.defaultFor(artworkAspect: 1.2, output: PixelSize(width: 1920, height: 1080))
+    if case .beside = TextColumnLayout.place(preferred: .left, calibration: roomy, canvasZone: z).position {} else {
+        Issue.record("a wall with room beside the tapestry should keep the side column")
+    }
+}

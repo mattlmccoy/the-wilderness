@@ -8,9 +8,10 @@ struct MenuView: View {
     let calibration: Calibration
     var soundOn: Bool = false
     var soundAvailable: Bool = true
+    var canvasZone: TextZone? = nil
 
     var body: some View {
-        WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: calibration), anchorY: 0.3) {
+        WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: calibration, canvasZone: canvasZone), anchorY: 0.3) {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 40) {
                     ForEach(MenuItem.allCases.filter { $0 != .sound }, id: \.self) { item in

@@ -78,6 +78,7 @@
 		F9A3F21AD7E3FC1488A1CA1E /* context-jordan-river-qasr-al-yahud-wide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
 		FECFDF91ECCC9166DAA6EFE5 /* context-brescia-17th-century-view.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DC561E73F08668C4B22C6C78 /* context-brescia-17th-century-view.jpg */; };
+		FF3CA8E3D6D2787175484F27 /* textzones.json in Resources */ = {isa = PBXBuildFile; fileRef = 400D1C002A2AD66C7B840729 /* textzones.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneScreenshotTour.swift; sourceTree = "<group>"; };
 		3E899EF5E0A146751A13B832 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		3F6E3C541A7FD4DED662EFED /* WildernessCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WildernessCore; path = Packages/WildernessCore; sourceTree = SOURCE_ROOT; };
+		400D1C002A2AD66C7B840729 /* textzones.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = textzones.json; sourceTree = "<group>"; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
 		4685DA18E56C3A97752987DC /* notices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = notices.json; sourceTree = "<group>"; };
 		4819C180FAC10AFBD91FC9FD /* maps.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maps.json; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				4819C180FAC10AFBD91FC9FD /* maps.json */,
 				4685DA18E56C3A97752987DC /* notices.json */,
 				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
+				400D1C002A2AD66C7B840729 /* textzones.json */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
 				EF96BD29AD8FCC6E195AB420 /* context-images */,
 			);
@@ -519,6 +522,7 @@
 				5BFD811DF4A1267483527309 /* maps.json in Resources */,
 				D52C0C38148E458A5BB06309 /* notices.json in Resources */,
 				A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */,
+				FF3CA8E3D6D2787175484F27 /* textzones.json in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
 				C75BCA21F10F270B6B8DA6E7 /* wind.m4a in Resources */,
 			);

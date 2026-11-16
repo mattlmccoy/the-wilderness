@@ -16,10 +16,10 @@ Matt, 2026-11-15: "adjust the alignment from my phone too … add 4 more midpoin
   Wall enters calibration and shows the pattern live; snapshot carries handle positions + selection.
 
 ## Steps (TDD for every core piece)
-1. [ ] Core: `Calibration.edgeOffsets` (tolerant decode), `bend(u:v:)`, `projectorPoint(artwork:)`, `handle(_:)`.
-2. [ ] Core: `AlignPoint` (8, clockwise), adjuster nudges corners or offsets (clamped), session walks 8 + review.
-3. [ ] App: Metal bend shader + MappedCanvas uses it; CalibrationView shows 8 handles.
-4. [ ] Core: phone protocol `PhoneCommand.align(...)`, `WallSnapshot.alignment`.
-5. [ ] App: calibration session lifted to RootView so phone + remote drive the same session.
-6. [ ] Phone: Align screen.
-7. [ ] Verify: simulator screenshots with a bent edge; phone sim drives TV sim; all tests green; commit per step.
+1. [x] Core: `Calibration.edgeOffsets` (tolerant decode), `bend(u:v:)`, `projectorPoint(artwork:)`, `handle(_:)`.
+2. [x] Core: `AlignPoint` (8, clockwise), adjuster nudges corners or offsets (clamped), session walks 8 + review.
+3. [x] App: Metal bend shader + MappedCanvas uses it; CalibrationView shows 8 handles.
+4. [x] Core: phone protocol `PhoneCommand.align(...)`, `WallSnapshot.alignment`.
+5. [x] App: calibration session lifted to RootView so phone + remote drive the same session.
+6. [x] Phone: Align screen.
+7. [x] Verify: simulator screenshots with a bent edge; phone sim drives TV sim; all tests green; commit per step.

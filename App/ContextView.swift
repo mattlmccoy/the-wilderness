@@ -12,6 +12,7 @@ struct ContextView: View {
     let calibration: Calibration
     var header: String? = nil
     var showsHint: Bool = false
+    var canvasZone: TextZone? = nil
 
     private var p: ContextPage { script.pages[min(page, script.pages.count - 1)] }
 
@@ -26,7 +27,7 @@ struct ContextView: View {
                 TrueSizeFrame().id(p.id + "-frame")
                     .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
             }
-            WallColumn(placement: TextColumnLayout.place(preferred: p.textSide, calibration: calibration), anchorY: 0.3) {
+            WallColumn(placement: TextColumnLayout.place(preferred: p.textSide, calibration: calibration, canvasZone: canvasZone), anchorY: 0.3) {
                 VStack(alignment: .leading, spacing: 14) {
                     if let header { Wayfinding.header(header) }
                     Text(p.title).font(Typography.title()).foregroundStyle(Palette.ivory)

@@ -108,21 +108,25 @@ struct RootView: View {
                     case let .menu(focus):
                         GlintLayer(points: content.glints, tuning: tuningStore.tuning, calibration: cal,
                                    demo: UserDefaults.standard.bool(forKey: "glintDemo"))
-                        MenuView(focus: focus, calibration: cal, soundOn: soundOn, soundAvailable: sound.available)
+                        MenuView(focus: focus, calibration: cal, soundOn: soundOn, soundAvailable: sound.available,
+                                 canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones))
                             .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
                                     calibration: cal, showsHint: machine?.hintUntil != nil,
-                                    edgeLine: tuningStore.tuning.edgeLine)
+                                    edgeLine: tuningStore.tuning.edgeLine,
+                                    canvasZone: CanvasText.zone(for: id, library: content.library, zones: content.zones))
                     case let .unfold(p):
                         UnfoldView(script: content.script, playback: p, library: content.library, calibration: cal,
                                    header: mode.wayfinding(library: content.library, script: content.script),
-                                   showsHint: machine?.hintUntil != nil)
+                                   showsHint: machine?.hintUntil != nil,
+                                   canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones))
                     case let .context(page):
                         ContextView(script: content.context, maps: content.maps, page: page, calibration: cal,
                                     header: mode.wayfinding(library: content.library, script: content.script,
                                                             context: content.context),
-                                    showsHint: machine?.hintUntil != nil)
+                                    showsHint: machine?.hintUntil != nil,
+                                    canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones))
                     case .pattern:
                         RegistrationTestPattern()
                     case .tuning:
@@ -178,7 +182,7 @@ struct RootView: View {
         var s = WallSnapshot.make(mode: m.mode, library: c.library, script: c.script, context: c.context,
                                   tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting)
         if m.mode == .calibrating {
-            s.alignment = (calSession ?? CalibrationSession(start: startingCalibration(for: screenSize))).alignmentState
+            s.alignment = (calSession ?? CalibrationSession(start: store.saved ?? startingCalibration(for: screenSize))).alignmentState
         }
         return s
     }
@@ -194,12 +198,13 @@ struct RootView: View {
     private func handleAlign(_ command: AlignCommand) {
         if command == .start {
             guard store.saved != nil else { return }   // first setup stays on the remote
-            calSession = CalibrationSession(start: startingCalibration(for: screenSize))
+            // Start from what is on the wall now: the saved calibration.
+            calSession = CalibrationSession(start: store.saved ?? startingCalibration(for: screenSize))
             machine?.beginCalibration()
             return
         }
         guard machine?.mode == .calibrating else { return }
-        var session = calSession ?? CalibrationSession(start: startingCalibration(for: screenSize))
+        var session = calSession ?? CalibrationSession(start: store.saved ?? startingCalibration(for: screenSize))
         switch command {
         case let .pick(p): session.handle(.pick(p))
         case let .move(d): session.handle(.move(d))

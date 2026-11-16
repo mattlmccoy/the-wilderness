@@ -13,11 +13,16 @@ struct MappedCanvas<Content: View>: View {
         let canvas = PixelSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
         let screenSize = PixelSize(width: screen.width, height: screen.height)
         if let h = calibration.canvasToScreen(canvas: canvas, screen: screenSize) {
-            content()
-                .frame(width: canvas.width, height: canvas.height, alignment: .topLeading)
-                .projectionEffect(ProjectionTransform(h.rowVectorElements))
-                .frame(width: screen.width, height: screen.height, alignment: .topLeading)
-                .modifier(BendEffect(calibration: calibration, screen: screenSize))
+            // A full-screen box under the warped layer, so the bend (which redraws only the layer's
+            // own box) sees everything the perspective put on screen, not just the canvas's box.
+            ZStack(alignment: .topLeading) {
+                Color.clear
+                content()
+                    .frame(width: canvas.width, height: canvas.height, alignment: .topLeading)
+                    .projectionEffect(ProjectionTransform(h.rowVectorElements))
+            }
+            .frame(width: screen.width, height: screen.height, alignment: .topLeading)
+            .modifier(BendEffect(calibration: calibration, screen: screenSize))
         }
     }
 }
@@ -38,7 +43,8 @@ private struct BendEffect: ViewModifier {
                 .float4(Float(o[0].x), Float(o[0].y), Float(o[2].x), Float(o[2].y)),
                 .float4(Float(o[1].x), Float(o[1].y), Float(o[3].x), Float(o[3].y)))
             let m = Calibration.maxEdgeOffset
-            content.distortionEffect(shader, maxSampleOffset: CGSize(width: m * screen.width, height: m * screen.height))
+            // Flattened first, so the bend sees everything the perspective drew (Canvas views included).
+            content.drawingGroup().distortionEffect(shader, maxSampleOffset: CGSize(width: m * screen.width, height: m * screen.height))
         } else {
             content
         }

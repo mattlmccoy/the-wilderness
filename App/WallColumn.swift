@@ -25,6 +25,13 @@ struct WallColumn<Content: View>: View {
                 .frame(width: column, alignment: .leading)
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
                 .offset(x: x, y: max(0, min(anchorY * canvas.height - 90, canvas.height - columnHeight)))
+        case .onCanvas(let z):
+            // On the painting, in a calm dark zone; kept wholly on the tapestry if the text is tall.
+            content
+                .frame(width: column, alignment: .leading)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
+                .offset(x: z.x * canvas.width,
+                        y: max(0, min(z.y * canvas.height, canvas.height - columnHeight - Self.unitsPerInch)))
         case .overLowerEdge:
             content
                 .frame(width: column, alignment: .leading)

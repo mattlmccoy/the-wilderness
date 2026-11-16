@@ -10,6 +10,7 @@ struct UnfoldView: View {
     let calibration: Calibration
     var header: String? = nil
     var showsHint: Bool = false
+    var canvasZone: TextZone? = nil
 
     private var beat: UnfoldBeat { script.beats[playback.beat] }
 
@@ -22,7 +23,7 @@ struct UnfoldView: View {
         ZStack(alignment: .topLeading) {
             WallText(title: beat.title, short: beat.short, more: beat.more,
                      expanded: beat.more != nil,
-                     placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration),
+                     placement: TextColumnLayout.place(preferred: beat.textSide, calibration: calibration, canvasZone: canvasZone),
                      anchorY: anchorY, paused: playback.paused, header: header,
                      hint: showsHint ? Wayfinding.unfoldHint : nil)
             .id(beat.id)
