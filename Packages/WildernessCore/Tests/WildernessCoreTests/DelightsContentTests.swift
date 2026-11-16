@@ -31,3 +31,16 @@ private let content = URL(fileURLWithPath: #filePath)
     #expect(d.hats[1].flip == nil)
     #expect(d.star.size == 0.03)
 }
+
+@Test func theCrownSitsOnChristsHeadAndTheCrossStandsClearOfTheFigures() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: content.appendingPathComponent("annotations.json")))
+    let d = try DelightsContent.decode(Data(contentsOf: content.appendingPathComponent("delights.json")))
+    let halo = try #require(d.halo), cross = try #require(d.cross)
+    let christ = try #require(lib.annotations.first { $0.id == "christ" }?.outline)
+    // The crown's centre is on Christ's head: inside the top fifth of his outline's box.
+    let x0 = christ.map(\.x).min()!, x1 = christ.map(\.x).max()!, y0 = christ.map(\.y).min()!, y1 = christ.map(\.y).max()!
+    #expect(halo.x > x0 && halo.x < x1 && halo.y >= y0 - 0.03 && halo.y < y0 + (y1 - y0) * 0.2)
+    // The cross stands on open hill: its base point is inside no figure's outline.
+    #expect(FigureHitTest.figure(at: .init(x: cross.x, y: cross.y - 0.01), in: lib) == nil)
+    #expect((cross.size ?? 0) > 0.02)
+}

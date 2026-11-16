@@ -37,7 +37,24 @@ public enum CanvasText {
         guard let s = subject else { return allowed.first ?? zones.first }
         let anchor = (x: s.anchor.x, y: s.anchor.y)
         let near = allowed.min { dist($0.centre, anchor) < dist($1.centre, anchor) }
-        return near ?? zones.first { z in !(s.outline.map { overlaps(z, $0) } ?? false) } ?? zones.first
+        guard let chosen = near else {
+            return zones.first { z in !(s.outline.map { overlaps(z, $0) } ?? false) } ?? zones.first
+        }
+        return slideLeft(chosen, avoiding: avoid)
+    }
+
+    /// Matt, 2026-11-16: Explore text sat too far toward the centre. Slide the zone left, toward the
+    /// left margin, until it would touch the figure or Christ (the frame then keeps the edge margin).
+    static func slideLeft(_ z: TextZone, avoiding avoid: [[Point<ArtworkSpace>]]) -> TextZone {
+        var out = z
+        let step = 0.005
+        while out.x > 0 {
+            var next = out
+            next.x = max(0, out.x - step)
+            if avoid.contains(where: { overlaps(next, $0) }) { break }
+            out = next
+        }
+        return out
     }
 
     /// Context and Unfold: one steady place, the best zone that does not cover Christ.
@@ -73,9 +90,10 @@ public struct CanvasTextFrame: Equatable, Sendable {
     public static let zonePaddingInches = 0.75
 
     /// `naturalHeight`: the column's height in inches at full size and this frame's width.
+    /// `margin`: distance from the tapestry's edge (Context uses a roomier one).
     public static func place(zone z: TextZone, tapestry: (w: Double, h: Double),
-                             naturalHeight: Double) -> CanvasTextFrame {
-        let m = edgeMarginInches, p = zonePaddingInches
+                             naturalHeight: Double, margin: Double = edgeMarginInches) -> CanvasTextFrame {
+        let m = margin, p = zonePaddingInches
         let left = max(z.x * tapestry.w + p, m)
         let right = min((z.x + z.w) * tapestry.w - p, tapestry.w - m)
         let room = tapestry.h - 2 * m

@@ -17,7 +17,11 @@ public enum LiturgicalTint: Equatable, Sendable {
 /// What the seasons put on the wall at a given moment (docs/superpowers/plans/2026-11-16-delights.md).
 public struct SeasonEffects: Equatable, Sendable {
     public var christmas = false      // hats and snow, 1 Dec – 6 Jan
-    public var star = false           // over the angels: 24–25 Dec and Epiphany
+    public var star = false           // shining down on Christ, all through Christmas
+    /// Easter Day: an empty cross of light on the far hill.
+    public var cross = false
+    /// Christmas and Easter Day: a crown of light rays about Christ's head, as the painting has it.
+    public var halo = false
     public var easterDawn = false     // Easter Sunday morning
     public var thanksgiving = false   // the turkey: Monday of the week before through Thanksgiving Day
     public var adventCandles = 0
@@ -34,7 +38,7 @@ public struct SeasonEffects: Equatable, Sendable {
             case .advent: adventCandles > 0
             case .christmas: christmas
             case .lent: lentDay != nil
-            case .easter: easterDawn
+            case .easter: easterDawn || cross
             case .thanksgiving: thanksgiving
             }
         }
@@ -68,13 +72,15 @@ public enum Seasons {
         let hour = calendar.component(.hour, from: date)
         var e = SeasonEffects()
         e.christmas = day.month == 12 || (day.month == 1 && day.day <= 6)
-        e.star = (day.month == 12 && (day.day == 24 || day.day == 25)) || (day.month == 1 && day.day == 6)
+        e.star = e.christmas   // Matt, 2026-11-16: the star shines down on Jesus all Christmas
         e.easterDawn = day == ChurchCalendar.easter(day.year) && (5..<11).contains(hour)
+        e.cross = day == ChurchCalendar.easter(day.year)
         let tg = ChurchCalendar.thanksgiving(day.year)
         e.thanksgiving = day >= tg.adding(days: -10) && day <= tg
         e.adventCandles = ChurchCalendar.adventCandles(day)
         e.lentDay = ChurchCalendar.lentDay(day)
         e.tint = tint(day)
+        e.halo = e.christmas || e.cross
         return e
     }
 
@@ -95,12 +101,15 @@ public enum Seasons {
             case .advent: e.adventCandles = show ? (auto.adventCandles > 0 ? auto.adventCandles : 4) : 0
             case .christmas:
                 e.christmas = show
-                e.star = show && (sw == .on || auto.star)
+                e.star = show
             case .lent: e.lentDay = show ? (auto.lentDay ?? 1) : nil
-            case .easter: e.easterDawn = show
+            case .easter:
+                e.cross = show
+                e.easterDawn = show && (sw == .on || auto.easterDawn)   // the dawn stays in the morning
             case .thanksgiving: e.thanksgiving = show
             }
         }
+        e.halo = e.christmas || e.cross
         return e
     }
 
@@ -138,6 +147,10 @@ public struct DelightsContent: Codable, Equatable, Sendable {
     public var star: Place
     /// Thanksgiving: the turkey's two runs (nil = none).
     public var turkey: TurkeyPaths? = nil
+    /// The crown of light about Christ's head (centre; size = ray length, fraction of the width).
+    public var halo: Place? = nil
+    /// Easter's cross on the far hill (x, the foot's y; size = height, fraction of the width).
+    public var cross: Place? = nil
 
     public static let empty = DelightsContent(hats: [], ravenEye: Spot(id: "raven", x: 0.262, y: 0.195), star: Place(x: 0.72, y: 0.06))
     public static func decode(_ data: Data) throws -> DelightsContent { try JSONDecoder().decode(Self.self, from: data) }

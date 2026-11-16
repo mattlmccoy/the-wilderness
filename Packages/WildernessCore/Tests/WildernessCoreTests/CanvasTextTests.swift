@@ -29,12 +29,18 @@ private let zones = [
     }
 }
 
+/// The same calm zone, perhaps slid left (exploreTextSlidesLeftUntilItWouldTouchItsFigure).
+private func isSlid(_ z: TextZone?, from base: TextZone) -> Bool {
+    guard let z else { return false }
+    return z.y == base.y && z.w == base.w && z.h == base.h && z.x <= base.x
+}
+
 @Test func textGoesToTheNearestCalmPlace() {
     // The raven (upper left): the sky zone overlaps it, so the rock face below is nearest.
-    #expect(CanvasText.zone(for: "raven", library: lib, zones: zones) == zones[1])
+    #expect(isSlid(CanvasText.zone(for: "raven", library: lib, zones: zones), from: zones[1]))
     // The lion (lower right): the zones near it cover Christ, so the nearest allowed is the
     // rock face (0.73 away) just ahead of the bottom-left bush (0.75).
-    #expect(CanvasText.zone(for: "lion", library: lib, zones: zones) == zones[1])
+    #expect(isSlid(CanvasText.zone(for: "lion", library: lib, zones: zones), from: zones[1]))
 }
 
 @Test func readingModesUseOneSteadyPlace() {
@@ -96,4 +102,31 @@ private let tapestry = (w: 60.0, h: 50.0)
 @Test func shortTextKeepsItsZoneHeight() {
     let f = CanvasTextFrame.place(zone: zones[1], tapestry: tapestry, naturalHeight: 8)
     #expect(abs(f.y - 0.30 * 50) < 1e-9)
+}
+
+// MARK: Matt, 2026-11-16: Explore text sat too far toward the centre; Context too tight to the edges.
+
+private func box(_ id: String, _ x0: Double, _ x1: Double, _ y0: Double = 0.3, _ y1: Double = 0.6) -> Annotation {
+    Annotation(id: id, title: id, short: "", extended: "", references: [], evidence: .documented,
+               anchor: .init(x: (x0 + x1) / 2, y: (y0 + y1) / 2),
+               outline: [.init(x: x0, y: y0), .init(x: x1, y: y0), .init(x: x1, y: y1), .init(x: x0, y: y1)],
+               textSide: .left, geometrySource: "test")
+}
+
+@Test func exploreTextSlidesLeftUntilItWouldTouchItsFigure() throws {
+    let lib = AnnotationLibrary(artworkAspect: 1.2, annotations: [box("christ", 0.7, 0.9), box("stag", 0.1, 0.2)])
+    let calm = TextZone(x: 0.35, y: 0.35, w: 0.2, h: 0.2, score: 1)
+    let z = try #require(CanvasText.zone(for: "stag", library: lib, zones: [calm]))
+    #expect(z.x < 0.35)                                   // moved left…
+    #expect(!CanvasText.overlaps(z, lib.annotations[1].outline!))   // …but never onto the stag
+    #expect(z.x <= 0.2 + CanvasText.clearance + 0.006)    // as far as it can go
+    let c = try #require(CanvasText.zone(for: "christ", library: lib, zones: [calm]))
+    #expect(c.x == 0)                                     // nothing in the way: all the way to the margin
+}
+
+@Test func contextGetsARoomierMargin() {
+    let f = CanvasTextFrame.place(zone: TextZone(x: 0, y: 0.7, w: 0.3, h: 0.3, score: 1), tapestry: (60, 50),
+                                  naturalHeight: 20, margin: 3.5)
+    #expect(f.x >= 3.5)
+    #expect(f.y + 20 * f.scale <= 50 - 3.5 + 1e-9)
 }

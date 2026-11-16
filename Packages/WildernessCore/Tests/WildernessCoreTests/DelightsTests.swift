@@ -24,7 +24,7 @@ private func hm(_ date: Date) -> Int { let c = cal.dateComponents([.hour, .minut
 @Test func theStarShinesOnChristmasEveDayAndEpiphany() {
     #expect(Seasons.effects(at: at(2026, 12, 24, 21), calendar: cal).star)
     #expect(Seasons.effects(at: at(2026, 12, 25, 9), calendar: cal).star)
-    #expect(!Seasons.effects(at: at(2026, 12, 26, 9), calendar: cal).star)
+    #expect(Seasons.effects(at: at(2026, 12, 26, 9), calendar: cal).star)   // now all Christmas (Matt, 2026-11-16)
     #expect(Seasons.effects(at: at(2027, 1, 6, 19), calendar: cal).star)
 }
 

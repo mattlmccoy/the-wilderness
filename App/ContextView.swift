@@ -30,17 +30,19 @@ struct ContextView: View {
             let placement = TextColumnLayout.place(preferred: p.textSide, calibration: calibration, canvasZone: canvasZone)
             // On the painting the page must fit within the tapestry: smaller map and photo.
             let compact: Bool = { if case .onCanvas = placement.position { return true }; return false }()
-            WallColumn(placement: placement, anchorY: 0.3) {
-                VStack(alignment: .leading, spacing: 14) {
+            // Matt, 2026-11-16: images too small, crammed against the bottom and left. A roomier margin,
+            // bigger photo and map, and more air between the parts.
+            WallColumn(placement: placement, anchorY: 0.3, margin: 3.5) {
+                VStack(alignment: .leading, spacing: 20) {
                     if let header { Wayfinding.header(header) }
                     Text(p.title).font(Typography.title()).foregroundStyle(Palette.ivory)
                     Text(p.text)
                         .font(Typography.text(Typography.Size.story)).lineSpacing(6)
                         .foregroundStyle(Palette.ivory.opacity(0.9))
                     if let id = p.map, let map = maps.map(id) {
-                        ContextMapView(map: map, maxAspect: compact ? 0.45 : ContextMapView.maxAspect).id(p.id + "-map").padding(.top, compact ? 10 : 18)
+                        ContextMapView(map: map, maxAspect: compact ? 0.62 : ContextMapView.maxAspect).id(p.id + "-map").padding(.top, compact ? 16 : 18)
                     }
-                    if let img = p.image { ContextPhoto(image: img, maxHeight: compact ? 110 : ContextPhoto.maxHeight).id(p.id + "-photo").padding(.top, compact ? 10 : 18) }
+                    if let img = p.image { ContextPhoto(image: img, maxHeight: compact ? 230 : ContextPhoto.maxHeight).id(p.id + "-photo").padding(.top, compact ? 16 : 18) }
                     if showsHint {
                         Wayfinding.hint(Wayfinding.contextHint).padding(.top, 10).transition(.opacity)
                     }

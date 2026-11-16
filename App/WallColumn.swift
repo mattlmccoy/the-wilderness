@@ -10,6 +10,8 @@ struct WallColumn<Content: View>: View {
     let placement: ColumnPlacement
     /// Vertical position to start level with, 0…1 in the artwork.
     let anchorY: Double
+    /// Distance from the tapestry's edge, inches (Context uses a roomier 3.5).
+    var margin: Double = CanvasTextFrame.edgeMarginInches
     @ViewBuilder let content: Content
 
     @State private var columnHeight: CGFloat = 0
@@ -24,14 +26,14 @@ struct WallColumn<Content: View>: View {
             // when the text is taller than the tapestry allows (CanvasTextFrame), so it all fits.
             let u = Self.unitsPerInch
             let f = CanvasTextFrame.place(zone: z, tapestry: (Double(canvas.width / u), Double(canvas.height / u)),
-                                          naturalHeight: Double(columnHeight / u))
+                                          naturalHeight: Double(columnHeight / u), margin: margin)
             content
                 .frame(width: f.width * u, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { h in
                     columnHeight = h
                     let s = CanvasTextFrame.place(zone: z, tapestry: (Double(canvas.width / u), Double(canvas.height / u)),
-                                                  naturalHeight: Double(h / u)).scale
+                                                  naturalHeight: Double(h / u), margin: margin).scale
                     canvasTextLog.debug("canvas text: \(Double(h / u), format: .fixed(precision: 1)) in tall, scale \(s, format: .fixed(precision: 2))")
                 }
                 .scaleEffect(f.scale, anchor: .topLeading)

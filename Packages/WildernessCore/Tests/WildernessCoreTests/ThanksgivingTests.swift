@@ -129,3 +129,26 @@ private let paths = TurkeyPaths(hill: [.init(x: 0.36, y: 0.275), .init(x: 0.60, 
         #expect(try JSONDecoder().decode(PhoneCommand.self, from: JSONEncoder().encode(c)) == c)
     }
 }
+
+// MARK: Matt, 2026-11-16: a cross at Easter; the star shines down on Jesus; a crown of light.
+
+@Test func theStarShinesAllChristmasAndChristWearsLight() {
+    for day in [(2026, 12, 3), (2026, 12, 24), (2027, 1, 6)] {
+        let e = Seasons.effects(at: at(day.0, day.1, day.2, 20), calendar: cal)
+        #expect(e.star && e.halo, "\(day)")
+    }
+    #expect(!Seasons.effects(at: at(2026, 11, 20, 20), calendar: cal).halo)
+}
+
+@Test func easterDayHasTheCrossAndTheCrownAllDay() {
+    let e = Seasons.effects(at: at(2027, 3, 28, 20), calendar: cal)   // Easter evening: dawn is over
+    #expect(e.cross && e.halo && !e.easterDawn)
+    #expect(!Seasons.effects(at: at(2027, 3, 29, 9), calendar: cal).cross)
+}
+
+@Test func switchingEasterOnShowsTheCross() {
+    let e = Seasons.effects(at: at(2026, 7, 4, 15), tuning: tuning([.easter: .on]), calendar: cal)
+    #expect(e.cross && e.easterDawn && e.halo)
+    let off = Seasons.effects(at: at(2027, 3, 28, 9), tuning: tuning([.easter: .off]), calendar: cal)
+    #expect(!off.cross && !off.easterDawn && !off.halo)
+}

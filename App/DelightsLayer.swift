@@ -37,7 +37,11 @@ struct DelightsLayer: View {
                 ctx.blendMode = .plusLighter
                 if let s = seasons {
                     if s.christmas { hats(&ctx, size); if atRest { snow(&ctx, size, t) } }
+                    // Matt, 2026-11-16: the star shines down on Jesus; Christ wears a crown of light.
+                    if s.star, let h = delights.halo { beam(&ctx, size, t, to: h) }
                     if s.star { star(&ctx, size, t) }
+                    if s.halo, let h = delights.halo { crown(&ctx, size, t, h) }
+                    if s.cross, let c = delights.cross { cross(&ctx, size, t, c) }
                     if atRest, s.adventCandles > 0 { candles(&ctx, size, t, lit: s.adventCandles) }
                     if atRest, let day = s.lentDay { lentLine(&ctx, size, day: day) }
                     if atRest, s.easterDawn { dawn(&ctx, size, t) }
@@ -140,6 +144,75 @@ struct DelightsLayer: View {
                                               startPoint: .zero, endPoint: CGPoint(x: len, y: 0)))
         }
         c.fill(Path(ellipseIn: CGRect(x: p.x - L * 0.09, y: p.y - L * 0.09, width: L * 0.18, height: L * 0.18)), with: .color(Color(red: 1, green: 0.99, blue: 0.94)))
+    }
+
+    /// A soft cone of light from the star down to Christ's head, brightest at the star.
+    private func beam(_ ctx: inout GraphicsContext, _ size: CGSize, _ t: Double, to head: DelightsContent.Place) {
+        let a = CGPoint(x: delights.star.x * size.width, y: delights.star.y * size.height)
+        let b = CGPoint(x: head.x * size.width, y: head.y * size.height)
+        let dx = b.x - a.x, dy = b.y - a.y, len = hypot(dx, dy)
+        guard len > 1 else { return }
+        let nx = -dy / len, ny = dx / len, wide = size.width * 0.035
+        var cone = Path()
+        cone.move(to: CGPoint(x: a.x + nx * 3, y: a.y + ny * 3))
+        cone.addLine(to: CGPoint(x: b.x + nx * wide, y: b.y + ny * wide))
+        cone.addLine(to: CGPoint(x: b.x - nx * wide, y: b.y - ny * wide))
+        cone.addLine(to: CGPoint(x: a.x - nx * 3, y: a.y - ny * 3))
+        cone.closeSubpath()
+        let breathe = 0.85 + 0.15 * sin(t * 0.5)
+        var c = ctx
+        c.addFilter(.blur(radius: 10))
+        c.fill(cone, with: .linearGradient(Gradient(stops: [
+            .init(color: Color(red: 1, green: 0.95, blue: 0.82).opacity(0.30 * breathe), location: 0),
+            .init(color: Color(red: 1, green: 0.93, blue: 0.78).opacity(0.12 * breathe), location: 0.75),
+            .init(color: Color(red: 1, green: 0.93, blue: 0.78).opacity(0), location: 1)]),
+            startPoint: a, endPoint: b))
+    }
+
+    /// Thin rays of light about Christ's head, like the painting's own halo; they shimmer slowly.
+    private func crown(_ ctx: inout GraphicsContext, _ size: CGSize, _ t: Double, _ h: DelightsContent.Place) {
+        let c0 = CGPoint(x: h.x * size.width, y: h.y * size.height)
+        let r = (h.size ?? 0.05) * size.width
+        var outer = ctx
+        outer.addFilter(.blur(radius: 1.2))
+        outer.drawLayer { layer in
+            var g = layer
+            g.blendMode = .normal
+            // Like the painting's halo: rays behind and above the head (from just below the left,
+            // over the top, to just below the right), starting outside the head, never across the face.
+            let n = 22
+            for i in 0..<n {
+                let a = .pi * (0.88 + 1.24 * Double(i) / Double(n - 1))
+                let len = r * (i % 2 == 0 ? 1.0 : 0.74)
+                let shimmer = 0.55 + 0.45 * sin(t * 0.8 + Double(i) * 1.7)
+                let p0 = CGPoint(x: c0.x + cos(a) * r * 0.55, y: c0.y + sin(a) * r * 0.55)
+                let p1 = CGPoint(x: c0.x + cos(a) * len, y: c0.y + sin(a) * len)
+                var ray = Path(); ray.move(to: p0); ray.addLine(to: p1)
+                g.stroke(ray, with: .linearGradient(Gradient(colors: [Color(red: 1, green: 0.88, blue: 0.6).opacity(0.75 * shimmer),
+                                                                     Color(red: 1, green: 0.9, blue: 0.65).opacity(0)]),
+                                                   startPoint: p0, endPoint: p1),
+                         style: StrokeStyle(lineWidth: max(1.2, r * 0.035), lineCap: .round))
+            }
+        }
+    }
+
+    /// Easter: an empty cross of light standing on the far hill.
+    private func cross(_ ctx: inout GraphicsContext, _ size: CGSize, _ t: Double, _ c: DelightsContent.Place) {
+        let hgt = (c.size ?? 0.06) * size.width, foot = CGPoint(x: c.x * size.width, y: c.y * size.height)
+        let w = hgt * 0.1, armY = foot.y - hgt * 0.72, arm = hgt * 0.32
+        var shape = Path()
+        shape.addRoundedRect(in: CGRect(x: foot.x - w / 2, y: foot.y - hgt, width: w, height: hgt), cornerSize: CGSize(width: w / 3, height: w / 3))
+        shape.addRoundedRect(in: CGRect(x: foot.x - arm, y: armY - w / 2, width: 2 * arm, height: w), cornerSize: CGSize(width: w / 3, height: w / 3))
+        let glow = 0.8 + 0.2 * sin(t * 0.6)
+        var g = ctx
+        g.addFilter(.blur(radius: hgt * 0.12))
+        g.fill(shape, with: .color(Color(red: 1, green: 0.9, blue: 0.7).opacity(0.55 * glow)))
+        var outer = ctx
+        outer.drawLayer { layer in
+            var k = layer
+            k.blendMode = .normal
+            k.fill(shape, with: .color(Color(red: 1, green: 0.97, blue: 0.9).opacity(0.85)))
+        }
     }
 
     // MARK: Advent and Lent
