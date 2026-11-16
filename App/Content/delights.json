@@ -1,11 +1,11 @@
 {
-  "_note": "Hand-marked on the painting (0-1 of the canvas) from the Met's full-resolution image, 2026-11-16. Hats sit on the head; the raven's eye catches the light in a rare moment; the star shines over the angels.",
+  "_note": "Placed by Matt with the Christmas placer (scripts/make_placer.py), 2026-11-16. Hats sit on the head; the raven's eye catches the light in a rare moment; the star shines over the angels.",
   "hats": [
     {"id": "lion",  "x": 0.866, "y": 0.722, "size": 0.050, "tilt": -12},
     {"id": "stag",  "x": 0.277, "y": 0.566, "size": 0.032, "tilt": 8},
-    {"id": "beast", "x": 0.446, "y": 0.438, "size": 0.032, "tilt": -20},
-    {"id": "fox",   "x": 0.498, "y": 0.536, "size": 0.026, "tilt": 10}
+    {"id": "beast", "x": 0.492, "y": 0.415, "size": 0.032, "tilt": -20},
+    {"id": "fox",   "x": 0.510, "y": 0.539, "size": 0.026, "tilt": 10}
   ],
   "ravenEye": {"id": "raven", "x": 0.262, "y": 0.195},
-  "star": {"x": 0.70, "y": 0.07}
+  "star": {"x": 0.918, "y": 0.084, "size": 0.028}
 }
