@@ -55,9 +55,8 @@ private let zones = [
         .init(x: 0.01, y: 0.02), .init(x: 0.99, y: 0.02), .init(x: 0.99, y: 0.98), .init(x: 0.01, y: 0.98)])
     let z = TextZone(x: 0.14, y: 0.3, w: 0.34, h: 0.24, score: 0.8)
     #expect(TextColumnLayout.place(preferred: .left, calibration: full, canvasZone: z).position == .onCanvas(z))
-    // A wall with room beside it keeps the side column.
+    // Matt, 2026-11-15: even with ~13.5 in beside the tapestry, the sides don't work on his wall.
+    // Whenever a calm zone is known, text goes on the canvas.
     let roomy = Calibration.defaultFor(artworkAspect: 1.2, output: PixelSize(width: 1920, height: 1080))
-    if case .beside = TextColumnLayout.place(preferred: .left, calibration: roomy, canvasZone: z).position {} else {
-        Issue.record("a wall with room beside the tapestry should keep the side column")
-    }
+    #expect(TextColumnLayout.place(preferred: .left, calibration: roomy, canvasZone: z).position == .onCanvas(z))
 }

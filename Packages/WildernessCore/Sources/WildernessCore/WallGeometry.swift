@@ -44,13 +44,14 @@ public enum TextColumnLayout {
 
     public static func place(preferred: TextSide, calibration: Calibration,
                              canvasZone: TextZone? = nil) -> ColumnPlacement {
+        // Matt's wall: text belongs on the painting, in a calm zone, whenever one is known.
+        if let z = canvasZone {
+            return ColumnPlacement(position: .onCanvas(z), widthInches: z.w * 60)   // the tapestry is 60 in wide
+        }
         let other: TextSide = preferred == .left ? .right : .left
         for side in [preferred, other] {
             let width = min(maxWidth, WallGeometry.wallInches(calibration, side: side) - gap - margin)
             if width >= minWidth { return ColumnPlacement(position: .beside(side), widthInches: width) }
-        }
-        if let z = canvasZone {
-            return ColumnPlacement(position: .onCanvas(z), widthInches: z.w * 60)   // the tapestry is 60 in wide
         }
         return ColumnPlacement(position: .overLowerEdge, widthInches: maxWidth)
     }

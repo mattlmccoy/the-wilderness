@@ -6,6 +6,7 @@ import WildernessCore
 /// the page's own place in gold. A route, if any, draws itself as a great-circle arc.
 struct ContextMapView: View {
     let map: ContextMap
+    var maxAspect: CGFloat = ContextMapView.maxAspect
     @State private var shown = false
     @State private var routeDrawn: CGFloat = 0
     /// The column's width, measured; the map fills it.
@@ -17,12 +18,12 @@ struct ContextMapView: View {
         Color.clear.frame(height: 1)
             .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
             .overlay(alignment: .topLeading) { if width > 0 { drawn(width) } }
-            .frame(height: width > 0 ? MapProjection(box: map.bbox, width: Double(width), height: Double(width * Self.maxAspect)).height : 1,
+            .frame(height: width > 0 ? MapProjection(box: map.bbox, width: Double(width), height: Double(width * maxAspect)).height : 1,
                    alignment: .topLeading)
     }
 
     private func drawn(_ width: CGFloat) -> some View {
-        let proj = MapProjection(box: map.bbox, width: Double(width), height: Double(width * Self.maxAspect))
+        let proj = MapProjection(box: map.bbox, width: Double(width), height: Double(width * maxAspect))
         return ZStack(alignment: .topLeading) {
             Canvas { ctx, _ in draw(proj, in: &ctx) }
             if let route = routePath(proj) {
@@ -101,6 +102,7 @@ struct ContextMapView: View {
 /// with a caption and the credit its licence asks for.
 struct ContextPhoto: View {
     let image: ContextImage
+    var maxHeight: CGFloat = ContextPhoto.maxHeight
     @State private var shown = false
     static let maxHeight: CGFloat = 200
 
@@ -108,7 +110,7 @@ struct ContextPhoto: View {
         VStack(alignment: .leading, spacing: 6) {
             if let ui = Self.load(image.file) {
                 Image(uiImage: ui).resizable().aspectRatio(contentMode: .fit)
-                    .frame(maxHeight: Self.maxHeight, alignment: .leading)
+                    .frame(maxHeight: maxHeight, alignment: .leading)
                     .saturation(0.8)
                     .mask(feather)
                     .opacity(0.92)

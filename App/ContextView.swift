@@ -27,7 +27,10 @@ struct ContextView: View {
                 TrueSizeFrame().id(p.id + "-frame")
                     .transition(.opacity.animation(.easeInOut(duration: LightTiming.textOut)))
             }
-            WallColumn(placement: TextColumnLayout.place(preferred: p.textSide, calibration: calibration, canvasZone: canvasZone), anchorY: 0.3) {
+            let placement = TextColumnLayout.place(preferred: p.textSide, calibration: calibration, canvasZone: canvasZone)
+            // On the painting the page must fit within the tapestry: smaller map and photo.
+            let compact: Bool = { if case .onCanvas = placement.position { return true }; return false }()
+            WallColumn(placement: placement, anchorY: 0.3) {
                 VStack(alignment: .leading, spacing: 14) {
                     if let header { Wayfinding.header(header) }
                     Text(p.title).font(Typography.title()).foregroundStyle(Palette.ivory)
@@ -35,9 +38,9 @@ struct ContextView: View {
                         .font(Typography.text(Typography.Size.story)).lineSpacing(6)
                         .foregroundStyle(Palette.ivory.opacity(0.9))
                     if let id = p.map, let map = maps.map(id) {
-                        ContextMapView(map: map).id(p.id + "-map").padding(.top, 18)
+                        ContextMapView(map: map, maxAspect: compact ? 0.45 : ContextMapView.maxAspect).id(p.id + "-map").padding(.top, compact ? 10 : 18)
                     }
-                    if let img = p.image { ContextPhoto(image: img).id(p.id + "-photo").padding(.top, 18) }
+                    if let img = p.image { ContextPhoto(image: img, maxHeight: compact ? 110 : ContextPhoto.maxHeight).id(p.id + "-photo").padding(.top, compact ? 10 : 18) }
                     if showsHint {
                         Wayfinding.hint(Wayfinding.contextHint).padding(.top, 10).transition(.opacity)
                     }
