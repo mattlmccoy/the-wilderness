@@ -33,8 +33,21 @@ public struct Glint: Equatable, Sendable {
     /// +1 or -1: which way a "thread" glint slides.
     public var direction: Double
 
-    public init(point: Point<ArtworkSpace>, start: Double, life: Double, peak: Double, direction: Double) {
+    /// How far it drifts over its life, as a fraction of the artwork (a small star shifting).
+    public var driftX: Double = 0
+    public var driftY: Double = 0
+
+    public init(point: Point<ArtworkSpace>, start: Double, life: Double, peak: Double, direction: Double,
+                driftX: Double = 0, driftY: Double = 0) {
         self.point = point; self.start = start; self.life = life; self.peak = peak; self.direction = direction
+        self.driftX = driftX; self.driftY = driftY
+    }
+
+    /// Where it is now: drifting smoothly from its point along its own direction.
+    public func position(at t: Double) -> Point<ArtworkSpace> {
+        let p = min(max(progress(at: t), 0), 1)
+        let eased = p * p * (3 - 2 * p)
+        return Point(x: point.x + driftX * eased, y: point.y + driftY * eased)
     }
 
     public var end: Double { start + life }
@@ -45,7 +58,9 @@ public struct Glint: Equatable, Sendable {
         let p = progress(at: t)
         guard (0...1).contains(p) else { return 0 }
         let s = sin(Double.pi * p)
-        return peak * s * s
+        // A gentle twinkle: three soft dips over its life, none at the peak.
+        let w = sin(2 * Double.pi * 3 * p)
+        return peak * s * s * (1 - 0.2 * w * w)
     }
 }
 
@@ -104,7 +119,9 @@ public struct GlintScheduler<R: RandomNumberGenerator> {
         Glint(point: pick(at: t), start: t,
               life: Double.random(in: params.life, using: &rng),
               peak: Double.random(in: params.peak, using: &rng),
-              direction: Bool.random(using: &rng) ? 1 : -1)
+              direction: Bool.random(using: &rng) ? 1 : -1,
+              driftX: 0, driftY: 0).drifting(angle: Double.random(in: 0..<(2 * .pi), using: &rng),
+                                             distance: Double.random(in: 0.009...0.016, using: &rng))
     }
 }
 
@@ -119,6 +136,15 @@ public struct GlintPoints: Codable, Sendable {
         guard g.points.allSatisfy({ (0...1).contains($0.x) && (0...1).contains($0.y) }) else {
             throw AnnotationLibrary.ValidationError.invalid("glints.json has points outside the artwork (0...1)")
         }
+        return g
+    }
+}
+
+extension Glint {
+    func drifting(angle: Double, distance: Double) -> Glint {
+        var g = self
+        g.driftX = cos(angle) * distance
+        g.driftY = sin(angle) * distance
         return g
     }
 }

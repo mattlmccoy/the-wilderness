@@ -33,16 +33,13 @@ struct GlintLayer: View {
         let coreInches = max(tuning.glintSizeInches, 0.5 / ppi)
         let r = coreInches * Self.unitsPerInch
         let i = g.intensity(at: now) * tuning.glintBrightness
-        let p = CGPoint(x: g.point.x * canvas.width, y: g.point.y * canvas.height)
+        let at = g.position(at: now)   // drifting, like a small star shifting
+        let p = CGPoint(x: at.x * canvas.width, y: at.y * canvas.height)
         var c = ctx
         // Light adds to what is already lit (the tapestry, or the painting in preview); it never
         // just tints it. Without this a glint over a bright passage barely shows.
         c.blendMode = .plusLighter
         c.translateBy(x: p.x, y: p.y)
-        if tuning.glintStyle == .thread {
-            // Light running along one thread: sliding about 0.35 in.
-            c.translateBy(x: g.direction * (g.progress(at: now) - 0.5) * 0.35 * Self.unitsPerInch, y: 0)
-        }
         // Soft halo, stretched along the thread for that style.
         var halo = c
         if tuning.glintStyle == .thread { halo.scaleBy(x: 3, y: 1) }

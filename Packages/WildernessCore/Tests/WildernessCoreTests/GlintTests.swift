@@ -78,3 +78,24 @@ private func distinctGlints(seconds: Double, step: Double = 0.05, seed: UInt64 =
 @Test func glintsLastLongEnoughToCatchAcrossARoom() {
     #expect(GlintParams().life == 1.2...2.2)
 }
+
+@Test func glintsDriftLikeSmallStarsAndTwinkle() {
+    // Matt, 2026-11-15: "the glints should move a bit almost like little stars that shift".
+    var s = GlintScheduler(points: [Point<ArtworkSpace>(x: 0.5, y: 0.5)], params: GlintParams(),
+                           rng: SplitMix64(seed: 3), now: 0)
+    var directions = Set<Int>()
+    for i in 0..<20 {
+        let t = Double(i) * 10
+        s.fireNow(at: t)
+        let g = s.active(at: t)!
+        let a = g.position(at: g.start), b = g.position(at: g.end)
+        let moved = hypot(b.x - a.x, b.y - a.y)
+        // 0.5–1 in on a 60 in tapestry ≈ 0.008–0.017 of its width.
+        #expect(moved >= 0.008 && moved <= 0.018)
+        directions.insert(Int((atan2(b.y - a.y, b.x - a.x) * 180 / .pi / 45).rounded()))
+        // Twinkle: brightness wavers while it lives, never below zero.
+        let samples = stride(from: g.start, through: g.end, by: g.life / 40).map { g.intensity(at: $0) }
+        #expect(samples.allSatisfy { $0 >= 0 })
+    }
+    #expect(directions.count >= 4)   // they drift every which way, not all along one thread
+}
