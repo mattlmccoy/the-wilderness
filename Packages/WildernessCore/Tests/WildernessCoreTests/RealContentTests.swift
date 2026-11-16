@@ -140,3 +140,16 @@ private let contentDir = contentURL.deletingLastPathComponent()
         for b in banned { #expect(!text.contains(b), "\(p.id) talks about the copy: “\(b)”") }
     }
 }
+
+/// Text on the canvas: every shipped figure has a calm place that covers neither it nor Christ.
+@Test func everyFigureHasARealTextPlaceAwayFromItAndChrist() throws {
+    let lib = try AnnotationLibrary.decode(Data(contentsOf: contentURL))
+    let zones = try TextZones.decode(Data(contentsOf: contentURL.deletingLastPathComponent()
+        .appendingPathComponent("textzones.json"))).zones
+    let christ = lib.annotations.first { $0.id == "christ" }!.outline!
+    for a in lib.annotations where a.outline != nil {
+        let z = try #require(CanvasText.zone(for: a.id, library: lib, zones: zones), "\(a.id) has no place")
+        #expect(!CanvasText.overlaps(z, a.outline!), "\(a.id)'s text covers \(a.id)")
+        #expect(!CanvasText.overlaps(z, christ), "\(a.id)'s text covers Christ")
+    }
+}
