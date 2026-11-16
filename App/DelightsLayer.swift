@@ -54,22 +54,46 @@ struct DelightsLayer: View {
 
     // MARK: Christmas
 
+    /// Mirrors drawHat() in scripts/placer_template.html: cloth in the painting's vermilion, lit
+    /// from the upper left like the figures, a fold, a soft fur trim and a pompom, edges softened.
     private func hats(_ ctx: inout GraphicsContext, _ size: CGSize) {
+        func rgba(_ r: Double, _ g: Double, _ b: Double, _ a: Double) -> Color { Color(red: r / 255, green: g / 255, blue: b / 255).opacity(a) }
         for h in delights.hats {
-            let w = (h.size ?? 0.03) * size.width, base = CGPoint(x: h.x * size.width, y: h.y * size.height)
+            let w = (h.size ?? 0.03) * size.width
             var c = ctx
-            c.translateBy(x: base.x, y: base.y)
+            c.translateBy(x: h.x * size.width, y: h.y * size.height)
             c.rotate(by: .degrees(h.tilt ?? 0))
+            if h.flip == true { c.scaleBy(x: -1, y: 1) }
+            c.addFilter(.blur(radius: max(0.4, w * 0.012)))
             var cone = Path()
-            cone.move(to: CGPoint(x: -w / 2, y: 0))
-            cone.addQuadCurve(to: CGPoint(x: w * 0.55, y: -w * 0.95), control: CGPoint(x: -w * 0.1, y: -w * 1.1))
-            cone.addQuadCurve(to: CGPoint(x: w / 2, y: 0), control: CGPoint(x: w * 0.5, y: -w * 0.4))
+            cone.move(to: CGPoint(x: -0.5 * w, y: 0))
+            cone.addCurve(to: CGPoint(x: 0.42 * w, y: -1.02 * w), control1: CGPoint(x: -0.46 * w, y: -0.62 * w), control2: CGPoint(x: -0.05 * w, y: -1.12 * w))
+            cone.addQuadCurve(to: CGPoint(x: 0.68 * w, y: -0.74 * w), control: CGPoint(x: 0.6 * w, y: -0.97 * w))
+            cone.addCurve(to: CGPoint(x: 0.5 * w, y: 0), control1: CGPoint(x: 0.52 * w, y: -0.8 * w), control2: CGPoint(x: 0.44 * w, y: -0.42 * w))
             cone.closeSubpath()
-            c.fill(cone, with: .color(Color(red: 0.95, green: 0.18, blue: 0.16).opacity(0.55)))
-            c.stroke(cone, with: .color(Color(red: 1, green: 0.5, blue: 0.45).opacity(0.6)), lineWidth: 1.5)
-            let brim = Path(roundedRect: CGRect(x: -w * 0.58, y: -w * 0.1, width: w * 1.16, height: w * 0.24), cornerRadius: w * 0.12)
-            c.fill(brim, with: .color(Palette.ivory.opacity(0.85)))
-            c.fill(Path(ellipseIn: CGRect(x: w * 0.45, y: -w * 1.07, width: w * 0.24, height: w * 0.24)), with: .color(Palette.ivory.opacity(0.9)))
+            c.fill(cone, with: .linearGradient(Gradient(stops: [.init(color: rgba(196, 70, 48, 0.92), location: 0),
+                                                                 .init(color: rgba(158, 42, 32, 0.92), location: 0.45),
+                                                                 .init(color: rgba(92, 22, 18, 0.92), location: 1)]),
+                                               startPoint: CGPoint(x: -0.5 * w, y: -0.9 * w), endPoint: CGPoint(x: 0.55 * w, y: -0.1 * w)))
+            var fold = Path(); fold.move(to: CGPoint(x: 0.12 * w, y: -0.05 * w)); fold.addQuadCurve(to: CGPoint(x: 0.42 * w, y: -0.9 * w), control: CGPoint(x: 0.2 * w, y: -0.55 * w))
+            c.stroke(fold, with: .color(rgba(60, 12, 10, 0.35)), style: StrokeStyle(lineWidth: w * 0.05, lineCap: .round))
+            var shine = Path(); shine.move(to: CGPoint(x: -0.32 * w, y: -0.1 * w)); shine.addQuadCurve(to: CGPoint(x: 0.05 * w, y: -0.92 * w), control: CGPoint(x: -0.3 * w, y: -0.6 * w))
+            c.stroke(shine, with: .color(rgba(255, 190, 160, 0.22)), style: StrokeStyle(lineWidth: w * 0.07, lineCap: .round))
+            func tuft(_ x: Double, _ y: Double, _ r: Double, edge: Color) {
+                c.fill(Path(ellipseIn: CGRect(x: x - r, y: y - r, width: 2 * r, height: 2 * r)),
+                       with: .radialGradient(Gradient(stops: [.init(color: rgba(246, 238, 222, 0.95), location: 0),
+                                                              .init(color: rgba(222, 208, 184, 0.9), location: 0.7),
+                                                              .init(color: edge, location: 1)]),
+                                             center: CGPoint(x: x - r * 0.3, y: y - r * 0.4), startRadius: r * 0.1, endRadius: r))
+            }
+            for i in 0..<13 {
+                let k = Double(i) / 12
+                tuft((-0.58 + 1.16 * k) * w, -0.02 * w + sin(Double(i) * 2.1) * 0.025 * w, (0.115 + 0.025 * sin(Double(i) * 1.7)) * w, edge: rgba(170, 150, 124, 0))
+            }
+            for i in 0..<5 {
+                let a = Double(i) * 1.26
+                tuft(0.68 * w + cos(a) * 0.04 * w, -0.72 * w + sin(a) * 0.04 * w, 0.085 * w, edge: rgba(190, 172, 146, 0))
+            }
         }
     }
 
@@ -87,20 +111,26 @@ struct DelightsLayer: View {
         }
     }
 
+    /// Mirrors drawStar() in scripts/placer_template.html: a warm glint with a soft halo.
     private func star(_ ctx: inout GraphicsContext, _ size: CGSize, _ t: Double) {
         let p = CGPoint(x: delights.star.x * size.width, y: delights.star.y * size.height)
-        let twinkle = 0.85 + 0.15 * sin(t * 2.1)
-        var halo = ctx
-        halo.addFilter(.blur(radius: 26))
-        halo.fill(Path(ellipseIn: CGRect(x: p.x - 50, y: p.y - 50, width: 100, height: 100)), with: .color(Color(red: 1, green: 0.93, blue: 0.75).opacity(0.5 * twinkle)))
-        var star = Path()
-        for k in 0..<16 {
-            let a = Double(k) * .pi / 8 - .pi / 2, r = k % 2 == 0 ? (k % 4 == 0 ? 46.0 : 26.0) * twinkle : 7.0
-            let q = CGPoint(x: p.x + cos(a) * r, y: p.y + sin(a) * r)
-            k == 0 ? star.move(to: q) : star.addLine(to: q)
+        let twinkle = 0.9 + 0.1 * sin(t * 2.1)
+        let L = (delights.star.size ?? 0.028) * size.width * twinkle
+        ctx.fill(Path(ellipseIn: CGRect(x: p.x - L * 1.3, y: p.y - L * 1.3, width: L * 2.6, height: L * 2.6)),
+                 with: .radialGradient(Gradient(colors: [Color(red: 1, green: 0.94, blue: 0.8).opacity(0.55), Color(red: 1, green: 0.9, blue: 0.7).opacity(0)]),
+                                       center: p, startRadius: 0, endRadius: L * 1.3))
+        var c = ctx
+        c.addFilter(.blur(radius: max(0.5, L * 0.03)))
+        for k in 0..<8 {
+            let len = k % 2 == 1 ? L * 0.45 : L, wd = k % 2 == 1 ? L * 0.05 : L * 0.075
+            var r = c
+            r.translateBy(x: p.x, y: p.y)
+            r.rotate(by: .radians(Double(k) * .pi / 4 - .pi / 2))
+            var ray = Path(); ray.move(to: CGPoint(x: 0, y: -wd)); ray.addLine(to: CGPoint(x: len, y: 0)); ray.addLine(to: CGPoint(x: 0, y: wd)); ray.closeSubpath()
+            r.fill(ray, with: .linearGradient(Gradient(colors: [Color(red: 1, green: 0.97, blue: 0.89).opacity(0.95), Color(red: 1, green: 0.93, blue: 0.77).opacity(0)]),
+                                              startPoint: .zero, endPoint: CGPoint(x: len, y: 0)))
         }
-        star.closeSubpath()
-        ctx.fill(star, with: .color(Color(red: 1, green: 0.96, blue: 0.85).opacity(0.95)))
+        c.fill(Path(ellipseIn: CGRect(x: p.x - L * 0.09, y: p.y - L * 0.09, width: L * 0.18, height: L * 0.18)), with: .color(Color(red: 1, green: 0.99, blue: 0.94)))
     }
 
     // MARK: Advent and Lent

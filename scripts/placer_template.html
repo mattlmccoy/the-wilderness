@@ -1,0 +1,256 @@
+<title>Christmas Placer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root { --bg:#161412; --panel:#221f1b; --ink:#efe6d6; --dim:#a89c88; --accent:#d9a441; --line:#3a352e; color-scheme: dark; }  /* one deliberate dark look: a projection room */
+  * { box-sizing: border-box; }
+  body { margin:0; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); background:var(--bg); color:var(--ink); font:14px/1.4 -apple-system, system-ui, sans-serif; }
+  header { padding-block:12px; border-bottom:1px solid var(--line); display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; font-weight:600; }
+  header p { margin:0; color:var(--dim); font-size:13px; }
+  main { display:flex; gap:16px; padding-block:16px; align-items:flex-start; flex-wrap:wrap; }
+  #stage { flex:1 1 640px; min-width:0; overflow:auto; max-height:calc(100vh - 90px); border:1px solid var(--line); background:#000; }
+  canvas { display:block; touch-action:none; cursor:crosshair; }
+  aside { flex:0 0 300px; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:12px; }
+  aside h2 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--dim); margin:0; }
+  .row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  button, select { background:#2e2a24; color:var(--ink); border:1px solid #4a443a; border-radius:6px; padding:6px 10px; font:inherit; cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  button.on { background:var(--accent); color:#1a1612; border-color:var(--accent); }
+  label { color:var(--dim); font-size:13px; display:flex; gap:6px; align-items:center; }
+  input[type=range] { width:100%; }
+  #sel { font-weight:600; color:var(--accent); }
+  textarea { width:100%; height:150px; background:#12100e; color:var(--ink); border:1px solid var(--line); border-radius:6px; font:12px/1.35 ui-monospace, monospace; padding:8px; }
+  .hint { color:var(--dim); font-size:12px; margin:0; }
+  @media (max-width: 720px) { aside { flex:1 1 100%; } }
+</style>
+<header>
+  <h1>Christmas placer</h1>
+  <p>Drag a hat or the star. Arrow keys nudge it; [ and ] tilt it; − and + resize it; F flips which way the tip falls.</p>
+</header>
+<main>
+  <div id="stage"><canvas id="c"></canvas></div>
+  <aside>
+    <h2>View</h2>
+    <div class="row">
+      <button id="vSim" class="on">Simulator</button>
+      <button id="vWall">On the wall</button>
+      <button id="vOut">Outlines</button>
+    </div>
+    <label>Zoom <input id="zoom" type="range" min="0.4" max="2.5" step="0.05" value="0.6"></label>
+
+    <h2>Selected: <span id="sel">none</span></h2>
+    <label>Size <input id="size" type="range" min="0.012" max="0.09" step="0.001"></label>
+    <label>Tilt <input id="tilt" type="range" min="-60" max="60" step="1"></label>
+    <div class="row">
+      <button id="flip">Flip tip</button>
+      <button id="remove">Remove hat</button>
+    </div>
+
+    <h2>Add a hat</h2>
+    <div class="row">
+      <select id="addId"></select>
+      <button id="add">Add</button>
+    </div>
+
+    <h2>Result</h2>
+    <div class="row"><button id="copy">Copy JSON</button><span id="copied" class="hint"></span></div>
+    <textarea id="out" readonly></textarea>
+    <p class="hint">Paste the JSON back to Claude, or save it as App/Content/delights.json.</p>
+  </aside>
+</main>
+<script>
+const OUTLINES = __OUTLINES__;
+const state = __DELIGHTS__;
+state.star.size = state.star.size ?? 0.028;
+for (const h of state.hats) { h.size = h.size ?? 0.03; h.tilt = h.tilt ?? 0; h.flip = h.flip ?? false; }
+
+const img = new Image();
+img.src = "__PAINTING__";
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+let view = "sim", showOutlines = false, zoom = 0.6, selected = null, drag = null;
+
+// ---- Drawing (mirrors App/DelightsLayer.swift: hat(), star()) ----
+function hatPath(w) {
+  const p = new Path2D();
+  p.moveTo(-0.5 * w, 0);
+  p.bezierCurveTo(-0.46 * w, -0.62 * w, -0.05 * w, -1.12 * w, 0.42 * w, -1.02 * w);   // left side rises, crown
+  p.quadraticCurveTo(0.6 * w, -0.97 * w, 0.68 * w, -0.74 * w);                          // flops over to the tip
+  p.bezierCurveTo(0.52 * w, -0.8 * w, 0.44 * w, -0.42 * w, 0.5 * w, 0);                 // right side back down
+  p.closePath();
+  return p;
+}
+
+function drawHat(g, h, W, H) {
+  const w = h.size * W;
+  g.save();
+  g.translate(h.x * W, h.y * H);
+  g.rotate(h.tilt * Math.PI / 180);
+  if (h.flip) g.scale(-1, 1);
+  g.filter = `blur(${Math.max(0.4, w * 0.012)}px)`;
+  // Cloth: the painting's vermilion, lit from the upper left like the figures.
+  const cone = hatPath(w);
+  const shade = g.createLinearGradient(-0.5 * w, -0.9 * w, 0.55 * w, -0.1 * w);
+  shade.addColorStop(0, "rgba(196,70,48,0.92)");
+  shade.addColorStop(0.45, "rgba(158,42,32,0.92)");
+  shade.addColorStop(1, "rgba(92,22,18,0.92)");
+  g.fillStyle = shade; g.fill(cone);
+  // A fold and a soft highlight, so it reads as cloth rather than a flat shape.
+  g.lineCap = "round";
+  g.strokeStyle = "rgba(60,12,10,0.35)"; g.lineWidth = w * 0.05;
+  g.beginPath(); g.moveTo(0.12 * w, -0.05 * w); g.quadraticCurveTo(0.2 * w, -0.55 * w, 0.42 * w, -0.9 * w); g.stroke();
+  g.strokeStyle = "rgba(255,190,160,0.22)"; g.lineWidth = w * 0.07;
+  g.beginPath(); g.moveTo(-0.32 * w, -0.1 * w); g.quadraticCurveTo(-0.3 * w, -0.6 * w, 0.05 * w, -0.92 * w); g.stroke();
+  // Fur trim: overlapping soft tufts, warm off-white, darker underneath.
+  for (let i = 0; i < 13; i++) {
+    const k = i / 12, x = (-0.58 + 1.16 * k) * w, y = -0.02 * w + Math.sin(i * 2.1) * 0.025 * w;
+    const r = (0.115 + 0.025 * Math.sin(i * 1.7)) * w;
+    const fur = g.createRadialGradient(x - r * 0.3, y - r * 0.4, r * 0.1, x, y, r);
+    fur.addColorStop(0, "rgba(246,238,222,0.95)");
+    fur.addColorStop(0.7, "rgba(222,208,184,0.9)");
+    fur.addColorStop(1, "rgba(170,150,124,0)");
+    g.fillStyle = fur; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+  // Pompom at the tip.
+  for (let i = 0; i < 5; i++) {
+    const a = i * 1.26, x = 0.68 * w + Math.cos(a) * 0.04 * w, y = -0.72 * w + Math.sin(a) * 0.04 * w, r = 0.085 * w;
+    const fur = g.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r);
+    fur.addColorStop(0, "rgba(246,238,222,0.95)"); fur.addColorStop(1, "rgba(190,172,146,0)");
+    g.fillStyle = fur; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+  g.restore();
+}
+
+function drawStar(g, s, W, H) {
+  const x = s.x * W, y = s.y * H, L = s.size * W;
+  g.save();
+  const halo = g.createRadialGradient(x, y, 0, x, y, L * 1.3);
+  halo.addColorStop(0, "rgba(255,240,205,0.55)"); halo.addColorStop(1, "rgba(255,230,180,0)");
+  g.fillStyle = halo; g.beginPath(); g.arc(x, y, L * 1.3, 0, Math.PI * 2); g.fill();
+  g.filter = `blur(${Math.max(0.5, L * 0.03)}px)`;
+  // Four long rays, four short ones: a glint, not a cartoon star.
+  for (let k = 0; k < 8; k++) {
+    const a = k * Math.PI / 4 - Math.PI / 2, len = k % 2 ? L * 0.45 : L, wd = k % 2 ? L * 0.05 : L * 0.075;
+    g.save(); g.translate(x, y); g.rotate(a);
+    const ray = g.createLinearGradient(0, 0, len, 0);
+    ray.addColorStop(0, "rgba(255,248,228,0.95)"); ray.addColorStop(1, "rgba(255,236,196,0)");
+    g.fillStyle = ray;
+    g.beginPath(); g.moveTo(0, -wd); g.lineTo(len, 0); g.lineTo(0, wd); g.closePath(); g.fill();
+    g.restore();
+  }
+  g.fillStyle = "rgba(255,252,240,1)"; g.beginPath(); g.arc(x, y, L * 0.09, 0, Math.PI * 2); g.fill();
+  g.restore();
+}
+
+function render() {
+  if (!img.complete || !img.naturalWidth) return;
+  const W = Math.round(img.naturalWidth * zoom), H = Math.round(img.naturalHeight * zoom);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  ctx.globalCompositeOperation = "source-over";
+  ctx.drawImage(img, 0, 0, W, H);
+  if (showOutlines) {
+    ctx.strokeStyle = "rgba(120,220,255,0.7)"; ctx.lineWidth = 1.5;
+    for (const pts of Object.values(OUTLINES)) {
+      if (pts.length < 3) continue;
+      ctx.beginPath(); pts.forEach(([px, py], i) => i ? ctx.lineTo(px * W, py * H) : ctx.moveTo(px * W, py * H)); ctx.closePath(); ctx.stroke();
+    }
+  }
+  // "On the wall": the projector can only add light, so the hats brighten the cloth beneath them.
+  const layer = document.createElement("canvas"); layer.width = W; layer.height = H;
+  const g = layer.getContext("2d");
+  for (const h of state.hats) drawHat(g, h, W, H);
+  drawStar(g, state.star, W, H);
+  ctx.globalCompositeOperation = view === "wall" ? "screen" : "source-over";
+  ctx.drawImage(layer, 0, 0);
+  ctx.globalCompositeOperation = "source-over";
+  if (selected) {
+    const s = selected === "star" ? state.star : selected;
+    ctx.strokeStyle = "#d9a441"; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
+    const r = (s.size ?? 0.03) * W * (selected === "star" ? 1.1 : 0.9);
+    ctx.beginPath(); ctx.arc(s.x * W, s.y * H - (selected === "star" ? 0 : r * 0.5), r, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  output();
+}
+
+// ---- Editing ----
+function round(v) { return Math.round(v * 1000) / 1000; }
+function output() {
+  const clean = {
+    _note: state._note,
+    hats: state.hats.map(h => ({ id: h.id, x: round(h.x), y: round(h.y), size: round(h.size), tilt: Math.round(h.tilt), ...(h.flip ? { flip: true } : {}) })),
+    ravenEye: state.ravenEye,
+    star: { x: round(state.star.x), y: round(state.star.y), size: round(state.star.size) },
+  };
+  document.getElementById("out").value = JSON.stringify(clean, null, 2)
+    .replace(/\{\n\s+"id"/g, '{"id"').replace(/,\n\s+"(x|y|size|tilt|flip)"/g, ', "$1"').replace(/\n\s+\}(,?)\n/g, "}$1\n");
+}
+function select(s) {
+  selected = s;
+  const t = s === "star" ? state.star : s;
+  document.getElementById("sel").textContent = s ? (s === "star" ? "star" : s.id + " hat") : "none";
+  document.getElementById("size").value = t ? t.size : 0.03;
+  document.getElementById("tilt").value = t && s !== "star" ? t.tilt : 0;
+  document.getElementById("tilt").disabled = document.getElementById("flip").disabled = document.getElementById("remove").disabled = !s || s === "star";
+  render();
+}
+function at(e) {
+  const r = cv.getBoundingClientRect();
+  return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+}
+function hit(p) {
+  const aspect = cv.height / cv.width;
+  const items = [["star", state.star.x, state.star.y, state.star.size * 1.2],
+                 ...state.hats.map(h => [h, h.x + 0.1 * h.size, h.y - 0.45 * h.size / aspect, h.size * 0.9])];
+  let best = null, bd = Infinity;
+  for (const [it, x, y, r] of items) {
+    const d = Math.hypot(p.x - x, (p.y - y) * aspect);
+    if (d < Math.max(r, 0.015) && d < bd) { best = it; bd = d; }
+  }
+  return best;
+}
+cv.addEventListener("pointerdown", e => {
+  const p = at(e), h = hit(p);
+  select(h);
+  if (h) { const t = h === "star" ? state.star : h; drag = { dx: t.x - p.x, dy: t.y - p.y, t }; cv.setPointerCapture(e.pointerId); }
+});
+cv.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const p = at(e); drag.t.x = Math.min(1, Math.max(0, p.x + drag.dx)); drag.t.y = Math.min(1, Math.max(0, p.y + drag.dy)); render();
+});
+cv.addEventListener("pointerup", () => { drag = null; });
+document.addEventListener("keydown", e => {
+  if (!selected || e.target.tagName === "TEXTAREA") return;
+  const t = selected === "star" ? state.star : selected, step = e.shiftKey ? 0.01 : 0.002;
+  const k = e.key;
+  if (k === "ArrowLeft") t.x -= step; else if (k === "ArrowRight") t.x += step;
+  else if (k === "ArrowUp") t.y -= step; else if (k === "ArrowDown") t.y += step;
+  else if (k === "[" && selected !== "star") t.tilt -= 2; else if (k === "]" && selected !== "star") t.tilt += 2;
+  else if (k === "-") t.size = Math.max(0.01, t.size - 0.001); else if (k === "=" || k === "+") t.size += 0.001;
+  else if ((k === "f" || k === "F") && selected !== "star") t.flip = !t.flip;
+  else return;
+  e.preventDefault(); select(selected);
+});
+document.getElementById("size").oninput = e => { if (!selected) return; (selected === "star" ? state.star : selected).size = +e.target.value; render(); };
+document.getElementById("tilt").oninput = e => { if (selected && selected !== "star") { selected.tilt = +e.target.value; render(); } };
+document.getElementById("flip").onclick = () => { if (selected && selected !== "star") { selected.flip = !selected.flip; render(); } };
+document.getElementById("remove").onclick = () => { if (selected && selected !== "star") { state.hats = state.hats.filter(h => h !== selected); select(null); } };
+const addId = document.getElementById("addId");
+for (const id of Object.keys(OUTLINES)) addId.add(new Option(id, id));
+document.getElementById("add").onclick = () => {
+  const pts = OUTLINES[addId.value] || [[0.5, 0.5]];
+  const x = pts.reduce((a, p) => a + p[0], 0) / pts.length, y = Math.min(...pts.map(p => p[1]));
+  const h = { id: addId.value, x, y, size: 0.03, tilt: 0, flip: false };
+  state.hats.push(h); select(h);
+};
+function setView(v) { view = v; document.getElementById("vSim").classList.toggle("on", v === "sim"); document.getElementById("vWall").classList.toggle("on", v === "wall"); render(); }
+document.getElementById("vSim").onclick = () => setView("sim");
+document.getElementById("vWall").onclick = () => setView("wall");
+document.getElementById("vOut").onclick = e => { showOutlines = !showOutlines; e.target.classList.toggle("on", showOutlines); render(); };
+document.getElementById("zoom").oninput = e => { zoom = +e.target.value; render(); };
+document.getElementById("copy").onclick = async () => {
+  const text = document.getElementById("out").value, msg = document.getElementById("copied");
+  try { await navigator.clipboard.writeText(text); msg.textContent = "Copied."; }
+  catch { document.getElementById("out").select(); msg.textContent = "Select-all is on: press Cmd-C."; }
+};
+img.onload = () => { zoom = Math.min(1, (document.getElementById("stage").clientWidth - 2) / img.naturalWidth); document.getElementById("zoom").value = zoom; select(null); };
+</script>

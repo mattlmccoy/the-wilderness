@@ -22,3 +22,12 @@ private let content = URL(fileURLWithPath: #filePath)
     }
     #expect(d.star.x > 0.05 && d.star.x < 0.95 && d.star.y > 0.03 && d.star.y < 0.3)
 }
+
+@Test func placerOutputDecodesFlipAndStarSize() throws {
+    // The shape scripts/placer_template.html writes.
+    let json = #"{"hats":[{"id":"lion","x":0.88,"y":0.74,"size":0.05,"tilt":-12,"flip":true},{"id":"fox","x":0.5,"y":0.54,"size":0.026,"tilt":10}],"ravenEye":{"id":"raven","x":0.262,"y":0.195},"star":{"x":0.7,"y":0.07,"size":0.03}}"#
+    let d = try DelightsContent.decode(Data(json.utf8))
+    #expect(d.hats[0].flip == true)
+    #expect(d.hats[1].flip == nil)
+    #expect(d.star.size == 0.03)
+}

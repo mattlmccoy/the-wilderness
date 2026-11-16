@@ -58,8 +58,15 @@ public struct DelightsContent: Codable, Equatable, Sendable {
         /// Hats: width as a fraction of the canvas; tilt in degrees.
         public var size: Double?
         public var tilt: Double?
+        /// Hats: the tip falls to the left instead of the right.
+        public var flip: Bool?
     }
-    public struct Place: Codable, Equatable, Sendable { public var x, y: Double }
+    public struct Place: Codable, Equatable, Sendable {
+        public var x, y: Double
+        /// The star: its long rays as a fraction of the canvas width.
+        public var size: Double?
+        public init(x: Double, y: Double, size: Double? = nil) { self.x = x; self.y = y; self.size = size }
+    }
     public var hats: [Spot]
     /// The raven's eye, where the "raven glints" moment catches the light.
     public var ravenEye: Spot
