@@ -58,7 +58,7 @@ struct AppContent {
     let zones: [TextZone]
     let glints: GlintPoints
     let notices: Notices
-    /// Hand-marked hats, eyes and the star (seasons and Easter eggs).
+    /// Hand-marked hats, the raven's eye and the star (seasons and Easter eggs).
     let delights: DelightsContent
 
     /// Each traced region's breathing rhythm (cheap: a handful of entries).

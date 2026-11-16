@@ -2,19 +2,19 @@ import Foundation
 import Testing
 @testable import WildernessCore
 
-// Hats and eyes are marked by hand on the painting (App/Content/delights.json); each must sit on
+// Hats and the raven's eye are marked by hand on the painting (App/Content/delights.json); each must sit on
 // its own animal, and the star must sit on the canvas, clear of the edges.
 
 private let content = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
     .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("App/Content")
 
-@Test func hatsAndEyesSitOnTheirAnimals() throws {
+@Test func hatsAndTheRavensEyeSitOnTheirAnimals() throws {
     let lib = try AnnotationLibrary.decode(Data(contentsOf: content.appendingPathComponent("annotations.json")))
     let d = try DelightsContent.decode(Data(contentsOf: content.appendingPathComponent("delights.json")))
     #expect(Set(d.hats.map(\.id)).isSuperset(of: ["lion", "stag", "beast"]))
-    #expect(d.eyes.count >= 4)
-    for p in d.hats + d.eyes {
+    #expect(d.ravenEye.id == "raven")
+    for p in d.hats + [d.ravenEye] {
         let o = try #require(lib.annotations.first { $0.id == p.id }?.outline, "\(p.id) has no outline")
         let xs = o.map(\.x), ys = o.map(\.y)
         #expect(p.x >= xs.min()! - 0.03 && p.x <= xs.max()! + 0.03, "\(p.id) x off its animal")

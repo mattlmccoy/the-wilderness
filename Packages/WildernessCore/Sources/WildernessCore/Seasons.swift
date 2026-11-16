@@ -19,7 +19,6 @@ public struct SeasonEffects: Equatable, Sendable {
     public var christmas = false      // hats and snow, 1 Dec – 6 Jan
     public var star = false           // over the angels: 24–25 Dec and Epiphany
     public var easterDawn = false     // Easter Sunday morning
-    public var halloween = false      // 31 Oct after dusk
     public var adventCandles = 0
     public var lentDay: Int? = nil
     public var tint: LiturgicalTint = .green
@@ -34,7 +33,6 @@ public enum Seasons {
         e.christmas = day.month == 12 || (day.month == 1 && day.day <= 6)
         e.star = (day.month == 12 && (day.day == 24 || day.day == 25)) || (day.month == 1 && day.day == 6)
         e.easterDawn = day == ChurchCalendar.easter(day.year) && (5..<11).contains(hour)
-        e.halloween = (day.month == 10 && day.day == 31 && hour >= 17) || (day.month == 11 && day.day == 1 && hour < 3)
         e.adventCandles = ChurchCalendar.adventCandles(day)
         e.lentDay = ChurchCalendar.lentDay(day)
         e.tint = tint(day)
@@ -63,9 +61,10 @@ public struct DelightsContent: Codable, Equatable, Sendable {
     }
     public struct Place: Codable, Equatable, Sendable { public var x, y: Double }
     public var hats: [Spot]
-    public var eyes: [Spot]
+    /// The raven's eye, where the "raven glints" moment catches the light.
+    public var ravenEye: Spot
     public var star: Place
 
-    public static let empty = DelightsContent(hats: [], eyes: [], star: Place(x: 0.72, y: 0.06))
+    public static let empty = DelightsContent(hats: [], ravenEye: Spot(id: "raven", x: 0.262, y: 0.195), star: Place(x: 0.72, y: 0.06))
     public static func decode(_ data: Data) throws -> DelightsContent { try JSONDecoder().decode(Self.self, from: data) }
 }

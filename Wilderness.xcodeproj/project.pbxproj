@@ -40,6 +40,7 @@
 		595051D0CC6239EB1FFFF05F /* ScreenshotTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */; };
 		5BFD811DF4A1267483527309 /* maps.json in Resources */ = {isa = PBXBuildFile; fileRef = 4819C180FAC10AFBD91FC9FD /* maps.json */; };
 		5CC5BF584E868827B2405033 /* ContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBA3E5909571B3CFA2A7003 /* ContextView.swift */; };
+		5DF8EB02522F043BC4AEDA7E /* DemoClips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02745443E10C767EDE16B557 /* DemoClips.swift */; };
 		604586D0FA971FF7C46A774C /* context.json in Resources */ = {isa = PBXBuildFile; fileRef = AC0C2043D85D5E257480B75E /* context.json */; };
 		607B28E705A4A3CC43B5D727 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
 		60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
@@ -107,6 +108,7 @@
 /* Begin PBXFileReference section */
 		00541C4509425B1002EE55BF /* CompanionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionClient.swift; sourceTree = "<group>"; };
 		00CD53A38F289ADB465D2F63 /* WildernessPhone.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WildernessPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02745443E10C767EDE16B557 /* DemoClips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoClips.swift; sourceTree = "<group>"; };
 		02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-jordan-river-qasr-al-yahud-wide.jpg"; sourceTree = "<group>"; };
 		06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessPhoneApp.swift; sourceTree = "<group>"; };
 		0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 			isa = PBXGroup;
 			children = (
 				2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */,
+				02745443E10C767EDE16B557 /* DemoClips.swift */,
 				9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */,
 				369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */,
 				B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */,
@@ -612,6 +615,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */,
+				5DF8EB02522F043BC4AEDA7E /* DemoClips.swift in Sources */,
 				4D82EBC476E49CB3071E006B /* ExperienceFlowUITests.swift in Sources */,
 				595051D0CC6239EB1FFFF05F /* ScreenshotTour.swift in Sources */,
 				9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */,

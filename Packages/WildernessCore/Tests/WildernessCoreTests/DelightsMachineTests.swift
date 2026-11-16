@@ -18,11 +18,11 @@ private extension ModeMachine {
 
 @Test func theCodeStartsTheDreamcoatForAMinuteAndItsSelectDoesNothingElse() {
     var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    let before = m.mode
     var t = 1.0
     for k: AppInput in [.move(.up), .move(.up), .move(.down), .move(.down), .move(.left), .move(.right), .move(.left), .move(.right)] {
         m.press(k, at: t); t += 0.3
     }
-    let before = m.mode
     m.press(.select, at: t)
     #expect(m.dreamcoat(now: t + 1))
     #expect(!m.dreamcoat(now: t + ModeMachine.dreamcoatSeconds + 1))
@@ -56,4 +56,14 @@ private extension ModeMachine {
     m.press(.select, at: 10)
     m.tick(now: 10 + SlowLooking.total(ids: ["christ", "stag", "lion"]) + 1, dt: 0.25, script: script)
     #expect(!m.isSlowLooking && m.mode == .stillness)
+}
+
+@Test func theWholeCodeFromRestLeavesTheWallAtRest() {
+    // Simulator capture, 2026-11-16: the arrows opened the menu and left it over the dreamcoat.
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    let start = m.mode
+    var t = 10.0
+    for i in SecretCode.sequence { m.press(i, at: t); t += 0.3 }
+    #expect(m.dreamcoat(now: t))
+    #expect(m.mode == start)
 }

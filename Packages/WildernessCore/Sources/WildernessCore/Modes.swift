@@ -73,6 +73,8 @@ public struct ModeMachine: Equatable, Sendable {
     /// ↑ ↑ ↓ ↓ ← → ← → Select: every outline cycles the rainbow for a minute (the dreamcoat).
     public static let dreamcoatSeconds = 60.0
     private var code = SecretCode()
+    /// The mode before each of the last presses, so the code can put the wall back where it began.
+    private var modesBeforePress: [Mode] = []
     public private(set) var dreamcoatUntil: Double?
     public func dreamcoat(now: Double) -> Bool { dreamcoatUntil.map { now < $0 } ?? false }
 
@@ -105,8 +107,12 @@ public struct ModeMachine: Equatable, Sendable {
             return nil
         }
         // The secret code's last press is used up: it opens nothing else.
+        modesBeforePress.append(mode)
+        if modesBeforePress.count > SecretCode.sequence.count { modesBeforePress.removeFirst() }
         if code.feed(input) {
             dreamcoatUntil = now + Self.dreamcoatSeconds
+            mode = modesBeforePress.first ?? mode   // undo what the code's arrows did on the way
+            modesBeforePress = []
             return nil
         }
         // Play/Pause in Explore: once = Unfold (after the window, in tick), twice = hide/show text.

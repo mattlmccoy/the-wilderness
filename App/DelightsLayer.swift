@@ -4,7 +4,7 @@ import WildernessCore
 /// The seasons, the rare moments, the dreamcoat and the phone's flashlight, all drawn as light
 /// in artwork canvas units (docs/superpowers/plans/2026-11-16-delights.md). The projector can only
 /// add light, so hats are soft red light with a bright brim, the star and snow are glints, and
-/// candle flames, eyes and the dawn are glows.
+/// candle flames and the dawn are glows.
 struct DelightsLayer: View {
     let library: AnnotationLibrary
     let delights: DelightsContent
@@ -41,7 +41,6 @@ struct DelightsLayer: View {
                     if atRest, s.adventCandles > 0 { candles(&ctx, size, t, lit: s.adventCandles) }
                     if atRest, let day = s.lentDay { lentLine(&ctx, size, day: day) }
                     if atRest, s.easterDawn { dawn(&ctx, size, t) }
-                    if s.halloween { eyes(&ctx, size, t) }
                 }
                 if atRest, let m = moment { self.moment(&ctx, size, m.0, m.1) }
                 if let r = revealSince { revealAngels(&ctx, size, seconds: t - r) }
@@ -138,7 +137,7 @@ struct DelightsLayer: View {
                       width: zone.w * size.width, height: min(zone.h * size.height, size.height - m - zone.y * size.height))
     }
 
-    // MARK: Easter, Halloween
+    // MARK: Easter
 
     private func dawn(_ ctx: inout GraphicsContext, _ size: CGSize, _ t: Double) {
         let cycle = t.truncatingRemainder(dividingBy: 180)
@@ -150,17 +149,6 @@ struct DelightsLayer: View {
                                                         .init(color: Color(red: 1, green: 0.78, blue: 0.4).opacity(0.28 * fade), location: 0.5),
                                                         .init(color: .clear, location: 1)]),
                                        startPoint: CGPoint(x: x - w, y: 0), endPoint: CGPoint(x: x + w, y: 0)))
-    }
-
-    private func eyes(_ ctx: inout GraphicsContext, _ size: CGSize, _ t: Double) {
-        var c = ctx
-        c.addFilter(.blur(radius: 3))
-        for (i, e) in delights.eyes.enumerated() {
-            let blink = sin(t * 0.7 + Double(i) * 2.3) > -0.95 ? 1.0 : 0.0
-            let p = CGPoint(x: e.x * size.width, y: e.y * size.height)
-            c.fill(Path(ellipseIn: CGRect(x: p.x - 6, y: p.y - 4, width: 12, height: 8)),
-                   with: .color(Color(red: 1, green: 0.6, blue: 0.15).opacity(0.85 * blink)))
-        }
     }
 
     // MARK: Moments, the restoration, the dreamcoat, the flashlight
@@ -183,7 +171,8 @@ struct DelightsLayer: View {
                 ctx.stroke(p, with: .color(Palette.ivory.opacity(0.7 * swell)), lineWidth: 2.5)
             }
         case .ravenGlints:
-            if let e = delights.eyes.first(where: { $0.id == "raven" }) {
+            do {
+                let e = delights.ravenEye
                 let p = CGPoint(x: e.x * size.width, y: e.y * size.height), r = 4 + 22 * swell
                 var g = ctx; g.addFilter(.blur(radius: 4))
                 g.fill(Path(ellipseIn: CGRect(x: p.x - r, y: p.y - r, width: 2 * r, height: 2 * r)), with: .color(Palette.ivory.opacity(0.8 * swell)))

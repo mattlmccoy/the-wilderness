@@ -34,11 +34,9 @@ private func hm(_ date: Date) -> Int { let c = cal.dateComponents([.hour, .minut
     #expect(!Seasons.effects(at: at(2026, 4, 6, 7), calendar: cal).easterDawn)
 }
 
-@Test func halloweenEyesGlowAfterDusk() {
-    #expect(!Seasons.effects(at: at(2026, 10, 31, 15), calendar: cal).halloween)
-    #expect(Seasons.effects(at: at(2026, 10, 31, 19), calendar: cal).halloween)
-    #expect(Seasons.effects(at: at(2026, 11, 1, 1), calendar: cal).halloween)
-    #expect(!Seasons.effects(at: at(2026, 11, 1, 9), calendar: cal).halloween)
+@Test func halloweenLeavesTheWallAsAnyEvening() {
+    // Matt, 2026-11-16: no Halloween mode. 31 Oct after dark is an ordinary evening.
+    #expect(Seasons.effects(at: at(2026, 10, 31, 19), calendar: cal) == Seasons.effects(at: at(2026, 10, 31, 12), calendar: cal))
 }
 
 @Test func countersAndTintFollowTheChurchYear() {
