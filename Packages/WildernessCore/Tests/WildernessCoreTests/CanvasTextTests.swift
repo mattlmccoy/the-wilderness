@@ -60,3 +60,40 @@ private let zones = [
     let roomy = Calibration.defaultFor(artworkAspect: 1.2, output: PixelSize(width: 1920, height: 1080))
     #expect(TextColumnLayout.place(preferred: .left, calibration: roomy, canvasZone: z).position == .onCanvas(z))
 }
+
+// Breathing room and fit (Matt, 2026-11-15): text never touches the tapestry's edge, and
+// expanded text always fits on the tapestry, shrinking its type if it must.
+private let tapestry = (w: 60.0, h: 50.0)
+
+@Test func textKeepsClearOfTheTapestryEdges() {
+    let m = CanvasTextFrame.edgeMarginInches
+    for z in zones {
+        let f = CanvasTextFrame.place(zone: z, tapestry: tapestry, naturalHeight: 8)
+        #expect(f.x >= m - 1e-9, "zone at x \(z.x) touches the left edge")
+        #expect(f.x + f.width <= tapestry.w - m + 1e-9, "zone at x \(z.x) touches the right edge")
+        let bottom: Double = f.y + 8 * f.scale
+        #expect(f.y >= m - 1e-9)
+        #expect(bottom <= tapestry.h - m + 1e-9)
+    }
+}
+
+@Test func textIsInsetWithinItsZone() {
+    let p = CanvasTextFrame.zonePaddingInches
+    let f = CanvasTextFrame.place(zone: zones[1], tapestry: tapestry, naturalHeight: 8)   // mid-canvas zone
+    #expect(abs(f.x - (0.14 * 60 + p)) < 1e-9)
+    #expect(abs(f.width - (0.34 * 60 - 2 * p)) < 1e-9)
+    #expect(f.scale == 1)
+}
+
+@Test func tallTextShrinksToFitTheTapestry() {
+    let m = CanvasTextFrame.edgeMarginInches
+    let f = CanvasTextFrame.place(zone: zones[0], tapestry: tapestry, naturalHeight: 80)   // taller than the wall
+    #expect(f.scale < 1)
+    #expect(abs(f.y - m) < 1e-9)
+    #expect(80 * f.scale <= tapestry.h - 2 * m + 1e-9)
+}
+
+@Test func shortTextKeepsItsZoneHeight() {
+    let f = CanvasTextFrame.place(zone: zones[1], tapestry: tapestry, naturalHeight: 8)
+    #expect(abs(f.y - 0.30 * 50) < 1e-9)
+}

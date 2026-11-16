@@ -1,5 +1,8 @@
 import SwiftUI
 import WildernessCore
+import os
+
+private let canvasTextLog = Logger(subsystem: "com.mattmccoy.wilderness", category: "text")
 
 /// Places a column of wall text beside the tapestry (or over its lower edge on a narrow wall),
 /// in artwork canvas units. Shared by WallText and the menu so both sit in the same place.
@@ -26,12 +29,22 @@ struct WallColumn<Content: View>: View {
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
                 .offset(x: x, y: max(0, min(anchorY * canvas.height - 90, canvas.height - columnHeight)))
         case .onCanvas(let z):
-            // On the painting, in a calm dark zone; kept wholly on the tapestry if the text is tall.
+            // On the painting, in a calm dark zone, clear of the tapestry's edges; type shrinks
+            // when the text is taller than the tapestry allows (CanvasTextFrame), so it all fits.
+            let u = Self.unitsPerInch
+            let f = CanvasTextFrame.place(zone: z, tapestry: (Double(canvas.width / u), Double(canvas.height / u)),
+                                          naturalHeight: Double(columnHeight / u))
             content
-                .frame(width: column, alignment: .leading)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnHeight = $0 }
-                .offset(x: z.x * canvas.width,
-                        y: max(0, min(z.y * canvas.height, canvas.height - columnHeight - Self.unitsPerInch)))
+                .frame(width: f.width * u, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { h in
+                    columnHeight = h
+                    let s = CanvasTextFrame.place(zone: z, tapestry: (Double(canvas.width / u), Double(canvas.height / u)),
+                                                  naturalHeight: Double(h / u)).scale
+                    canvasTextLog.debug("canvas text: \(Double(h / u), format: .fixed(precision: 1)) in tall, scale \(s, format: .fixed(precision: 2))")
+                }
+                .scaleEffect(f.scale, anchor: .topLeading)
+                .offset(x: f.x * u, y: f.y * u)
         case .overLowerEdge:
             content
                 .frame(width: column, alignment: .leading)

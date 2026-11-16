@@ -54,3 +54,27 @@ public enum CanvasText {
 
     static func dist(_ a: (x: Double, y: Double), _ b: (x: Double, y: Double)) -> Double { hypot(a.x - b.x, a.y - b.y) }
 }
+
+/// Where a column of text sits in its zone, in inches on the tapestry: inset inside the zone,
+/// never closer than `edgeMarginInches` to the tapestry's edge, and shrunk (`scale` < 1) when
+/// it is taller than the tapestry allows, so expanded text always fits.
+public struct CanvasTextFrame: Equatable, Sendable {
+    public var x, y, width: Double
+    public var scale: Double
+
+    public static let edgeMarginInches = 2.0
+    public static let zonePaddingInches = 0.75
+
+    /// `naturalHeight`: the column's height in inches at full size and this frame's width.
+    public static func place(zone z: TextZone, tapestry: (w: Double, h: Double),
+                             naturalHeight: Double) -> CanvasTextFrame {
+        let m = edgeMarginInches, p = zonePaddingInches
+        let left = max(z.x * tapestry.w + p, m)
+        let right = min((z.x + z.w) * tapestry.w - p, tapestry.w - m)
+        let room = tapestry.h - 2 * m
+        let scale = naturalHeight > room ? room / naturalHeight : 1
+        let h = naturalHeight * scale
+        let y = min(max(z.y * tapestry.h, m), tapestry.h - m - h)
+        return CanvasTextFrame(x: left, y: y, width: right - left, scale: scale)
+    }
+}

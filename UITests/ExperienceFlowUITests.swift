@@ -24,7 +24,7 @@ final class ExperienceFlowUITests: XCTestCase {
         remote.press(.right)
         XCTAssertTrue(app.staticTexts["Jesus Christ"].waitForExistence(timeout: 5))
         remote.press(.select)
-        XCTAssertTrue(text(app, containing: "He chose this weakness for us").waitForExistence(timeout: 4))
+        XCTAssertTrue(text(app, containing: "He chose to be hungry and tired").waitForExistence(timeout: 4))
         remote.press(.up)
         XCTAssertTrue(text(app, containing: "Satan tempted Him with the promise of angels").waitForExistence(timeout: 5),
                       "the longer text should stay open on the next subject")

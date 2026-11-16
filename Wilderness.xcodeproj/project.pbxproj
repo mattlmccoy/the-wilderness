@@ -41,6 +41,7 @@
 		607B28E705A4A3CC43B5D727 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
 		60AC9AB5EF728C7BBC384DC2 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		6194B5E1AC67B6A65CE3F5E1 /* context-lago-d-iseo-lear.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AD16DE832CBEA1C8CD132C88 /* context-lago-d-iseo-lear.jpg */; };
+		625D02A0740A97DEDBB1E05C /* SelectPressDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C1AD2F8C4F4ADBF42FD038 /* SelectPressDetector.swift */; };
 		697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */; };
 		698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10055DBD8B0259D70A5114C9 /* ExploreView.swift */; };
 		6ADF519634EEB1ECF0280B98 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
@@ -57,7 +58,6 @@
 		A50F0CF636D0377ED97F7164 /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
 		A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
 		AA631997609D4FC70F29A91B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9454B4A0B41FE0516A95935 /* Assets.xcassets */; };
-		AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE8658D36AD63360176932D /* SelectHoldDetector.swift */; };
 		AD4311D3ED1AD0E33C37B35B /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		B0C64794E425760E28401393 /* LightLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05E43D6E479D37C55550E7 /* LightLayer.swift */; };
 		BC81D67AB0B01913A484ACE3 /* CompanionServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10720E4193012A37B12219F /* CompanionServer.swift */; };
@@ -135,6 +135,7 @@
 		69A6BB2EC267DFB6DEB14308 /* glints.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = glints.json; sourceTree = "<group>"; };
 		6F06B70493ADCF9380EB26B7 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		70EA86F0730BB326ACDC744A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		71C1AD2F8C4F4ADBF42FD038 /* SelectPressDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPressDetector.swift; sourceTree = "<group>"; };
 		7D05E43D6E479D37C55550E7 /* LightLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightLayer.swift; sourceTree = "<group>"; };
 		896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFlowUITests.swift; sourceTree = "<group>"; };
@@ -162,7 +163,6 @@
 		DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Italic-Variable.ttf"; sourceTree = "<group>"; };
 		E10720E4193012A37B12219F /* CompanionServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionServer.swift; sourceTree = "<group>"; };
 		E1732656C7709B1DB01DC8F7 /* context-monastery-of-the-temptation.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-monastery-of-the-temptation.jpg"; sourceTree = "<group>"; };
-		EAE8658D36AD63360176932D /* SelectHoldDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectHoldDetector.swift; sourceTree = "<group>"; };
 		EC8DE0641F53B0F5D109C655 /* WildernessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessApp.swift; sourceTree = "<group>"; };
 		F6BDD2885BEE47A41C152161 /* WallText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallText.swift; sourceTree = "<group>"; };
 		FD97476B6D5814CC002BB613 /* TuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TuningStore.swift; sourceTree = "<group>"; };
@@ -233,7 +233,7 @@
 				393AF73F60A0DEC4D2325EBB /* MenuView.swift */,
 				34504EEACA619A61C36E1178 /* Palette.swift */,
 				29BA13ECF8A5F9A7660C4A71 /* RootView.swift */,
-				EAE8658D36AD63360176932D /* SelectHoldDetector.swift */,
+				71C1AD2F8C4F4ADBF42FD038 /* SelectPressDetector.swift */,
 				96443CC736D66435C0FEE8F1 /* SettingsView.swift */,
 				28AA1011679F17D8912C77D4 /* SoundPlayer.swift */,
 				FD97476B6D5814CC002BB613 /* TuningStore.swift */,
@@ -571,7 +571,7 @@
 				36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */,
 				11C90AC1520F8C4C28C3A14B /* Palette.swift in Sources */,
 				FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */,
-				AB3B9F82E0AF3F0F201003DE /* SelectHoldDetector.swift in Sources */,
+				625D02A0740A97DEDBB1E05C /* SelectPressDetector.swift in Sources */,
 				2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */,
 				CD05E8F3650DFC776F8BF9C9 /* SoundPlayer.swift in Sources */,
 				DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */,

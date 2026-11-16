@@ -33,7 +33,8 @@ struct CalibrationView: View {
         .frame(width: screen.width, height: screen.height, alignment: .topLeading)
         .focusable()
         .onMoveCommand { direction in send(.move(direction.nudge)) }
-        .onTapGesture { withAnimation(.easeOut(duration: 0.25)) { send(.select) } }
+        // Clicks from the button alone, so a resting thumb never swallows one (SelectPressDetector).
+        .background(SelectPressDetector(onClick: { withAnimation(.easeOut(duration: 0.25)) { send(.select) } }, onHold: {}))
         .onPlayPauseCommand { send(.playPause) }
         // Back must reach the system on first setup (to leave the app), except on review.
         .onExitCommand(perform: (reviewing || canCancel) ? { send(.back) } : nil)

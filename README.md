@@ -152,4 +152,9 @@ committed here is the Berean Standard Bible and the Douay-Rheims, both public do
 - **Research sources** for every Context page and figure are listed beside the text in
   `App/Content/context.json` and `App/Content/annotations.json`.
 
+## License
+
+The code is under the [MIT License](LICENSE). The painting, photographs, maps and fonts keep
+the licences listed under Credits; scripture text is not part of this repository.
+
 Made by Matt McCoy, 2026.
