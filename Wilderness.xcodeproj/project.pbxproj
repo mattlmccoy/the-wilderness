@@ -85,6 +85,7 @@
 		F9A3F21AD7E3FC1488A1CA1E /* context-jordan-river-qasr-al-yahud-wide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 02FEF36A0FC8EC1114A7D9E6 /* context-jordan-river-qasr-al-yahud-wide.jpg */; };
 		FE1737A0F027DA5E9B3C0A7D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BA13ECF8A5F9A7660C4A71 /* RootView.swift */; };
 		FECFDF91ECCC9166DAA6EFE5 /* context-brescia-17th-century-view.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DC561E73F08668C4B22C6C78 /* context-brescia-17th-century-view.jpg */; };
+		FEF66FFE1A0504963DCD9E0E /* DriftLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36823F915B93A13143BACBFF /* DriftLayer.swift */; };
 		FF3CA8E3D6D2787175484F27 /* textzones.json in Resources */ = {isa = PBXBuildFile; fileRef = 400D1C002A2AD66C7B840729 /* textzones.json */; };
 /* End PBXBuildFile section */
 
@@ -121,6 +122,7 @@
 		2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationFlowUITests.swift; sourceTree = "<group>"; };
 		2BEA43B01189736807F84B94 /* WildernessUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WildernessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34504EEACA619A61C36E1178 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		36823F915B93A13143BACBFF /* DriftLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriftLayer.swift; sourceTree = "<group>"; };
 		369A9E4F35613B8B6D8388A3 /* ScreenshotTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTour.swift; sourceTree = "<group>"; };
 		393AF73F60A0DEC4D2325EBB /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneScreenshotTour.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				BBBA3E5909571B3CFA2A7003 /* ContextView.swift */,
 				D48359873878EEE55C08BC20 /* ContextVisuals.swift */,
 				4686451FB2FB9319FFEDE288 /* DelightsLayer.swift */,
+				36823F915B93A13143BACBFF /* DriftLayer.swift */,
 				5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
@@ -589,6 +592,7 @@
 				5CC5BF584E868827B2405033 /* ContextView.swift in Sources */,
 				4F75DC0856BE7739A7D5D43F /* ContextVisuals.swift in Sources */,
 				27098C50260FC4087E2CCA86 /* DelightsLayer.swift in Sources */,
+				FEF66FFE1A0504963DCD9E0E /* DriftLayer.swift in Sources */,
 				697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */,
 				698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */,
 				21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */,

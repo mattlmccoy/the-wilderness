@@ -112,7 +112,8 @@ colour, and all the light warms and dims with the day, from sunrise and sunset a
 
 A few times an evening, at times that change every day, something small happens at rest: the stag
 leaps, the raven's eye catches the light, the angels brighten together. Menu → *Be still* walks
-the light slowly from figure to figure for seven minutes. Late in the evening the wall settles
+the light slowly from figure to figure for seven minutes, each drifting into the next. At rest a
+softer light drifts round the painting the same way, from each figure to its nearest neighbour. Late in the evening the wall settles
 to breathing only and lets the Apple TV sleep. And there is a code.
 
 ### The phone

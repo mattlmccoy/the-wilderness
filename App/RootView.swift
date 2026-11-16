@@ -122,6 +122,7 @@ struct RootView: View {
                         LightLayer(library: content.library, tuning: wallTuning,
                                    targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script, context: content.context),
                                    dark: mode.isIntro, washColor: season.map { Self.washColor($0.tint) } ?? Palette.ivory)
+                        drift(mode, content)
                         AliveLayer(library: content.library, breathing: content.breathing, tuning: wallTuning,
                                    active: Breathing.isActive(mode) && windDown != .sleeping, clock: alive, demoSince: machine?.demoSince)
                     }
@@ -160,7 +161,7 @@ struct RootView: View {
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
                                     calibration: cal, showsHint: machine?.hintUntil != nil,
-                                    edgeLine: wallTuning.edgeLine,
+                                    edgeLine: machine?.isSlowLooking == true ? 0 : wallTuning.edgeLine,   // Be still: the drift alone
                                     canvasZone: CanvasText.zone(for: id, library: content.library, zones: content.zones),
                                     textHidden: machine?.textHidden ?? false)
                     case let .unfold(p):
@@ -295,6 +296,8 @@ struct RootView: View {
             if on { machine?.startSlowLooking(now: Self.now, library: c.library) } else { machine?.stopSlowLooking() }
         case let .dreamcoat(on):
             machine?.setDreamcoat(on, now: Self.now)
+        case let .show(screen):
+            if store.saved != nil { machine?.openScreen(screen) }
         case let .demo(on):
             if on, store.saved != nil { machine?.startDemo(now: Self.now) }
             else if !on, machine?.isDemo == true { send(.back, c) }
@@ -393,8 +396,33 @@ struct RootView: View {
         if UIApplication.shared.isIdleTimerDisabled != keep { UIApplication.shared.isIdleTimerDisabled = keep }
     }
 
+    /// The drifting light: Be still's walk, or at rest a gentler loop round the painting
+    /// (Tuning.drift; off in wind-down, the intro and alignment).
+    @ViewBuilder private func drift(_ mode: Mode, _ c: AppContent) -> some View {
+        let tour = Self.tour(c.library)
+        if let m = machine, m.isSlowLooking, let since = m.slowLookingSince {
+            DriftLayer(library: c.library, path: SlowLooking.path(ids: tour), since: since,
+                       dwell: SlowLooking.secondsPerFigure, fade: Drift.stillFade, loops: false,
+                       strength: wallTuning.subjectStrength)
+        } else {
+            let resting = mode == .stillness && windDown == .awake && machine?.isDemo != true
+            DriftLayer(library: c.library, path: tour, since: resting ? 0 : nil,
+                       dwell: Drift.restDwell, fade: Drift.restFade, loops: true,
+                       strength: wallTuning.subjectStrength * wallTuning.drift)
+                .opacity(resting ? 1 : 0)
+                .animation(.easeInOut(duration: 3), value: resting)
+        }
+    }
+    private static var tourCache: [String] = []
+    private static func tour(_ library: AnnotationLibrary) -> [String] {
+        if tourCache.isEmpty { tourCache = Drift.tour(library) }
+        return tourCache
+    }
+
     private func lightTargets(_ mode: Mode, _ c: AppContent) -> Set<String> {
-        switch mode {
+        // Be still: the drift draws the light (DriftLayer), so the figure's own light stays off.
+        if machine?.isSlowLooking == true { return [] }
+        return switch mode {
         case let .explore(id, _): [id]
         case let .unfold(p): UnfoldView.targets(c.script, p)
         case let .context(page): ContextView.targets(c.context, page: page)

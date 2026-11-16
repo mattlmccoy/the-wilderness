@@ -127,6 +127,8 @@ struct PhoneRootView: View {
         let s = client.snapshot
         let still = s?.still != nil
         return HStack(spacing: 0) {
+            modeButton("Explore", on: s?.mode == "explore" && !still) { client.send(.go(.exploreStart)) }
+            Spacer(minLength: 2)
             modeButton("Unfold", on: s?.mode == "unfold" && !still) { client.send(.go(.unfold)) }
             Spacer(minLength: 2)
             modeButton("Context", on: s?.mode == "context") { client.send(.go(.context)) }
@@ -300,6 +302,7 @@ struct SettingsSheet: View {
                 }
                 Section("At rest") {
                     slider("Breathing", \.breathing, 0...0.3)
+                    slider("Drifting light", \.drift, 0...1)
                     Toggle("Passing light", isOn: Binding(get: { tuning.passingLight },
                                                           set: { tuning.passingLight = $0; client.send(.setTuning(tuning)) }))
                 }
@@ -311,6 +314,10 @@ struct SettingsSheet: View {
                     .pickerStyle(.segmented)
                     slider("Brightness", \.glintBrightness, 0.2...1)
                     slider("Size", \.glintSizeInches, 0.05...0.6)
+                    Picker("Style", selection: Binding(get: { tuning.glintStyle },
+                                                       set: { tuning.glintStyle = $0; client.send(.setTuning(tuning)) })) {
+                        Text("Along a thread").tag(GlintStyle.thread); Text("Pinpoint").tag(GlintStyle.pinpoint)
+                    }
                 }
                 Section {
                     Toggle("Sound", isOn: Binding(get: { client.snapshot?.soundOn ?? false },
@@ -331,8 +338,10 @@ struct SettingsSheet: View {
                         }
                     }
                 }
-                Section {
+                Section(footer: Text("The pattern and About show on the wall; Back on the phone or the remote closes them.")) {
                     Button("Align to the tapestry…") { aligning = true }
+                    Button("Show the alignment pattern") { client.send(.show(.pattern)) }
+                    Button("Show About on the wall") { client.send(.show(.about)) }
                 }
                 Section(footer: Text("Plays every feature in a three-minute loop, for filming. Any press on the remote ends it.")) {
                     Button("Start the demo") { client.send(.demo(true)) }
