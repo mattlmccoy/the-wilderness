@@ -137,3 +137,18 @@ private func hm(_ date: Date) -> Int { let c = cal.dateComponents([.hour, .minut
         #expect(try JSONDecoder().decode(PhoneCommand.self, from: LineFramer.frame(cmd).dropLast()) == cmd)
     }
 }
+
+// MARK: Scatter (snow on 20 Nov 2026 fell in visible diagonal rows: x and y were linear in the flake number)
+
+@Test func scatterIsUncorrelatedAcrossFlakes() {
+    let n = 70
+    let xs = (0..<n).map { Scatter.unit($0, 3) }, ys = (0..<n).map { Scatter.unit($0, 2) }
+    #expect(xs.allSatisfy { $0 >= 0 && $0 < 1 })
+    let mx = xs.reduce(0, +) / Double(n), my = ys.reduce(0, +) / Double(n)
+    let cov = zip(xs, ys).map { ($0 - mx) * ($1 - my) }.reduce(0, +)
+    let sx = sqrt(xs.map { ($0 - mx) * ($0 - mx) }.reduce(0, +)), sy = sqrt(ys.map { ($0 - my) * ($0 - my) }.reduce(0, +))
+    #expect(abs(cov / (sx * sy)) < 0.3)
+    // Neighbouring flakes do not step by a constant amount (the rows).
+    let steps = Set((1..<n).map { Int(((xs[$0] - xs[$0 - 1]) * 1000).rounded()) })
+    #expect(steps.count > n / 2)
+}

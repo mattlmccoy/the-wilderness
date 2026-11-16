@@ -15,6 +15,7 @@ struct PhoneRootView: View {
     var body: some View {
         VStack(spacing: 0) {
             header
+            statusLine
             PaintingView(library: library, selected: client.snapshot?.subjectId,
                          onTap: { id in client.send(.go(.explore(id))) },
                          onTorch: torch ? { p in
@@ -43,7 +44,7 @@ struct PhoneRootView: View {
                 Text(client.link == .searching ? "Looking for the wall…" : "Not connected to the wall")
                     .font(PhoneType.text(16)).padding(.horizontal, 18).padding(.vertical, 10)
                     .background(Capsule().fill(PhonePalette.stone.opacity(0.35)))
-                    .padding(.bottom, 78)   // just above the controls, clear of the painting and text
+                    .padding(.bottom, 120)   // just above the controls, clear of the painting and text
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
@@ -74,6 +75,8 @@ struct PhoneRootView: View {
     private var header: some View {
         HStack {
             Text("The Wilderness").font(PhoneType.title(26))
+                // Easter egg: hold the title for the dreamcoat (hold again to end it).
+                .onLongPressGesture(minimumDuration: 1.0) { client.send(.dreamcoat(client.snapshot?.dreamcoat != true)) }
             Spacer()
             // Pulses each time the wall answers, so you can see it heard you.
             Circle().fill(client.link == .connected ? PhonePalette.gold : PhonePalette.stone)
@@ -88,10 +91,67 @@ struct PhoneRootView: View {
         .padding(.horizontal, 16).padding(.vertical, 10)
     }
 
+    /// What the wall is doing now, mirrored: the mode, and anything running (Be still, the
+    /// dreamcoat, the demo, the seasons).
+    private var statusLine: some View {
+        let s = client.snapshot
+        let parts = client.link == .connected ? [Self.modeName(s)] + (s?.status ?? []) : []
+        return Text(parts.compactMap { $0 }.joined(separator: "  ·  "))
+            .font(PhoneType.text(14)).tracking(1)
+            .foregroundStyle(PhonePalette.gold.opacity(0.9))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16).padding(.bottom, 8)
+            .lineLimit(2)
+            .animation(.easeInOut(duration: 0.3), value: parts)
+            .accessibilityLabel("The wall: " + parts.compactMap { $0 }.joined(separator: ", "))
+    }
+
+    static func modeName(_ s: WallSnapshot?) -> String? {
+        guard let s else { return nil }
+        if s.still != nil { return nil }   // "Be still · n of m" says it
+        switch s.mode {
+        case "rest": return "At rest"
+        case "menu": return "Menu"
+        case "intro": return "Starting"
+        case "explore": return s.title.map { "Exploring: \($0)" } ?? "Exploring"
+        case "unfold": return s.paused ? "Unfold, paused" : "Unfold"
+        case "context": return "Context"
+        case "calibrating": return "Aligning"
+        default: return "Settings"
+        }
+    }
+
+    /// The wall's modes, the running one lit gold; a lit one ends it. (The dreamcoat is an Easter
+    /// egg, not a mode: a long press on the title, like the code on the remote.)
+    private var modeRow: some View {
+        let s = client.snapshot
+        let still = s?.still != nil
+        return HStack(spacing: 0) {
+            modeButton("Unfold", on: s?.mode == "unfold" && !still) { client.send(.go(.unfold)) }
+            Spacer(minLength: 2)
+            modeButton("Context", on: s?.mode == "context") { client.send(.go(.context)) }
+            Spacer(minLength: 2)
+            modeButton("Be still", on: still) { client.send(.beStill(!still)) }
+        }
+        .font(PhoneType.text(17))
+        .padding(.horizontal, 10).padding(.top, 6)
+        .opacity(client.link == .connected ? 1 : 0.55)
+    }
+
+    private func modeButton(_ title: String, on: Bool, _ action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title).lineLimit(1).fixedSize()
+                .padding(.horizontal, 8).padding(.vertical, 4)
+                .background(Capsule().stroke(PhonePalette.gold.opacity(on ? 0.9 : 0), lineWidth: 1))
+        }
+        .foregroundStyle(on ? PhonePalette.gold : PhonePalette.ivory)
+        .accessibilityAddTraits(on ? .isSelected : [])
+    }
+
     private var controls: some View {
+        VStack(spacing: 0) {
+        modeRow
         HStack(spacing: 18) {
-            Button("Unfold") { client.send(.go(.unfold)) }.lineLimit(1).fixedSize()
-            Button("Context") { client.send(.go(.context)) }.lineLimit(1).fixedSize()
             Spacer()
             if client.snapshot?.canStep == true {
                 Button { client.send(.move(.left)) } label: { Image(systemName: "chevron.left") }
@@ -120,9 +180,10 @@ struct PhoneRootView: View {
         }
         .font(PhoneType.text(19))
         .tint(PhonePalette.gold)
-        .padding(.horizontal, 20).padding(.vertical, 14)
+        .padding(.horizontal, 20).padding(.vertical, 12)
         // Never disabled: a press while disconnected answers with a message and a buzz instead of nothing.
         .opacity(client.link == .connected ? 1 : 0.55)
+        }
     }
 }
 
@@ -260,6 +321,15 @@ struct SettingsSheet: View {
                 Section("Through the year") {
                     Toggle("Seasons", isOn: Binding(get: { tuning.seasons }, set: { tuning.seasons = $0; client.send(.setTuning(tuning)) }))
                     Toggle("Light follows the day", isOn: Binding(get: { tuning.followDay }, set: { tuning.followDay = $0; client.send(.setTuning(tuning)) }))
+                }
+                Section(header: Text("Each season"),
+                        footer: Text("Auto follows the calendar. On shows it any day; Off hides it. Thanksgiving's turkey runs every 90 seconds when On.")) {
+                    ForEach(SeasonMode.allCases, id: \.self) { m in
+                        Picker(m.title, selection: Binding(get: { tuning.switchFor(m) },
+                                                           set: { tuning.setSwitch(m, $0); client.send(.setTuning(tuning)) })) {
+                            Text("Auto").tag(SeasonSwitch.auto); Text("On").tag(SeasonSwitch.on); Text("Off").tag(SeasonSwitch.off)
+                        }
+                    }
                 }
                 Section {
                     Button("Align to the tapestry…") { aligning = true }

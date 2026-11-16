@@ -129,7 +129,7 @@ struct RootView: View {
                     .opacity(day.level)
                     .animation(.easeInOut(duration: 20), value: day)
                     DelightsLayer(library: content.library, delights: content.delights,
-                                  seasons: mode.isIntro || mode == .calibrating ? nil : season,
+                                  seasons: Self.showsSeasons(mode) ? season : nil,
                                   atRest: mode == .stillness && windDown != .sleeping,
                                   zone: CanvasText.instructionsZone(library: content.library, zones: content.zones),
                                   dreamcoatUntil: machine?.dreamcoatUntil,
@@ -229,6 +229,11 @@ struct RootView: View {
         var s = WallSnapshot.make(mode: m.mode, library: c.library, script: c.script, context: c.context,
                                   tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting,
                                   textHidden: m.textHidden)
+        // What is running, so the phone mirrors the wall.
+        s.still = m.slowProgress(now: Self.now)
+        s.dreamcoat = m.dreamcoat(now: Self.now)
+        s.seasons = seasons?.active ?? []
+        s.demo = m.isDemo
         if m.mode == .calibrating {
             s.alignment = (calSession ?? CalibrationSession(start: store.saved ?? startingCalibration(for: screenSize))).alignmentState
         }
@@ -286,6 +291,10 @@ struct RootView: View {
             machine?.noteActivity(now: Self.now)
         case let .align(a):
             handleAlign(a)
+        case let .beStill(on):
+            if on { machine?.startSlowLooking(now: Self.now, library: c.library) } else { machine?.stopSlowLooking() }
+        case let .dreamcoat(on):
+            machine?.setDreamcoat(on, now: Self.now)
         case let .demo(on):
             if on, store.saved != nil { machine?.startDemo(now: Self.now) }
             else if !on, machine?.isDemo == true { send(.back, c) }
@@ -329,10 +338,17 @@ struct RootView: View {
         return f.date(from: s).map { $0.timeIntervalSinceNow } ?? 0
     }()
     private var wallDate: Date { Date().addingTimeInterval(Self.previewOffset) }
-    private var seasons: SeasonEffects? { tuningStore.tuning.seasons ? Seasons.effects(at: wallDate) : nil }
+    private var seasons: SeasonEffects? { Seasons.effects(at: wallDate, tuning: tuningStore.tuning) }
     private var dayLight: DayLight { tuningStore.tuning.followDay ? DayLight.at(wallDate, place: .home) : .neutral }
     private var windDown: WindDown.Phase {
         machine?.isDemo == true ? .awake : WindDown().phase(at: wallDate)
+    }
+    /// The seasons decorate the painting, never the intro, alignment or settings screens (their text).
+    static func showsSeasons(_ mode: Mode) -> Bool {
+        switch mode {
+        case .intro, .calibrating, .settings, .tuning, .pattern, .about: false
+        default: true
+        }
     }
     static func washColor(_ tint: LiturgicalTint) -> Color {
         let c = tint.rgb, k = 0.35   // a faint tint over ivory

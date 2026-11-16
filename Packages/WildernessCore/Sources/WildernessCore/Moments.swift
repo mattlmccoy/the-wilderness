@@ -92,3 +92,11 @@ public struct WindDown: Equatable, Sendable {
         return m >= startMinute ? .settling : .awake
     }
 }
+
+/// Repeatable scatter for the snow and other sprinkled light: a value in 0..<1 for item `i`, channel `k`.
+public enum Scatter {
+    public static func unit(_ i: Int, _ k: Int) -> Double {
+        var g = SplitMix(seed: UInt64(truncatingIfNeeded: i) &* 0x1000_0000_01B3 &+ UInt64(truncatingIfNeeded: k))
+        return Double(g.next() >> 11) / Double(1 << 53)
+    }
+}

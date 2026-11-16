@@ -35,6 +35,6 @@ final class CompanionRoundTripUITests: XCTestCase {
         expectation(for: enabled, evaluatedWith: app.buttons["Context"])
         waitForExpectations(timeout: 20)
         app.buttons["Context"].tap()
-        XCTAssertTrue(app.staticTexts["The Painter"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["Into the Wilderness"].waitForExistence(timeout: 8))
     }
 }

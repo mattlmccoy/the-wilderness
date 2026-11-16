@@ -21,8 +21,15 @@ struct SettingsView: View {
                 }
             case .tuning:
                 if let t = tuning {
-                    ForEach(TuningRow.allCases, id: \.self) { r in
-                        row(TuningSession.label(r, t.tuning), focused: r == t.row)
+                    // Two columns, so every row fits on the canvas: the light, then the year.
+                    HStack(alignment: .top, spacing: 60) {
+                        VStack(alignment: .leading, spacing: 18) {
+                            ForEach(TuningRow.lightRows, id: \.self) { r in row(TuningSession.label(r, t.tuning), focused: r == t.row) }
+                        }
+                        VStack(alignment: .leading, spacing: 18) {
+                            hint("THROUGH THE YEAR")
+                            ForEach(TuningRow.yearRows, id: \.self) { r in row(TuningSession.label(r, t.tuning), focused: r == t.row) }
+                        }
                     }
                     hint("↑ ↓ choose   ·   ← → change   ·   ‹ done")
                 }
@@ -37,7 +44,7 @@ struct SettingsView: View {
                 EmptyView()
             }
         }
-        .frame(width: mode == .about ? 1060 : 560, alignment: .leading)
+        .frame(width: mode == .about || mode == .tuning ? 1060 : 560, alignment: .leading)
         .padding(.leading, 60).padding(.top, 140)
     }
 

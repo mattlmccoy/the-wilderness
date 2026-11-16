@@ -107,7 +107,7 @@ The wall keeps the church calendar (Easter by the Gregorian computus, everything
 it). Advent lights a candle on the canvas each Sunday; Lent counts its forty days; Christmas puts
 hats of soft red light on the lion, the stag, the bowing animal and the fox, lets snow fall and
 hangs a star over the angels on Christmas Eve and at Epiphany; Easter morning sends a gold dawn
-across the painting. The background wash takes the season's
+across the painting; and from the Monday of the week before Thanksgiving through the day itself, a turkey trots along the far hill now and then and bolts through the foreground. Each season can be set to Auto, On or Off, on the wall's Tune screen or the phone. The background wash takes the season's
 colour, and all the light warms and dims with the day, from sunrise and sunset at home.
 
 A few times an evening, at times that change every day, something small happens at rest: the stag

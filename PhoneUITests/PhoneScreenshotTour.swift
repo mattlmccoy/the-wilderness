@@ -16,7 +16,7 @@ final class PhoneScreenshotTour: XCTestCase {
         XCTAssertTrue(app.buttons["Context"].waitForExistence(timeout: 20))
         sleep(3); shot("phone-0-rest")
         app.buttons["Context"].tap()
-        XCTAssertTrue(app.staticTexts["The Painter"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["Into the Wilderness"].waitForExistence(timeout: 8))
         sleep(2); shot("phone-1-context")
         app.buttons["Settings"].tap()
         sleep(2); shot("phone-2-settings")

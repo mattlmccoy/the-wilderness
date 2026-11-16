@@ -41,6 +41,10 @@ struct DelightsLayer: View {
                     if atRest, s.adventCandles > 0 { candles(&ctx, size, t, lit: s.adventCandles) }
                     if atRest, let day = s.lentDay { lentLine(&ctx, size, day: day) }
                     if atRest, s.easterDawn { dawn(&ctx, size, t) }
+                    if atRest, s.thanksgiving, let paths = delights.turkey,
+                       let pose = Turkey.pose(at: t, every: Turkey.every(forced: s.forced.contains(.thanksgiving)), paths: paths) {
+                        turkey(&ctx, size, pose)
+                    }
                 }
                 if atRest, let m = moment { self.moment(&ctx, size, m.0, m.1) }
                 if let r = revealSince { revealAngels(&ctx, size, seconds: t - r) }
@@ -60,11 +64,15 @@ struct DelightsLayer: View {
         func rgba(_ r: Double, _ g: Double, _ b: Double, _ a: Double) -> Color { Color(red: r / 255, green: g / 255, blue: b / 255).opacity(a) }
         for h in delights.hats {
             let w = (h.size ?? 0.03) * size.width
-            var c = ctx
+            // One picture per hat, then added as light, so the overlapping fur tufts don't add up.
+            var outer = ctx
+            outer.addFilter(.blur(radius: max(0.4, w * 0.012)))
+            outer.drawLayer { layer in
+            var c = layer
+            c.blendMode = .normal
             c.translateBy(x: h.x * size.width, y: h.y * size.height)
             c.rotate(by: .degrees(h.tilt ?? 0))
             if h.flip == true { c.scaleBy(x: -1, y: 1) }
-            c.addFilter(.blur(radius: max(0.4, w * 0.012)))
             var cone = Path()
             cone.move(to: CGPoint(x: -0.5 * w, y: 0))
             cone.addCurve(to: CGPoint(x: 0.42 * w, y: -1.02 * w), control1: CGPoint(x: -0.46 * w, y: -0.62 * w), control2: CGPoint(x: -0.05 * w, y: -1.12 * w))
@@ -94,6 +102,7 @@ struct DelightsLayer: View {
                 let a = Double(i) * 1.26
                 tuft(0.68 * w + cos(a) * 0.04 * w, -0.72 * w + sin(a) * 0.04 * w, 0.085 * w, edge: rgba(190, 172, 146, 0))
             }
+            }
         }
     }
 
@@ -101,7 +110,7 @@ struct DelightsLayer: View {
         var c = ctx
         c.addFilter(.blur(radius: 1.5))
         for i in 0..<70 {
-            let r = { (k: Int) in Double((i * 7919 + k * 104_729) % 1000) / 1000 }
+            let r = { (k: Int) in Scatter.unit(i, k) }
             let fall = 0.012 + 0.02 * r(1)
             let y = (r(2) + t * fall).truncatingRemainder(dividingBy: 1.08) - 0.04
             let x = r(3) + 0.012 * sin(t * (0.3 + 0.4 * r(4)) + Double(i))
@@ -179,6 +188,76 @@ struct DelightsLayer: View {
                                                         .init(color: Color(red: 1, green: 0.78, blue: 0.4).opacity(0.28 * fade), location: 0.5),
                                                         .init(color: .clear, location: 1)]),
                                        startPoint: CGPoint(x: x - w, y: 0), endPoint: CGPoint(x: x + w, y: 0)))
+    }
+
+    // MARK: Thanksgiving
+
+    /// The turkey, drawn like the hats: shaded, soft-edged, lit from the upper left. It faces right
+    /// unless its path runs left; its legs pump and its body bobs as it runs.
+    private func turkey(_ ctx: inout GraphicsContext, _ size: CGSize, _ pose: Turkey.Pose) {
+        func rgba(_ r: Double, _ g: Double, _ b: Double, _ a: Double) -> Color { Color(red: r / 255, green: g / 255, blue: b / 255).opacity(a) }
+        let h = pose.size * size.width
+        let leg = pose.seconds * 2 * .pi * (pose.onHill ? 2.5 : 3.2)
+        let bob = abs(sin(leg)) * 0.05 * h
+        // Fade in and out on the hill (it slips behind the rocks); the foreground run enters off the canvas.
+        let legLength = pose.onHill ? Turkey.hillSeconds : Turkey.groundSeconds
+        let fade = pose.onHill ? min(1, pose.seconds / 0.8, (legLength - pose.seconds) / 0.8) : 1
+        // Drawn as one picture, then added as light: overlapping feathers must not add up.
+        var outer = ctx
+        outer.opacity = max(0, fade)
+        outer.addFilter(.blur(radius: max(0.3, h * 0.008)))
+        outer.drawLayer { layer in
+        var c = layer
+        c.blendMode = .normal
+        c.translateBy(x: pose.x * size.width, y: pose.y * size.height)
+        if !pose.facingRight { c.scaleBy(x: -1, y: 1) }
+        // Legs, under everything: two thin strokes swinging opposite ways.
+        for k in [0.0, Double.pi] {
+            let a = sin(leg + k) * 0.45
+            let hip = CGPoint(x: 0.02 * h, y: -0.3 * h - bob)
+            var l = Path(); l.move(to: hip)
+            l.addLine(to: CGPoint(x: hip.x + sin(a) * 0.3 * h, y: hip.y + cos(a) * 0.3 * h))
+            c.stroke(l, with: .color(rgba(190, 120, 70, 0.9)), style: StrokeStyle(lineWidth: 0.035 * h, lineCap: .round))
+        }
+        // The fan tail, behind the body: banded feathers, dark at the root, rust, then a pale tip.
+        let fanCenter = CGPoint(x: -0.18 * h, y: -0.5 * h - bob)
+        for i in 0..<11 {
+            let a = Angle.degrees(-170 + Double(i) * 14)
+            var f = c
+            f.translateBy(x: fanCenter.x, y: fanCenter.y)
+            f.rotate(by: a)
+            let len = 0.5 * h, wid = 0.13 * h
+            f.fill(Path(ellipseIn: CGRect(x: 0, y: -wid / 2, width: len, height: wid)),
+                   with: .linearGradient(Gradient(stops: [.init(color: rgba(70, 42, 24, 0.95), location: 0),
+                                                          .init(color: rgba(150, 78, 36, 0.95), location: 0.55),
+                                                          .init(color: rgba(60, 34, 20, 0.95), location: 0.78),
+                                                          .init(color: rgba(232, 214, 180, 0.95), location: 0.92),
+                                                          .init(color: rgba(232, 214, 180, 0), location: 1)]),
+                                         startPoint: .zero, endPoint: CGPoint(x: len, y: 0)))
+        }
+        // Body: bronze, lit from the upper left.
+        let body = Path(ellipseIn: CGRect(x: -0.26 * h, y: -0.66 * h - bob, width: 0.52 * h, height: 0.42 * h))
+        c.fill(body, with: .linearGradient(Gradient(colors: [rgba(150, 96, 52, 0.95), rgba(96, 58, 32, 0.95), rgba(52, 32, 20, 0.95)]),
+                                          startPoint: CGPoint(x: -0.2 * h, y: -0.7 * h), endPoint: CGPoint(x: 0.2 * h, y: -0.25 * h)))
+        // Neck and head, stretched forward at a run.
+        var neck = Path()
+        neck.move(to: CGPoint(x: 0.14 * h, y: -0.55 * h - bob))
+        neck.addQuadCurve(to: CGPoint(x: 0.3 * h, y: -0.86 * h - bob), control: CGPoint(x: 0.3 * h, y: -0.6 * h - bob))
+        c.stroke(neck, with: .color(rgba(120, 80, 60, 0.95)), style: StrokeStyle(lineWidth: 0.07 * h, lineCap: .round))
+        let head = CGPoint(x: 0.31 * h, y: -0.88 * h - bob)
+        c.fill(Path(ellipseIn: CGRect(x: head.x - 0.06 * h, y: head.y - 0.055 * h, width: 0.12 * h, height: 0.11 * h)),
+               with: .color(rgba(170, 160, 175, 0.95)))
+        var beak = Path(); beak.move(to: CGPoint(x: head.x + 0.05 * h, y: head.y - 0.015 * h))
+        beak.addLine(to: CGPoint(x: head.x + 0.11 * h, y: head.y + 0.005 * h)); beak.addLine(to: CGPoint(x: head.x + 0.05 * h, y: head.y + 0.02 * h))
+        c.fill(beak, with: .color(rgba(220, 180, 110, 0.95)))
+        // The wattle swings with the run.
+        var wattle = Path()
+        wattle.move(to: CGPoint(x: head.x + 0.04 * h, y: head.y + 0.03 * h))
+        wattle.addQuadCurve(to: CGPoint(x: head.x + 0.02 * h + sin(leg) * 0.02 * h, y: head.y + 0.15 * h),
+                            control: CGPoint(x: head.x + 0.08 * h, y: head.y + 0.1 * h))
+        c.stroke(wattle, with: .color(rgba(200, 40, 34, 0.95)), style: StrokeStyle(lineWidth: 0.04 * h, lineCap: .round))
+        c.fill(Path(ellipseIn: CGRect(x: head.x - 0.005 * h, y: head.y - 0.025 * h, width: 0.022 * h, height: 0.022 * h)), with: .color(.black))
+        }
     }
 
     // MARK: Moments, the restoration, the dreamcoat, the flashlight
