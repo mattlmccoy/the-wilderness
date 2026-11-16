@@ -18,6 +18,9 @@ struct RootView: View {
     @State private var companion = CompanionServer()
     private static let painting: UIImage? = Bundle.main.path(forResource: "painting", ofType: "jpg").flatMap(UIImage.init(contentsOfFile:))
     @State private var machine: ModeMachine?
+    /// The alignment in progress: shared by the remote (CalibrationView) and the phone (Align).
+    @State private var calSession: CalibrationSession?
+    @State private var screenSize = PixelSize(width: 1920, height: 1080)
     @State private var tuningSession: TuningSession?
     /// Decoded once per process, not on every RootView re-creation. A failure is kept too,
     /// so the visible "Content failed to load" message still shows.
@@ -39,14 +42,11 @@ struct RootView: View {
                 if let m = machine {
                     if m.mode == .calibrating || store.saved == nil {
                         CalibrationView(
-                            start: startingCalibration(for: screen),
+                            session: Binding(get: { calSession ?? CalibrationSession(start: startingCalibration(for: screen)) },
+                                             set: { calSession = $0 }),
                             screen: geo.size,
                             canCancel: store.saved != nil,
-                            onFinish: { outcome in
-                                var saved = false
-                                if case let .save(cal) = outcome { store.save(cal); saved = true }
-                                machine?.finishCalibration(now: Self.now, playIntro: saved && !Self.skipIntro)
-                            })
+                            onFinish: { finishCalibration($0) })
                     } else if let cal = store.saved {
                         artwork(cal, screen: geo.size)
                     }
@@ -54,6 +54,7 @@ struct RootView: View {
             }
         }
         .ignoresSafeArea()
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { screenSize = PixelSize(width: $0.width, height: $0.height) }
         .onAppear {
             if machine == nil {
                 machine = ModeMachine(calibrated: store.saved != nil, now: Self.now, intro: !Self.skipIntro)
@@ -174,8 +175,42 @@ struct RootView: View {
 
     private var snapshot: WallSnapshot? {
         guard let m = machine, case let .success(c) = Self.content else { return nil }
-        return WallSnapshot.make(mode: m.mode, library: c.library, script: c.script, context: c.context,
-                                 tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting)
+        var s = WallSnapshot.make(mode: m.mode, library: c.library, script: c.script, context: c.context,
+                                  tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting)
+        if m.mode == .calibrating {
+            s.alignment = (calSession ?? CalibrationSession(start: startingCalibration(for: screenSize))).alignmentState
+        }
+        return s
+    }
+
+    private func finishCalibration(_ outcome: CalibrationSession.Outcome) {
+        var saved = false
+        if case let .save(cal) = outcome { store.save(cal); saved = true }
+        calSession = nil
+        machine?.finishCalibration(now: Self.now, playIntro: saved && !Self.skipIntro)
+    }
+
+    /// The phone's Align screen drives the same session as the remote.
+    private func handleAlign(_ command: AlignCommand) {
+        if command == .start {
+            guard store.saved != nil else { return }   // first setup stays on the remote
+            calSession = CalibrationSession(start: startingCalibration(for: screenSize))
+            machine?.beginCalibration()
+            return
+        }
+        guard machine?.mode == .calibrating else { return }
+        var session = calSession ?? CalibrationSession(start: startingCalibration(for: screenSize))
+        switch command {
+        case let .pick(p): session.handle(.pick(p))
+        case let .move(d): session.handle(.move(d))
+        case .toggleFine: session.handle(.playPause)
+        case .save: finishCalibration(.save(session.calibration)); return
+        case .cancel:
+            if store.saved != nil { finishCalibration(.cancel) }
+            return
+        case .start: break
+        }
+        calSession = session
     }
 
     private func handlePhone(_ command: PhoneCommand) {
@@ -189,6 +224,8 @@ struct RootView: View {
             soundOn = on
         case let .setShowPainting(on):
             showPainting = on
+        case let .align(a):
+            handleAlign(a)
         default:
             if let input = command.input { send(input, c) }
         }

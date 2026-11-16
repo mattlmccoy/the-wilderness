@@ -17,6 +17,30 @@ struct MappedCanvas<Content: View>: View {
                 .frame(width: canvas.width, height: canvas.height, alignment: .topLeading)
                 .projectionEffect(ProjectionTransform(h.rowVectorElements))
                 .frame(width: screen.width, height: screen.height, alignment: .topLeading)
+                .modifier(BendEffect(calibration: calibration, screen: screenSize))
+        }
+    }
+}
+
+/// Eight-point alignment: bows each edge through its midpoint (Bend.metal). Skipped entirely
+/// while every edge is straight, so a 4-corner calibration renders exactly as before.
+private struct BendEffect: ViewModifier {
+    let calibration: Calibration
+    let screen: PixelSize
+
+    func body(content: Content) -> some View {
+        if calibration.isBent, let rows = calibration.screenToArtworkRows(screen: screen) {
+            let o = calibration.edgeOffsets
+            let f3 = { (r: SIMD3<Double>) in Shader.Argument.float3(Float(r.x), Float(r.y), Float(r.z)) }
+            let shader = ShaderLibrary.wildernessBend(
+                f3(rows[0]), f3(rows[1]), f3(rows[2]),
+                .float2(Float(screen.width), Float(screen.height)),
+                .float4(Float(o[0].x), Float(o[0].y), Float(o[2].x), Float(o[2].y)),
+                .float4(Float(o[1].x), Float(o[1].y), Float(o[3].x), Float(o[3].y)))
+            let m = Calibration.maxEdgeOffset
+            content.distortionEffect(shader, maxSampleOffset: CGSize(width: m * screen.width, height: m * screen.height))
+        } else {
+            content
         }
     }
 }

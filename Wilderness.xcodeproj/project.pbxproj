@@ -15,6 +15,7 @@
 		19E03F1DEAEF0829F051EE75 /* context-met-fifth-avenue.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 48BDF7B68F2D96EDE22DD2A7 /* context-met-fifth-avenue.jpg */; };
 		1A3E825D8DF9C1766804B19B /* WildernessPhoneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */; };
 		1B42BB5778852B23F8F7146B /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
+		1B47E4F6A4BAC578CD889007 /* Bend.metal in Sources */ = {isa = PBXBuildFile; fileRef = C0F9EC69B2D1674762F0D15E /* Bend.metal */; };
 		1DC8D6B1048D207A6E9D3339 /* CompanionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00541C4509425B1002EE55BF /* CompanionClient.swift */; };
 		1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */; };
 		21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425BD17EFB125958F97DC424 /* GlintLayer.swift */; };
@@ -26,6 +27,7 @@
 		36DED69A7C315F85CC3A7B48 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393AF73F60A0DEC4D2325EBB /* MenuView.swift */; };
 		3D9872B60E300B60885C3D00 /* context-brescia-and-monte-guglielmo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9CB09035172BE7CF4119EDD /* context-brescia-and-monte-guglielmo.jpg */; };
 		45F67052610914C12403E339 /* annotations.json in Resources */ = {isa = PBXBuildFile; fileRef = FEF2516EA0E49076236AEF71 /* annotations.json */; };
+		46B57182DBBB10CCE8DD6425 /* AlignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE26A22216ED7EBD7036342 /* AlignView.swift */; };
 		4D82EBC476E49CB3071E006B /* ExperienceFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9008DA8A92D1DE18AB52BBBD /* ExperienceFlowUITests.swift */; };
 		4EC4A7D42FF434BECCF8E6CB /* OFL-EBGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */; };
 		4F75DC0856BE7739A7D5D43F /* ContextVisuals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48359873878EEE55C08BC20 /* ContextVisuals.swift */; };
@@ -147,6 +149,7 @@
 		B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationStore.swift; sourceTree = "<group>"; };
 		B9454B4A0B41FE0516A95935 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBBA3E5909571B3CFA2A7003 /* ContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextView.swift; sourceTree = "<group>"; };
+		C0F9EC69B2D1674762F0D15E /* Bend.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Bend.metal; sourceTree = "<group>"; };
 		C383264E565691887550532C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C3D9ABCB216D4822AD9E821B /* OFL-EBGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-EBGaramond.txt"; sourceTree = "<group>"; };
 		C9B6A942754A14FEB94BB43E /* AliveLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliveLayer.swift; sourceTree = "<group>"; };
@@ -162,6 +165,7 @@
 		F6BDD2885BEE47A41C152161 /* WallText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallText.swift; sourceTree = "<group>"; };
 		FD97476B6D5814CC002BB613 /* TuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TuningStore.swift; sourceTree = "<group>"; };
 		FEF2516EA0E49076236AEF71 /* annotations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = annotations.json; sourceTree = "<group>"; };
+		FFE26A22216ED7EBD7036342 /* AlignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +191,7 @@
 		120BADBCCFC09D5AD94257F5 /* Phone */ = {
 			isa = PBXGroup;
 			children = (
+				FFE26A22216ED7EBD7036342 /* AlignView.swift */,
 				B9454B4A0B41FE0516A95935 /* Assets.xcassets */,
 				00541C4509425B1002EE55BF /* CompanionClient.swift */,
 				C383264E565691887550532C /* Info.plist */,
@@ -209,6 +214,7 @@
 			children = (
 				C9B6A942754A14FEB94BB43E /* AliveLayer.swift */,
 				63272EBAD19DCC2048941CE0 /* Assets.xcassets */,
+				C0F9EC69B2D1674762F0D15E /* Bend.metal */,
 				B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */,
 				3E899EF5E0A146751A13B832 /* CalibrationView.swift */,
 				E10720E4193012A37B12219F /* CompanionServer.swift */,
@@ -525,6 +531,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46B57182DBBB10CCE8DD6425 /* AlignView.swift in Sources */,
 				1DC8D6B1048D207A6E9D3339 /* CompanionClient.swift in Sources */,
 				C30A7F5606E2F4A061AFC73E /* PhoneViews.swift in Sources */,
 				1A3E825D8DF9C1766804B19B /* WildernessPhoneApp.swift in Sources */,
@@ -545,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88052D5A91DBAE1B9FC9BEE3 /* AliveLayer.swift in Sources */,
+				1B47E4F6A4BAC578CD889007 /* Bend.metal in Sources */,
 				1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */,
 				719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */,
 				BC81D67AB0B01913A484ACE3 /* CompanionServer.swift in Sources */,

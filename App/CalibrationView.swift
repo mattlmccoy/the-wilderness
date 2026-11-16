@@ -1,25 +1,19 @@
 import SwiftUI
 import WildernessCore
 
-/// Four-corner calibration with the Siri Remote. The flow itself lives in `CalibrationSession`:
+/// Eight-point calibration (4 corners + 4 edge midpoints) with the Siri Remote or the phone. The flow itself lives in `CalibrationSession`:
 ///   Arrows → move the corner · Select → next corner, then review · Select on review → save
 ///   ‹ Back → on review, keep adjusting; otherwise cancel · Play/Pause → fine / coarse
 /// The registration pattern is drawn *through* the live mapping, so what you see on the
 /// wall while adjusting is exactly what the saved calibration will produce.
 struct CalibrationView: View {
+    /// Owned by RootView so the phone's Align screen can drive the same session.
+    @Binding var session: CalibrationSession
     let screen: CGSize
     /// False on first setup: there is nothing to return to, so Back leaves the app as tvOS expects.
     let canCancel: Bool
     let onFinish: (CalibrationSession.Outcome) -> Void
-    @State private var session: CalibrationSession
 
-    init(start: Calibration, screen: CGSize, canCancel: Bool,
-         onFinish: @escaping (CalibrationSession.Outcome) -> Void) {
-        self.screen = screen
-        self.canCancel = canCancel
-        self.onFinish = onFinish
-        _session = State(initialValue: CalibrationSession(start: start))
-    }
 
     private var reviewing: Bool { session.phase == .review }
 
@@ -29,7 +23,7 @@ struct CalibrationView: View {
                 RegistrationTestPattern()
             }
             if !reviewing {
-                ForEach(Corner.allCases, id: \.self) { corner in handle(for: corner) }
+                ForEach(AlignPoint.allCases, id: \.self) { point in handle(for: point) }
             }
             // Kept inside the TV title-safe margin (about 60 pt at 1080p) so it never falls off the wall.
             instructions
@@ -49,13 +43,20 @@ struct CalibrationView: View {
         if let outcome = session.handle(input) { onFinish(outcome) }
     }
 
-    private func handle(for corner: Corner) -> some View {
-        let p = session.calibration.corners[corner.rawValue]
-        let selected = session.phase == .corner(corner)
+    /// Corners are rings; edge midpoints are small diamonds (they bend an edge, not move a corner).
+    private func handle(for point: AlignPoint) -> some View {
+        let p = session.calibration.handle(point)
+        let selected = session.phase == .point(point)
+        let color = selected ? Palette.gold : Palette.stone.opacity(0.5)
+        let size: CGFloat = selected ? 34 : 18
         return ZStack {
-            Circle().stroke(selected ? Palette.gold : Palette.stone.opacity(0.5), lineWidth: selected ? 2.5 : 1.5)
-                .frame(width: selected ? 34 : 18, height: selected ? 34 : 18)
-            Circle().fill(selected ? Palette.gold : Palette.stone.opacity(0.5)).frame(width: 4, height: 4)
+            if point.edge == nil {
+                Circle().stroke(color, lineWidth: selected ? 2.5 : 1.5).frame(width: size, height: size)
+            } else {
+                Rectangle().stroke(color, lineWidth: selected ? 2.5 : 1.5)
+                    .frame(width: size * 0.75, height: size * 0.75).rotationEffect(.degrees(45))
+            }
+            Circle().fill(color).frame(width: 4, height: 4)
         }
         .position(x: p.x * screen.width, y: p.y * screen.height)
     }

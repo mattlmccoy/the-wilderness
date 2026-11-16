@@ -159,6 +159,7 @@ struct SettingsSheet: View {
     @ObservedObject var client: CompanionClient
     @State private var tuning = Tuning.defaults
     @State private var loaded = false
+    @State private var aligning = false
 
     var body: some View {
         NavigationStack {
@@ -188,9 +189,13 @@ struct SettingsSheet: View {
                     Toggle("Show painting", isOn: Binding(get: { client.snapshot?.showPainting ?? false },
                                                           set: { client.send(.setShowPainting($0)) }))
                 }
+                Section {
+                    Button("Align to the tapestry…") { aligning = true }
+                }
                 Section { Button("Reset light to defaults") { tuning = .defaults; client.send(.setTuning(tuning)) } }
             }
             .navigationTitle("Settings")
+            .fullScreenCover(isPresented: $aligning) { AlignView(client: client) }
             .navigationBarTitleDisplayMode(.inline)
         }
         // Always edit the wall's real values (never defaults), and follow changes made on the wall.
