@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from fetch_verses import FetchError, passage_id, refresh  # noqa: E402
+from fetch_verses import FetchError, passage_id, refresh, wall_excerpts  # noqa: E402
 from verse_align import align, normalize  # noqa: E402
 
 FIX = json.loads((Path(__file__).parent / "fixtures/standin_verses.json").read_text())
@@ -152,3 +152,24 @@ def test_script_loads_isolated_under_the_system_python_launchd_uses():
                         f"import runpy; runpy.run_path({str(script)!r}, run_name='loaded')"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
+
+
+# Into the Quiet (docs/superpowers/specs/2026-11-16-prayer-mode-design.md)
+
+def test_prayer_books_have_codes():
+    assert passage_id("Lamentations 3:23") == "LAM.3.23"
+    assert passage_id("Philippians 4:7") == "PHP.4.7"
+
+
+def test_prayer_lines_are_fetched_like_wall_verses(content, sources):
+    (content / "prayer.json").write_text(json.dumps({
+        "morning": [{"ref": "Psalm 42:1", "text": FIX["Psalm 42:1"]["excerpt"]}],
+        "evening": [{"ref": "John 7:37", "text": FIX["John 7:37"]["excerpt"]}]}))
+    ex = wall_excerpts(content)   # neither is a figure's or a beat's verse in this fixture
+    assert ex["Psalm 42:1"] == FIX["Psalm 42:1"]["excerpt"] and "John 7:37" in ex
+    run(content, sources)
+    assert {"Psalm 42:1", "John 7:37"} <= {v["ref"] for v in saved(content)["verses"]}
+
+
+def test_no_prayer_file_is_fine(content):
+    assert "Genesis 3:15" in wall_excerpts(content)

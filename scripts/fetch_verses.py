@@ -35,7 +35,7 @@ API = "https://rest.api.bible/v1/bibles/{bible}/passages/{pid}?content-type=text
       "&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false&include-verse-spans=false"
 BOOKS = {"Genesis": "GEN", "Exodus": "EXO", "Deuteronomy": "DEU", "Psalm": "PSA", "Psalms": "PSA",
          "Isaiah": "ISA", "Daniel": "DAN", "Matthew": "MAT", "Mark": "MRK", "Luke": "LUK", "John": "JHN",
-         "Romans": "ROM", "Galatians": "GAL", "Hebrews": "HEB", "1 Peter": "1PE", "Revelation": "REV"}
+         "Romans": "ROM", "Galatians": "GAL", "Lamentations": "LAM", "Philippians": "PHP", "Hebrews": "HEB", "1 Peter": "1PE", "Revelation": "REV"}
 
 Fetch = Callable[[str, str], Dict]
 
@@ -54,7 +54,8 @@ def passage_id(ref: str) -> str:
 
 
 def wall_excerpts(content: Path) -> dict[str, str]:
-    """Every verse on the wall still written against the BSB placeholder: ref -> excerpt."""
+    """Every verse on the wall still written against the BSB placeholder: ref -> excerpt.
+    Includes the prayer lines in prayer.json."""
     items = json.loads((content / "annotations.json").read_text())["annotations"] + \
         json.loads((content / "unfold.json").read_text())["beats"]
     out: dict[str, str] = {}
@@ -62,6 +63,12 @@ def wall_excerpts(content: Path) -> dict[str, str]:
         for v in (item.get("more") or {}).get("verses", []):
             if v["translation"] == "BSB":
                 out.setdefault(v["ref"], v["text"])
+    # Into the Quiet: the morning and evening prayer lines (BSB clauses).
+    prayer = content / "prayer.json"
+    if prayer.exists():
+        data = json.loads(prayer.read_text())
+        for line in data.get("morning", []) + data.get("evening", []):
+            out.setdefault(line["ref"], line["text"])
     return out
 
 
