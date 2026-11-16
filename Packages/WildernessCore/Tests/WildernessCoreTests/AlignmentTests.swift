@@ -126,3 +126,35 @@ private func near(_ a: Point<ProjectorSpace>, _ b: Point<ProjectorSpace>, _ tol:
     e.beginCalibration()
     #expect(e.mode == .calibrating)
 }
+
+// MARK: Dragging handles on the phone (Matt, 2026-11-15)
+
+@Test func draggingACornerPutsItExactlyThere() {
+    var s = CalibrationSession(start: cal())
+    s.handle(.place(.topLeft, Point(x: 0.2, y: 0.12)))
+    #expect(s.phase == .point(.topLeft))
+    #expect(near(s.calibration.corners[0], Point(x: 0.2, y: 0.12)))
+}
+
+@Test func draggingAMidpointBendsItsEdgeSoTheHandleLandsUnderTheFinger() {
+    var s = CalibrationSession(start: cal())
+    let straight = cal().handle(.topMiddle)
+    let target = Point<ProjectorSpace>(x: straight.x, y: straight.y + 0.03)
+    s.handle(.place(.topMiddle, target))
+    #expect(near(s.calibration.handle(.topMiddle), target, 1e-9))
+    #expect(s.calibration.corners == cal().corners)
+}
+
+@Test func aDragCannotFoldTheOutlineOrBendTooFar() {
+    var s = CalibrationSession(start: cal())
+    let before = s.calibration
+    s.handle(.place(.topLeft, Point(x: 0.95, y: 0.95)))          // past the opposite corner
+    #expect(s.calibration.corners == before.corners)
+    s.handle(.place(.bottomMiddle, Point(x: 0.5, y: 2.0)))       // far off the frame
+    #expect(abs(s.calibration.edgeOffsets[AlignEdge.bottom.rawValue].y) <= Calibration.maxEdgeOffset + 1e-12)
+}
+
+@Test func placeTravelsOverTheWire() throws {
+    let c = PhoneCommand.align(.place(.rightMiddle, Point(x: 0.81, y: 0.5)))
+    #expect(try JSONDecoder().decode(PhoneCommand.self, from: LineFramer.frame(c).dropLast()) == c)
+}

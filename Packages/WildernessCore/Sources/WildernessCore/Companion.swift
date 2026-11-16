@@ -33,6 +33,8 @@ public enum PhoneCommand: Codable, Equatable, Sendable {
 /// Apple TV → phone: what the wall is showing now, plus the settings the phone edits.
 public enum AlignCommand: Codable, Equatable, Sendable {
     case start, pick(AlignPoint), move(NudgeDirection), toggleFine, save, cancel
+    /// A handle dragged on the phone, to this normalized projector point.
+    case place(AlignPoint, Point<ProjectorSpace>)
 }
 
 /// What the phone needs to draw the alignment diagram while the wall is calibrating.

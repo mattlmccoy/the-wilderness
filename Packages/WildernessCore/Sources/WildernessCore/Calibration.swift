@@ -191,6 +191,23 @@ public struct CornerAdjuster: Sendable {
 
     public mutating func select(_ point: AlignPoint) { selected = point }
 
+    /// Drag from the phone: put a handle exactly where the finger is. A corner moves (never
+    /// folding the outline); a midpoint bends its edge so the handle lands there (clamped).
+    public mutating func place(_ point: AlignPoint, at target: Point<ProjectorSpace>) {
+        selected = point
+        if let edge = point.edge, let h = calibration.artworkToProjector {
+            let straight = h.apply(point.artworkPosition)
+            let m = Calibration.maxEdgeOffset
+            calibration.edgeOffsets[edge.rawValue] = Point(x: min(max(target.x - straight.x, -m), m),
+                                                           y: min(max(target.y - straight.y, -m), m))
+            return
+        }
+        guard let i = point.cornerIndex else { return }
+        var candidate = calibration
+        candidate.corners[i] = Point(x: min(max(target.x, 0), 1), y: min(max(target.y, 0), 1))
+        if candidate.isConvex { calibration = candidate }
+    }
+
     public mutating func selectNext() {
         selected = AlignPoint(rawValue: (selected.rawValue + 1) % AlignPoint.allCases.count)!
     }

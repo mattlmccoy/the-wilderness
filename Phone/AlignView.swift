@@ -7,6 +7,9 @@ import WildernessCore
 struct AlignView: View {
     @ObservedObject var client: CompanionClient
     @Environment(\.dismiss) private var dismiss
+    /// While dragging: the handle follows the finger here at once; the wall follows over Wi-Fi.
+    @State private var dragging: (point: AlignPoint, at: CGPoint)?
+    @State private var lastSent = Date.distantPast
 
     private var state: AlignmentState? { client.snapshot?.alignment }
 
@@ -16,7 +19,7 @@ struct AlignView: View {
             diagram
                 .aspectRatio(16.0 / 9.0, contentMode: .fit)
                 .padding(.horizontal, 12)
-            Text("Tap a point, then nudge it until the line sits on the edge of the weave. The diamonds bend an edge.")
+            Text("Drag a point until the line on the wall sits on the edge of the weave; use the arrows for the last few pixels. The diamonds bend an edge.")
                 .font(PhoneType.text(15, italic: true)).foregroundStyle(PhonePalette.stone)
                 .multilineTextAlignment(.center).padding(.horizontal, 24)
             arrows
@@ -46,21 +49,50 @@ struct AlignView: View {
     private var diagram: some View {
         GeometryReader { geo in
             let w = geo.size.width, h = geo.size.height
-            let pts = (state?.handles ?? []).map { CGPoint(x: $0.x * w, y: $0.y * h) }
+            var pts = (state?.handles ?? []).map { CGPoint(x: $0.x * w, y: $0.y * h) }
+            let _ = { if let d = dragging, pts.count == 8 { pts[d.point.rawValue] = d.at } }()
             ZStack {
                 Rectangle().stroke(PhonePalette.stone.opacity(0.4), lineWidth: 1)
+                    .contentShape(Rectangle())
                 if pts.count == 8 {
-                    Path { p in p.addLines(pts); p.closeSubpath() }
-                        .stroke(PhonePalette.ivory.opacity(0.6), lineWidth: 1.2)
+                    // Each edge as the wall draws it: a smooth curve through its midpoint handle.
+                    Path { p in
+                        p.move(to: pts[0])
+                        for i in stride(from: 0, to: 8, by: 2) {
+                            let a = pts[i], m = pts[i + 1], b = pts[(i + 2) % 8]
+                            p.addQuadCurve(to: b, control: CGPoint(x: 2 * m.x - (a.x + b.x) / 2, y: 2 * m.y - (a.y + b.y) / 2))
+                        }
+                    }
+                    .stroke(PhonePalette.ivory.opacity(0.6), lineWidth: 1.2)
                     ForEach(AlignPoint.allCases, id: \.self) { point in
                         let selected = state?.selected == point
-                        handle(point, selected: selected)
+                        handle(point, selected: selected || dragging?.point == point)
                             .position(pts[point.rawValue])
-                            .onTapGesture { client.send(.align(.pick(point))) }
+                            .gesture(drag(point, size: geo.size))
                     }
                 }
             }
+            .coordinateSpace(name: "diagram")
         }
+    }
+
+    /// Drag a handle: it follows the finger here, and the wall moves with it (~20 updates a second).
+    private func drag(_ point: AlignPoint, size: CGSize) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .named("diagram"))
+            .onChanged { g in
+                let at = CGPoint(x: min(max(g.location.x, 0), size.width), y: min(max(g.location.y, 0), size.height))
+                if dragging == nil { client.send(.align(.pick(point))) }
+                dragging = (point, at)
+                if Date().timeIntervalSince(lastSent) > 0.05 { send(point, at, size); lastSent = Date() }
+            }
+            .onEnded { g in
+                if let d = dragging { send(point, d.at, size) }
+                dragging = nil
+            }
+    }
+
+    private func send(_ point: AlignPoint, _ at: CGPoint, _ size: CGSize) {
+        client.send(.align(.place(point, Point(x: at.x / size.width, y: at.y / size.height))))
     }
 
     private func handle(_ point: AlignPoint, selected: Bool) -> some View {

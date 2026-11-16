@@ -6,7 +6,11 @@
 ///   Play/Pause  → toggle coarse / fine steps
 public struct CalibrationSession: Sendable {
     public enum Phase: Equatable, Sendable { case point(AlignPoint), review }
-    public enum Input: Sendable { case move(NudgeDirection), select, back, playPause, pick(AlignPoint) }
+    public enum Input: Sendable {
+        case move(NudgeDirection), select, back, playPause, pick(AlignPoint)
+        /// Drag from the phone: this handle, at this projector point.
+        case place(AlignPoint, Point<ProjectorSpace>)
+    }
     public enum Outcome: Equatable, Sendable { case save(Calibration), cancel }
 
     public private(set) var phase: Phase = .point(.topLeft)
@@ -38,6 +42,9 @@ public struct CalibrationSession: Sendable {
             phase = .point(adjuster.selected)
         case (.select, .review):
             return .save(adjuster.calibration)
+        case let (.place(p, at), _):
+            adjuster.place(p, at: at)
+            phase = .point(p)
         case let (.pick(p), _):
             adjuster.select(p)
             phase = .point(p)

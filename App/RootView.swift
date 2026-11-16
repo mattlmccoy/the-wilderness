@@ -208,6 +208,7 @@ struct RootView: View {
         switch command {
         case let .pick(p): session.handle(.pick(p))
         case let .move(d): session.handle(.move(d))
+        case let .place(p, at): session.handle(.place(p, at))
         case .toggleFine: session.handle(.playPause)
         case .save: finishCalibration(.save(session.calibration)); return
         case .cancel:
