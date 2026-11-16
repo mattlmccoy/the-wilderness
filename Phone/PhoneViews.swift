@@ -7,14 +7,20 @@ struct PhoneRootView: View {
     @StateObject private var client = CompanionClient()
     @State private var showSettings = false
     @State private var notConnected = false
+    /// Flashlight mode: drag on the painting to move a pool of light on the wall.
+    @State private var torch = false
+    @State private var lastTorch = Date.distantPast
     let library: AnnotationLibrary?
 
     var body: some View {
         VStack(spacing: 0) {
             header
-            PaintingView(library: library, selected: client.snapshot?.subjectId) { id in
-                client.send(.go(.explore(id)))
-            }
+            PaintingView(library: library, selected: client.snapshot?.subjectId,
+                         onTap: { id in client.send(.go(.explore(id))) },
+                         onTorch: torch ? { p in
+                             // About 20 updates a second while the finger moves; always the last one.
+                             if p == nil || Date().timeIntervalSince(lastTorch) > 0.05 { client.send(.flashlight(p)); lastTorch = Date() }
+                         } : nil)
             .padding(.horizontal, 12)
             .opacity(client.link == .connected ? 1 : 0.5)
             ReadAlongView(snapshot: client.snapshot, link: client.link)
@@ -45,10 +51,23 @@ struct PhoneRootView: View {
             withAnimation(.easeOut(duration: 0.25)) { notConnected = true }
             Task { try? await Task.sleep(for: .seconds(2.2)); withAnimation(.easeIn(duration: 0.4)) { notConnected = false } }
         }
-        .onAppear { client.start() }
+        .onAppear { client.start(); deliverIntent() }
+        // Siri / Shortcuts: act as soon as the wall is connected.
+        .onReceive(NotificationCenter.default.publisher(for: IntentInbox.arrived)) { _ in deliverIntent() }
+        .onChange(of: client.link) { deliverIntent() }
         .sheet(isPresented: $showSettings) {
             SettingsSheet(client: client)
                 .presentationDetents([.medium, .large])
+        }
+    }
+
+    private func deliverIntent() {
+        guard client.link == .connected, let r = IntentInbox.shared.pending else { return }
+        IntentInbox.shared.pending = nil
+        switch r {
+        case .demo: client.send(.demo(true))
+        case .lightOnly: client.send(.setTextHidden(true))
+        case .flashlight: torch = true
         }
     }
 
@@ -91,6 +110,11 @@ struct PhoneRootView: View {
                 }
                 .accessibilityLabel(client.snapshot?.paused == true ? "Resume" : "Pause")
             }
+            Button { torch.toggle(); if !torch { client.send(.flashlight(nil)) } } label: {
+                Image(systemName: torch ? "flashlight.on.fill" : "flashlight.off.fill")
+            }
+            .foregroundStyle(torch ? PhonePalette.gold : PhonePalette.ivory)
+            .accessibilityLabel(torch ? "Flashlight on: drag on the painting" : "Flashlight")
             Button { client.send(.back) } label: { Image(systemName: "arrow.uturn.backward") }
                 .accessibilityLabel("Back")
         }
@@ -107,6 +131,10 @@ struct PaintingView: View {
     let library: AnnotationLibrary?
     let selected: String?
     let onTap: (String) -> Void
+    /// Flashlight: while set, a finger on the painting moves a pool of light on the wall
+    /// (nil when the finger lifts) instead of choosing a figure.
+    var onTorch: ((Point<ArtworkSpace>?) -> Void)? = nil
+    @State private var finger: CGPoint?
     private static let image = UIImage(named: "painting.jpg")
 
     var body: some View {
@@ -125,9 +153,22 @@ struct PaintingView: View {
                     }
                 }
             }
+            .overlay {
+                if onTorch != nil, let f = finger {
+                    Circle().fill(RadialGradient(colors: [PhonePalette.ivory.opacity(0.55), .clear], center: .center, startRadius: 0, endRadius: 40))
+                        .frame(width: 80, height: 80).position(f).allowsHitTesting(false)
+                }
+            }
             .contentShape(Rectangle())
+            .gesture(onTorch == nil ? nil : DragGesture(minimumDistance: 0)
+                .onChanged { g in
+                    let at = CGPoint(x: min(max(g.location.x, 0), size.width), y: min(max(g.location.y, 0), size.height))
+                    finger = at
+                    onTorch?(Point(x: at.x / size.width, y: at.y / size.height))
+                }
+                .onEnded { _ in finger = nil; onTorch?(nil) })
             .onTapGesture { at in
-                guard let library else { return }
+                guard onTorch == nil, let library else { return }
                 let pt = Point<ArtworkSpace>(x: at.x / size.width, y: at.y / size.height)
                 if let id = FigureHitTest.figure(at: pt, in: library) { onTap(id) }
             }
@@ -215,6 +256,10 @@ struct SettingsSheet: View {
                                                   set: { client.send(.setSound($0)) }))
                     Toggle("Show painting", isOn: Binding(get: { client.snapshot?.showPainting ?? false },
                                                           set: { client.send(.setShowPainting($0)) }))
+                }
+                Section("Through the year") {
+                    Toggle("Seasons", isOn: Binding(get: { tuning.seasons }, set: { tuning.seasons = $0; client.send(.setTuning(tuning)) }))
+                    Toggle("Light follows the day", isOn: Binding(get: { tuning.followDay }, set: { tuning.followDay = $0; client.send(.setTuning(tuning)) }))
                 }
                 Section {
                     Button("Align to the tapestry…") { aligning = true }

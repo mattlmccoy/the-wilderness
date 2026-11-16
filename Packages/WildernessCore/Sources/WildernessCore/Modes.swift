@@ -73,7 +73,7 @@ public struct ModeMachine: Equatable, Sendable {
     /// ↑ ↑ ↓ ↓ ← → ← → Select: every outline cycles the rainbow for a minute (the dreamcoat).
     public static let dreamcoatSeconds = 60.0
     private var code = SecretCode()
-    private var dreamcoatUntil: Double?
+    public private(set) var dreamcoatUntil: Double?
     public func dreamcoat(now: Double) -> Bool { dreamcoatUntil.map { now < $0 } ?? false }
 
     /// Menu → Be still: seven minutes of slow looking, light only (SlowLooking).

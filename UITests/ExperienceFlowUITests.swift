@@ -158,7 +158,7 @@ final class ExperienceFlowUITests: XCTestCase {
         let app = launch()
         remote.press(.select, forDuration: 1.2)
         XCTAssertTrue(app.staticTexts["Calibrate"].waitForExistence(timeout: 3))
-        for _ in 0..<4 { remote.press(.down) }
+        for _ in 0..<3 { remote.press(.down) }
         let startsOn = app.staticTexts["Show painting · on"].exists
         let flipped = startsOn ? "Show painting · off" : "Show painting · on"
         let original = startsOn ? "Show painting · on" : "Show painting · off"

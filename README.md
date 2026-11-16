@@ -101,12 +101,27 @@ and swells a little with Christ's twelve-second breath. Moving to a figure breat
 Tibetan singing bowl, its strike cut away, tuned so each figure has its own note of D major
 pentatonic: Christ is home, and the others rise from left to right across the painting.
 
+### Through the year
+
+The wall keeps the church calendar (Easter by the Gregorian computus, everything else hung from
+it). Advent lights a candle on the canvas each Sunday; Lent counts its forty days; Christmas puts
+hats of soft red light on the lion, the stag, the bowing animal and the fox, lets snow fall and
+hangs a star over the angels on Christmas Eve and at Epiphany; Easter morning sends a gold dawn
+across the painting; on Halloween the animals' eyes glow. The background wash takes the season's
+colour, and all the light warms and dims with the day, from sunrise and sunset at home.
+
+A few times an evening, at times that change every day, something small happens at rest: the stag
+leaps, the raven's eye catches the light, the angels brighten together. Menu → *Be still* walks
+the light slowly from figure to figure for seven minutes. Late in the evening the wall settles
+to breathing only and lets the Apple TV sleep. And there is a code.
+
 ### The phone
 
 The iPhone app finds the Apple TV on the home network (Bonjour), shows the painting with its
 traced outlines, and mirrors whatever the wall is saying. From it you can jump to any figure,
 page through Unfold and Context, hide the text, tune the light, align the projection and start the
-demo. Every press is felt and seen; a press that cannot reach the wall says so, and the
+demo, or become a flashlight: drag a finger across the painting and a pool of light follows on
+the wall. Siri can start the demo, hide the text or turn on the flashlight. Every press is felt and seen; a press that cannot reach the wall says so, and the
 connection dot pulses whenever the wall answers.
 
 ### A demo for filming
@@ -138,7 +153,7 @@ flowchart LR
 
 - **WildernessCore** holds everything that can be reasoned about without a screen: the mode
   machine, calibration and the bend, light timing, the content model and the phone protocol.
-  Development was test-first; the package has 264 tests and the Python tools 165 more.
+  Development was test-first; the package has 290 tests and the Python tools 165 more.
 - **The tvOS app** draws in the artwork's own coordinates and warps the whole layer onto the
   tapestry with one homography, so every highlight and line of type is perspective-correct.
 - **The iPhone app** talks to the wall over the local network only. No accounts, no cloud.

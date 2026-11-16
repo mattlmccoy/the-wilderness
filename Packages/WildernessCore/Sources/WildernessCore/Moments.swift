@@ -6,7 +6,7 @@ public struct Moment: Equatable, Hashable, Sendable {
     public var kind: Kind
     /// Minutes after local midnight.
     public var minute: Int
-    public static let duration = 6.0
+    public static let duration = 8.0
 }
 
 public enum Moments {

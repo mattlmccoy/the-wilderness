@@ -41,6 +41,8 @@ struct RootView: View {
     @State private var heard = HeardMode()
     /// The phone's flashlight: where, and when it last moved (it goes out 3 s after the finger stops).
     @State private var flashlight: (point: Point<ArtworkSpace>, at: Double)?
+    /// Changes once a minute so the root view redraws with the clock (day light, seasons).
+    @State private var wallMinute = 0
     private static let cues: SoundCues? = {
         guard case let .success(c) = content else { return nil }
         return SoundCues(library: c.library)
@@ -113,6 +115,7 @@ struct RootView: View {
                         Image(uiImage: img).resizable()
                             .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
                     }
+                    let _ = wallMinute   // read, so the minute tick redraws the wall
                     let day = dayLight, season = seasons
                     // The light warms and dims with the day (DayLight); the wash takes the church year's tint.
                     ZStack(alignment: .topLeading) {
@@ -129,10 +132,10 @@ struct RootView: View {
                                   seasons: mode.isIntro || mode == .calibrating ? nil : season,
                                   atRest: mode == .stillness && windDown != .sleeping,
                                   zone: CanvasText.instructionsZone(library: content.library, zones: content.zones),
-                                  dreamcoat: machine?.dreamcoat(now: Self.now) ?? false,
+                                  dreamcoatUntil: machine?.dreamcoatUntil,
                                   flashlight: flashlight?.point,
-                                  moment: currentMoment,
-                                  reveal: revealSeconds(mode, content))
+                                  wallOffset: Self.previewOffset,
+                                  revealSince: revealSince(mode, content))
                     if machine?.isSlowLooking == true, let since = machine?.slowLookingSince, Self.now - since < 9 {
                         WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: cal,
                                                                      canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
@@ -331,20 +334,15 @@ struct RootView: View {
     private var windDown: WindDown.Phase {
         machine?.isDemo == true ? .awake : WindDown().phase(at: wallDate)
     }
-    private var currentMoment: (kind: Moment.Kind, progress: Double)? {
-        guard let m = Moments.active(at: wallDate) else { return nil }
-        let start = Calendar.current.startOfDay(for: wallDate).addingTimeInterval(Double(m.minute * 60))
-        return (m.kind, wallDate.timeIntervalSince(start) / Moment.duration)
-    }
     static func washColor(_ tint: LiturgicalTint) -> Color {
         let c = tint.rgb, k = 0.35   // a faint tint over ivory
         return Color(red: 1 - k * (1 - c.r), green: 0.97 - k * (0.97 - c.g), blue: 0.9 - k * (0.9 - c.b))
     }
     /// The restoration page reveals the angels it is about.
-    private func revealSeconds(_ mode: Mode, _ c: AppContent) -> Double? {
+    private func revealSince(_ mode: Mode, _ c: AppContent) -> Double? {
         guard case let .context(page) = mode, c.context.pages.indices.contains(page),
-              c.context.pages[page].id == "angels", let since = heard.contextSince else { return nil }
-        return Self.now - since
+              c.context.pages[page].id == "angels" else { return nil }
+        return heard.contextSince
     }
 
     private func applyTuning() {
@@ -364,6 +362,9 @@ struct RootView: View {
         if heard.mode != m.mode, case .context = m.mode { heard.contextSince = now }
         heard.mode = m.mode
         if let f = flashlight, now - f.at > 3 { flashlight = nil }
+        // Once a minute: the day light, seasons and wind-down follow the clock even at rest.
+        let minute = Int(wallDate.timeIntervalSinceReferenceDate / 60)
+        if minute != wallMinute { wallMinute = minute }
         if m != machine { machine = m }
         updateIdleTimer()
     }

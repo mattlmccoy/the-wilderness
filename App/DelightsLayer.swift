@@ -13,19 +13,27 @@ struct DelightsLayer: View {
     /// The wall at rest: counters, snow, the dawn and the moments show only then.
     let atRest: Bool
     let zone: TextZone
-    let dreamcoat: Bool
+    /// The dreamcoat runs until this time (reference-date seconds), if at all.
+    let dreamcoatUntil: Double?
     let flashlight: Point<ArtworkSpace>?
-    /// A rare moment and how far into it the wall is (0…1).
-    let moment: (kind: Moment.Kind, progress: Double)?
-    /// The restoration page: how many seconds the angels have been revealing.
-    let reveal: Double?
+    /// Wall time = real time + this (the simulator's -previewDate), for the moments.
+    let wallOffset: TimeInterval
+    /// The restoration page: when the angels began revealing (reference-date seconds).
+    let revealSince: Double?
 
     private let canvas = CGSize(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 24)) { timeline in
             Canvas { ctx, size in
+                // Everything time-dependent is read from this clock, so it moves even while the
+                // rest of the wall is still (the root view redraws only when something changes).
                 let t = timeline.date.timeIntervalSinceReferenceDate
+                let wall = timeline.date.addingTimeInterval(wallOffset)
+                let moment = Moments.active(at: wall).map { m -> (Moment.Kind, Double) in
+                    let start = Calendar.current.startOfDay(for: wall).addingTimeInterval(Double(m.minute * 60))
+                    return (m.kind, wall.timeIntervalSince(start) / Moment.duration)
+                }
                 ctx.blendMode = .plusLighter
                 if let s = seasons {
                     if s.christmas { hats(&ctx, size); if atRest { snow(&ctx, size, t) } }
@@ -35,9 +43,9 @@ struct DelightsLayer: View {
                     if atRest, s.easterDawn { dawn(&ctx, size, t) }
                     if s.halloween { eyes(&ctx, size, t) }
                 }
-                if atRest, let m = moment { self.moment(&ctx, size, m.kind, m.progress) }
-                if let r = reveal { revealAngels(&ctx, size, seconds: r) }
-                if dreamcoat { coat(&ctx, size, t) }
+                if atRest, let m = moment { self.moment(&ctx, size, m.0, m.1) }
+                if let r = revealSince { revealAngels(&ctx, size, seconds: t - r) }
+                if let until = dreamcoatUntil, t < until { coat(&ctx, size, t) }
                 if let f = flashlight { torch(&ctx, size, f) }
             }
         }
@@ -183,7 +191,8 @@ struct DelightsLayer: View {
         case .angelsBrighten:
             if let p = outline("angels", size) {
                 var g = ctx; g.addFilter(.blur(radius: 14))
-                g.fill(p, with: .color(Palette.ivory.opacity(0.35 * swell)))
+                g.fill(p, with: .color(Palette.ivory.opacity(0.6 * swell)))
+                ctx.stroke(p, with: .color(Palette.ivory.opacity(0.8 * swell)), lineWidth: 2.5)
             }
         }
     }

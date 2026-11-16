@@ -75,6 +75,7 @@
 		DA1CB6598A983AB046FA38D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D8E6D898684EBFA211F0660 /* LaunchScreen.storyboard */; };
 		DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD97476B6D5814CC002BB613 /* TuningStore.swift */; };
 		E1165F574DA60DA8B5292E6A /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
+		E32E79FE6DFBA2B5FB8076CD /* WildernessIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A079B8A4EA9D6259AF8F733 /* WildernessIntents.swift */; };
 		E70BFE2B92D9EE9C11EEAFBC /* EBGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC632249BA14042157A28A01 /* EBGaramond-Italic-Variable.ttf */; };
 		EBF7A280A6A7B4A9BDC8A5A1 /* PhoneScreenshotTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF3C1E3057DAA75B2571652 /* PhoneScreenshotTour.swift */; };
 		EF37B698B064E91094D059D2 /* context-moretto-christ-blessing-john.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0DFC4A231966E276EF87FE59 /* context-moretto-christ-blessing-john.jpg */; };
@@ -135,6 +136,7 @@
 		550ED5F2E1580DB49ECD46F0 /* delights.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = delights.json; sourceTree = "<group>"; };
 		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
 		5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeLineView.swift; sourceTree = "<group>"; };
+		5A079B8A4EA9D6259AF8F733 /* WildernessIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildernessIntents.swift; sourceTree = "<group>"; };
 		5A99AD67A32A46E664548762 /* CompanionRoundTripUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionRoundTripUITests.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				00541C4509425B1002EE55BF /* CompanionClient.swift */,
 				C383264E565691887550532C /* Info.plist */,
 				4D088259126199245FC8AD1E /* PhoneViews.swift */,
+				5A079B8A4EA9D6259AF8F733 /* WildernessIntents.swift */,
 				06E224C522B222D18ECE56E1 /* WildernessPhoneApp.swift */,
 			);
 			path = Phone;
@@ -557,6 +560,7 @@
 				46B57182DBBB10CCE8DD6425 /* AlignView.swift in Sources */,
 				1DC8D6B1048D207A6E9D3339 /* CompanionClient.swift in Sources */,
 				C30A7F5606E2F4A061AFC73E /* PhoneViews.swift in Sources */,
+				E32E79FE6DFBA2B5FB8076CD /* WildernessIntents.swift in Sources */,
 				1A3E825D8DF9C1766804B19B /* WildernessPhoneApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
