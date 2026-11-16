@@ -5,8 +5,9 @@
   <key>Label</key><string>com.mattmccoy.wilderness.refresh</string>
   <key>ProgramArguments</key>
   <array><string>/Users/mattmccoy/Developer/Wilderness/scripts/refresh.sh</string></array>
-  <!-- Daily at 03:40; if the Mac is asleep then, launchd runs it on wake. -->
+  <!-- Checks daily at 17:30 (or on wake if the Mac slept through it). refresh.sh installs only
+       when 6+ days have passed and only 2 pm-10 pm: weekly, never at night. -->
   <key>StartCalendarInterval</key>
-  <dict><key>Hour</key><integer>3</integer><key>Minute</key><integer>40</integer></dict>
+  <dict><key>Hour</key><integer>17</integer><key>Minute</key><integer>30</integer></dict>
 </dict>
 </plist>

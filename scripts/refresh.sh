@@ -1,7 +1,10 @@
 #!/bin/zsh
 # Rebuilds, re-signs (free Apple ID) and reinstalls The Wilderness on the Apple TV.
-# Free provisioning expires after 7 days; launchd runs this daily so a missed night never
-# lets it lapse. Saved calibration on the Apple TV is kept across reinstalls.
+# Free provisioning expires after 7 days. launchd calls this every afternoon, but it only
+# installs between 2 pm and 10 pm and when the last good install is 6+ days old
+# (scripts/refresh_due.py): about once a week, never at night (Matt, 2026-11-15).
+# If the Apple TV was off before the install, it is put back to sleep afterwards (needs pyatv's
+# atvremote, paired once, and ATV_NAME in refresh.conf). Saved calibration is kept across reinstalls.
 # It builds for the specific Apple TV: a free team can only make a provisioning profile for a
 # device it has registered, and building for that device is what registers it.
 #
@@ -26,6 +29,15 @@ notify_fail() {
 source "$ROOT/scripts/refresh.conf"
 [[ -n "${TEAM_ID:-}" && -n "${DEVICE_ID:-}" ]] || notify_fail "TEAM_ID or DEVICE_ID not set"
 
+STAMP="$HOME/Library/Logs/Wilderness-last-ok"
+/usr/bin/python3 -I "$ROOT/scripts/refresh_due.py" "$STAMP" || exit 0   # not due, or outside the evening window
+
+# Was the Apple TV asleep? Then it goes back to sleep after the install.
+WAS_OFF=0
+if [[ -n "${ATV_NAME:-}" ]] && command -v atvremote >/dev/null; then
+  atvremote -n "$ATV_NAME" power_state 2>/dev/null | grep -q "Off" && WAS_OFF=1
+fi
+
 echo "$(date '+%F %T') start" >> "$LOG"
 # Licensed verse text must be re-fetched at least every 30 days (API.Bible); a failure keeps
 # the last good copy for up to 30 days, so it warns but never stops the build.
@@ -43,6 +55,7 @@ xcrun devicectl device install app --device "$DEVICE_ID" "$APP" >> "$LOG" 2>&1 \
   || notify_fail "install on Apple TV (is it on the same Wi-Fi and paired?)"
 
 echo "$(date '+%F %T') OK: installed fresh build" >> "$LOG"
+date '+%Y-%m-%dT%H:%M:%S' > "$STAMP"
 
 # The iPhone companion (optional): re-signed and installed when PHONE_ID is set and the phone is
 # reachable (awake, unlocked, same Wi-Fi). A missing phone only warns; the Apple TV is what matters.
@@ -57,4 +70,11 @@ if [[ -n "${PHONE_ID:-}" ]]; then
   else
     echo "$(date '+%F %T') WARN: iPhone companion not installed (phone asleep, locked or away?)" >> "$LOG"
   fi
+fi
+
+if [[ "$WAS_OFF" == 1 ]]; then
+  sleep 20   # let the install settle
+  atvremote -n "$ATV_NAME" turn_off >> "$LOG" 2>&1 \
+    && echo "$(date '+%F %T') OK: Apple TV back to sleep" >> "$LOG" \
+    || echo "$(date '+%F %T') WARN: could not put the Apple TV back to sleep" >> "$LOG"
 fi
