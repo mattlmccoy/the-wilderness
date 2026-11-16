@@ -4,7 +4,7 @@
 # installs between 2 pm and 10 pm and when the last good install is 6+ days old
 # (scripts/refresh_due.py): about once a week, never at night (Matt, 2026-11-15).
 # If the Apple TV was off before the install, it is put back to sleep afterwards (needs pyatv's
-# atvremote, paired once, and ATV_NAME in refresh.conf). Saved calibration is kept across reinstalls.
+# atvremote in ~/.local/share/wilderness-atv/venv, paired once, and ATV_NAME in refresh.conf). Saved calibration is kept across reinstalls.
 # It builds for the specific Apple TV: a free team can only make a provisioning profile for a
 # device it has registered, and building for that device is what registers it.
 #
@@ -34,8 +34,9 @@ STAMP="$HOME/Library/Logs/Wilderness-last-ok"
 
 # Was the Apple TV asleep? Then it goes back to sleep after the install.
 WAS_OFF=0
-if [[ -n "${ATV_NAME:-}" ]] && command -v atvremote >/dev/null; then
-  atvremote -n "$ATV_NAME" power_state 2>/dev/null | grep -q "Off" && WAS_OFF=1
+ATV="$HOME/.local/share/wilderness-atv/venv/bin/atvremote"   # pyatv, in its own venv (Python 3.12)
+if [[ -n "${ATV_NAME:-}" && -x "$ATV" ]]; then
+  "$ATV" -n "$ATV_NAME" power_state 2>/dev/null | grep -q "Off" && WAS_OFF=1
 fi
 
 echo "$(date '+%F %T') start" >> "$LOG"
@@ -74,7 +75,7 @@ fi
 
 if [[ "$WAS_OFF" == 1 ]]; then
   sleep 20   # let the install settle
-  atvremote -n "$ATV_NAME" turn_off >> "$LOG" 2>&1 \
+  "$ATV" -n "$ATV_NAME" turn_off >> "$LOG" 2>&1 \
     && echo "$(date '+%F %T') OK: Apple TV back to sleep" >> "$LOG" \
     || echo "$(date '+%F %T') WARN: could not put the Apple TV back to sleep" >> "$LOG"
 fi
