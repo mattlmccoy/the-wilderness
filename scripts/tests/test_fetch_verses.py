@@ -173,3 +173,24 @@ def test_prayer_lines_are_fetched_like_wall_verses(content, sources):
 
 def test_no_prayer_file_is_fine(content):
     assert "Genesis 3:15" in wall_excerpts(content)
+
+
+def test_every_reference_in_the_real_content_has_a_book_code():
+    # 2026-11-16: a figure's 1 Kings verse stopped every fetch (no book code). Check them all.
+    real = Path(__file__).resolve().parent.parent.parent / "App/Content"
+    for ref in wall_excerpts(real):
+        passage_id(ref)
+
+
+def test_all_sixty_six_books_have_codes():
+    assert passage_id("1 Kings 17:6") == "1KI.17.6"
+    assert passage_id("Song of Solomon 2:11") == "SNG.2.11"
+    assert passage_id("Revelation 22:5") == "REV.22.5"
+
+
+def test_every_reference_in_the_real_content_has_a_bsb_source():
+    # The NIV clause is found by aligning against the full BSB verse (docs/copy/verse-sources.json).
+    root = Path(__file__).resolve().parent.parent.parent
+    sources = json.loads((root / "docs/copy/verse-sources.json").read_text())
+    missing = [r for r in wall_excerpts(root / "App/Content") if "BSB" not in sources.get(r, {})]
+    assert missing == []
