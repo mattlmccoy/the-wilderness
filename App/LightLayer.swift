@@ -14,6 +14,8 @@ struct LightLayer: View {
     let exploring: Bool
     /// The boot-up intro starts on a dark wall: no wash until it ends.
     var dark = false
+    /// The wash's colour: ivory, faintly tinted by the church year when Seasons is on.
+    var washColor: Color = Palette.ivory
 
     /// Feather of about 2.2 in on the wall (44 canvas units).
     static let featherRadius: CGFloat = 22
@@ -32,7 +34,7 @@ struct LightLayer: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Rectangle().fill(Palette.ivory).opacity(washOpacity)
+            Rectangle().fill(washColor).opacity(washOpacity)
             ForEach(library.annotations.filter { $0.outline != nil }) { a in
                 SubjectGlow(outline: a.outline!, canvas: canvas)
                     .opacity((levels[a.id] ?? 0) * tuning.subjectStrength)

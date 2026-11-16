@@ -39,6 +39,8 @@ struct RootView: View {
     @State private var clock = TickClockBox()
     /// The last mode the sound answered (a box: updating it never redraws the view).
     @State private var heard = HeardMode()
+    /// The phone's flashlight: where, and when it last moved (it goes out 3 s after the finger stops).
+    @State private var flashlight: (point: Point<ArtworkSpace>, at: Double)?
     private static let cues: SoundCues? = {
         guard case let .success(c) = content else { return nil }
         return SoundCues(library: c.library)
@@ -111,11 +113,34 @@ struct RootView: View {
                         Image(uiImage: img).resizable()
                             .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
                     }
-                    LightLayer(library: content.library, tuning: wallTuning,
-                               targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script, context: content.context),
-                               dark: mode.isIntro)
-                    AliveLayer(library: content.library, breathing: content.breathing, tuning: wallTuning,
-                               active: Breathing.isActive(mode), clock: alive, demoSince: machine?.demoSince)
+                    let day = dayLight, season = seasons
+                    // The light warms and dims with the day (DayLight); the wash takes the church year's tint.
+                    ZStack(alignment: .topLeading) {
+                        LightLayer(library: content.library, tuning: wallTuning,
+                                   targets: lightTargets(mode, content), exploring: mode.dimsWash(script: content.script, context: content.context),
+                                   dark: mode.isIntro, washColor: season.map { Self.washColor($0.tint) } ?? Palette.ivory)
+                        AliveLayer(library: content.library, breathing: content.breathing, tuning: wallTuning,
+                                   active: Breathing.isActive(mode) && windDown != .sleeping, clock: alive, demoSince: machine?.demoSince)
+                    }
+                    .colorMultiply(Color(red: 1, green: 1 - 0.22 * day.warmth, blue: 1 - 0.45 * day.warmth))
+                    .opacity(day.level)
+                    .animation(.easeInOut(duration: 20), value: day)
+                    DelightsLayer(library: content.library, delights: content.delights,
+                                  seasons: mode.isIntro || mode == .calibrating ? nil : season,
+                                  atRest: mode == .stillness && windDown != .sleeping,
+                                  zone: CanvasText.instructionsZone(library: content.library, zones: content.zones),
+                                  dreamcoat: machine?.dreamcoat(now: Self.now) ?? false,
+                                  flashlight: flashlight?.point,
+                                  moment: currentMoment,
+                                  reveal: revealSeconds(mode, content))
+                    if machine?.isSlowLooking == true, let since = machine?.slowLookingSince, Self.now - since < 9 {
+                        WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: cal,
+                                                                     canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
+                                   anchorY: 0) {
+                            Wayfinding.hint("Seven minutes of slow looking.\nBreathe with the light. Any button ends it.")
+                        }
+                        .transition(.opacity.animation(.easeInOut(duration: 2)))
+                    }
                     switch mode {
                     case let .intro(startedAt):
                         IntroView(library: content.library, tuning: wallTuning, startedAt: startedAt)
@@ -253,6 +278,9 @@ struct RootView: View {
             showPainting = on
         case let .setTextHidden(hidden):
             machine?.setTextHidden(hidden)
+        case let .flashlight(point):
+            flashlight = point.map { (point: $0, at: Self.now) }
+            machine?.noteActivity(now: Self.now)
         case let .align(a):
             handleAlign(a)
         case let .demo(on):
@@ -281,8 +309,42 @@ struct RootView: View {
             t.passingLight = true
             t.glintMeanInterval = 4
             t.breathing = max(t.breathing, 0.12)
+        } else if windDown != .awake, machine?.isSlowLooking != true {
+            // Late evening: breathing only, no glints or sun rays.
+            t.passingLight = false
+            t.glintMeanInterval = 1_000_000
         }
         return t
+    }
+
+    // MARK: Seasons, the day, wind-down, moments (docs/superpowers/plans/2026-11-16-delights.md)
+
+    /// Preview any date in the simulator: `-previewDate 2026-12-24T19:00`.
+    private static let previewOffset: TimeInterval = {
+        guard let s = UserDefaults.standard.string(forKey: "previewDate") else { return 0 }
+        let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd'T'HH:mm"; f.timeZone = .current
+        return f.date(from: s).map { $0.timeIntervalSinceNow } ?? 0
+    }()
+    private var wallDate: Date { Date().addingTimeInterval(Self.previewOffset) }
+    private var seasons: SeasonEffects? { tuningStore.tuning.seasons ? Seasons.effects(at: wallDate) : nil }
+    private var dayLight: DayLight { tuningStore.tuning.followDay ? DayLight.at(wallDate, place: .home) : .neutral }
+    private var windDown: WindDown.Phase {
+        machine?.isDemo == true ? .awake : WindDown().phase(at: wallDate)
+    }
+    private var currentMoment: (kind: Moment.Kind, progress: Double)? {
+        guard let m = Moments.active(at: wallDate) else { return nil }
+        let start = Calendar.current.startOfDay(for: wallDate).addingTimeInterval(Double(m.minute * 60))
+        return (m.kind, wallDate.timeIntervalSince(start) / Moment.duration)
+    }
+    static func washColor(_ tint: LiturgicalTint) -> Color {
+        let c = tint.rgb, k = 0.35   // a faint tint over ivory
+        return Color(red: 1 - k * (1 - c.r), green: 0.97 - k * (0.97 - c.g), blue: 0.9 - k * (0.9 - c.b))
+    }
+    /// The restoration page reveals the angels it is about.
+    private func revealSeconds(_ mode: Mode, _ c: AppContent) -> Double? {
+        guard case let .context(page) = mode, c.context.pages.indices.contains(page),
+              c.context.pages[page].id == "angels", let since = heard.contextSince else { return nil }
+        return Self.now - since
     }
 
     private func applyTuning() {
@@ -295,17 +357,22 @@ struct RootView: View {
         let dt = clock.value.dt(now: now)
         m.tick(now: now, dt: dt, script: c.script, context: c.context)
         let breath = alive.since.map { SoundCues.swell(breathing: c.breathing, at: now, since: $0) } ?? 0.5
-        sound.update(target: Soundscape.target(mode: m.mode, on: soundOn), dt: dt, breath: breath)
+        let quiet = windDown == .sleeping ? 0.0 : windDown == .settling ? 0.5 : 1.0   // wind-down hushes the sound too
+        sound.update(target: Soundscape.target(mode: m.mode, on: soundOn) * quiet, dt: dt, breath: breath)
         // A new figure, Unfold beat or Context page rings the bowl at its own note.
         if let last = heard.mode, let cue = Self.cues?.cue(from: last, to: m.mode, script: c.script) { sound.ring(cue) }
+        if heard.mode != m.mode, case .context = m.mode { heard.contextSince = now }
         heard.mode = m.mode
+        if let f = flashlight, now - f.at > 3 { flashlight = nil }
         if m != machine { machine = m }
         updateIdleTimer()
     }
 
     private func updateIdleTimer() {
         guard let m = machine else { return }
-        let keep = AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: Self.now)
+        var keep = AwakePolicy.keepAwake(lastInputAt: m.lastInputAt, now: Self.now)
+        // Wind-down: late at night, ten minutes after the last press, the Apple TV may sleep.
+        if windDown == .sleeping, Self.now - m.lastInputAt > 600 { keep = false }
         if UIApplication.shared.isIdleTimerDisabled != keep { UIApplication.shared.isIdleTimerDisabled = keep }
     }
 
@@ -347,4 +414,8 @@ private extension Mode {
 }
 
 /// What the sound last answered, so a change of figure rings once.
-final class HeardMode { var mode: Mode? }
+final class HeardMode {
+    var mode: Mode?
+    /// When the current Context page appeared (for the restoration reveal).
+    var contextSince: Double?
+}

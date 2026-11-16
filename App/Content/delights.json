@@ -1,0 +1,17 @@
+{
+  "_note": "Hand-marked on the painting (0-1 of the canvas) from the Met's full-resolution image, 2026-11-16. Hats sit on the head; eyes glow faintly on Halloween; the star shines over the angels.",
+  "hats": [
+    {"id": "lion",  "x": 0.866, "y": 0.722, "size": 0.050, "tilt": -12},
+    {"id": "stag",  "x": 0.277, "y": 0.566, "size": 0.032, "tilt": 8},
+    {"id": "beast", "x": 0.446, "y": 0.438, "size": 0.032, "tilt": -20},
+    {"id": "fox",   "x": 0.498, "y": 0.536, "size": 0.026, "tilt": 10}
+  ],
+  "eyes": [
+    {"id": "lion",  "x": 0.857, "y": 0.748},
+    {"id": "stag",  "x": 0.274, "y": 0.585},
+    {"id": "fox",   "x": 0.503, "y": 0.553},
+    {"id": "beast", "x": 0.452, "y": 0.470},
+    {"id": "raven", "x": 0.262, "y": 0.195}
+  ],
+  "star": {"x": 0.70, "y": 0.07}
+}

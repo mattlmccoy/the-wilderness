@@ -58,6 +58,8 @@ struct AppContent {
     let zones: [TextZone]
     let glints: GlintPoints
     let notices: Notices
+    /// Hand-marked hats, eyes and the star (seasons and Easter eggs).
+    let delights: DelightsContent
 
     /// Each traced region's breathing rhythm (cheap: a handful of entries).
     var breathing: Breathing { Breathing(ids: library.annotations.filter { $0.outline != nil }.map(\.id)) }
@@ -77,7 +79,8 @@ enum ContentLoader {
                               maps: maps,
                               zones: try TextZones.decode(data("textzones")).zones,
                               glints: try GlintPoints.decode(data("glints")),
-                              notices: try Notices.decode(data("notices")))
+                              notices: try Notices.decode(data("notices")),
+                              delights: try DelightsContent.decode(data("delights")))
         }
     }
 

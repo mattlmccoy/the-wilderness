@@ -16,6 +16,10 @@ public struct Tuning: Codable, Equatable, Sendable {
     public var breathing = 0.06
     /// At rest: a soft band of light crossing the tapestry every few minutes. See `PassingLight`.
     public var passingLight = false
+    /// Christmas hats, Advent candles, the Easter dawn and the rest of the church year (2026-11-16).
+    public var seasons = true
+    /// The light warms and dims with the time of day (sunrise and sunset at home).
+    public var followDay = true
 
     public init() {}
     public static let defaults = Tuning()
@@ -24,7 +28,7 @@ public struct Tuning: Codable, Equatable, Sendable {
     /// A new field must be added here and in `init(from:)`, or it is silently not saved.
     enum CodingKeys: String, CodingKey {
         case subjectStrength, baseWash, exploreWashFactor, glintMeanInterval, glintBrightness, glintSizeInches, glintStyle
-        case edgeLine, breathing, passingLight
+        case edgeLine, breathing, passingLight, seasons, followDay
     }
 
     /// Tolerant of profiles saved before a field existed: a missing key takes that field's
@@ -42,6 +46,8 @@ public struct Tuning: Codable, Equatable, Sendable {
         edgeLine = try c.decodeIfPresent(Double.self, forKey: .edgeLine) ?? d.edgeLine
         breathing = try c.decodeIfPresent(Double.self, forKey: .breathing) ?? d.breathing
         passingLight = try c.decodeIfPresent(Bool.self, forKey: .passingLight) ?? d.passingLight
+        seasons = try c.decodeIfPresent(Bool.self, forKey: .seasons) ?? d.seasons
+        followDay = try c.decodeIfPresent(Bool.self, forKey: .followDay) ?? d.followDay
     }
 
     /// Every value inside the range the wall's Tune screen allows (the phone sends whole Tunings).

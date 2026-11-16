@@ -20,6 +20,7 @@
 		1DE724BEC993964EBCE976E0 /* CalibrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D9C3A09CAAF92263087C62 /* CalibrationStore.swift */; };
 		21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425BD17EFB125958F97DC424 /* GlintLayer.swift */; };
 		218E43BE5E49243BC837151B /* MappedCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD48D87D7C3EF24F3C1DB0CA /* MappedCanvas.swift */; };
+		27098C50260FC4087E2CCA86 /* DelightsLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4686451FB2FB9319FFEDE288 /* DelightsLayer.swift */; };
 		2A98FCA5C1CCEEBD0346B5D2 /* CompanionRoundTripUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A99AD67A32A46E664548762 /* CompanionRoundTripUITests.swift */; };
 		2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96443CC736D66435C0FEE8F1 /* SettingsView.swift */; };
 		3112350BA2ADE9C0DD2AB7BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63272EBAD19DCC2048941CE0 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 		6ADF519634EEB1ECF0280B98 /* CormorantGaramond-Italic-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896E0A45CE4E17DED3ECD0B5 /* CormorantGaramond-Italic-Variable.ttf */; };
 		6C24D3E98340031D4B050A69 /* context-wadi-qelt.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96CF398BB97A76EB16E643A2 /* context-wadi-qelt.jpg */; };
 		719F8982BE8F35360761F13A /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E899EF5E0A146751A13B832 /* CalibrationView.swift */; };
+		75AE2CE75D79DB873DEF9D5D /* delights.json in Resources */ = {isa = PBXBuildFile; fileRef = 550ED5F2E1580DB49ECD46F0 /* delights.json */; };
 		7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5575DEF51153E5584DC61376 /* UnfoldView.swift */; };
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		88052D5A91DBAE1B9FC9BEE3 /* AliveLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B6A942754A14FEB94BB43E /* AliveLayer.swift */; };
@@ -124,11 +126,13 @@
 		400D1C002A2AD66C7B840729 /* textzones.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = textzones.json; sourceTree = "<group>"; };
 		425BD17EFB125958F97DC424 /* GlintLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintLayer.swift; sourceTree = "<group>"; };
 		4685DA18E56C3A97752987DC /* notices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = notices.json; sourceTree = "<group>"; };
+		4686451FB2FB9319FFEDE288 /* DelightsLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelightsLayer.swift; sourceTree = "<group>"; };
 		4819C180FAC10AFBD91FC9FD /* maps.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maps.json; sourceTree = "<group>"; };
 		48BDF7B68F2D96EDE22DD2A7 /* context-met-fifth-avenue.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "context-met-fifth-avenue.jpg"; sourceTree = "<group>"; };
 		493C50FBD2AC2BA1ED2DD0AB /* bowl.m4a */ = {isa = PBXFileReference; path = bowl.m4a; sourceTree = "<group>"; };
 		4D088259126199245FC8AD1E /* PhoneViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViews.swift; sourceTree = "<group>"; };
 		4D8385225EF6CEFBD3D833AD /* licensed-verses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "licensed-verses.json"; sourceTree = "<group>"; };
+		550ED5F2E1580DB49ECD46F0 /* delights.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = delights.json; sourceTree = "<group>"; };
 		5575DEF51153E5584DC61376 /* UnfoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfoldView.swift; sourceTree = "<group>"; };
 		5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeLineView.swift; sourceTree = "<group>"; };
 		5A99AD67A32A46E664548762 /* CompanionRoundTripUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionRoundTripUITests.swift; sourceTree = "<group>"; };
@@ -228,6 +232,7 @@
 				E10720E4193012A37B12219F /* CompanionServer.swift */,
 				BBBA3E5909571B3CFA2A7003 /* ContextView.swift */,
 				D48359873878EEE55C08BC20 /* ContextVisuals.swift */,
+				4686451FB2FB9319FFEDE288 /* DelightsLayer.swift */,
 				5789B3EE1D3DD5BBA27D46F4 /* EdgeLineView.swift */,
 				10055DBD8B0259D70A5114C9 /* ExploreView.swift */,
 				425BD17EFB125958F97DC424 /* GlintLayer.swift */,
@@ -281,6 +286,7 @@
 			children = (
 				FEF2516EA0E49076236AEF71 /* annotations.json */,
 				AC0C2043D85D5E257480B75E /* context.json */,
+				550ED5F2E1580DB49ECD46F0 /* delights.json */,
 				69A6BB2EC267DFB6DEB14308 /* glints.json */,
 				4D8385225EF6CEFBD3D833AD /* licensed-verses.json */,
 				4819C180FAC10AFBD91FC9FD /* maps.json */,
@@ -529,6 +535,7 @@
 				EF37B698B064E91094D059D2 /* context-moretto-christ-blessing-john.jpg in Resources */,
 				6C24D3E98340031D4B050A69 /* context-wadi-qelt.jpg in Resources */,
 				604586D0FA971FF7C46A774C /* context.json in Resources */,
+				75AE2CE75D79DB873DEF9D5D /* delights.json in Resources */,
 				563576B5C812D60693833113 /* glints.json in Resources */,
 				DA07F358B2C596955AA90204 /* licensed-verses.json in Resources */,
 				5BFD811DF4A1267483527309 /* maps.json in Resources */,
@@ -574,6 +581,7 @@
 				BC81D67AB0B01913A484ACE3 /* CompanionServer.swift in Sources */,
 				5CC5BF584E868827B2405033 /* ContextView.swift in Sources */,
 				4F75DC0856BE7739A7D5D43F /* ContextVisuals.swift in Sources */,
+				27098C50260FC4087E2CCA86 /* DelightsLayer.swift in Sources */,
 				697B18C0D057F67F82DE5438 /* EdgeLineView.swift in Sources */,
 				698CEDB5848B9BB2BBECCE36 /* ExploreView.swift in Sources */,
 				21180AABD919BE7813266F9A /* GlintLayer.swift in Sources */,

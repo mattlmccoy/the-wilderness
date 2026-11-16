@@ -86,3 +86,12 @@ private func session(at row: TuningRow, _ t: Tuning = .defaults) -> TuningSessio
     let json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(Tuning.defaults)) as! [String: Any]
     #expect(Set(json.keys) == fields)
 }
+
+// Seasons and the light following the day (2026-11-16): on by default, kept when saved.
+@Test func seasonsAndFollowTheDayAreOnByDefaultAndSurviveASave() throws {
+    let old = try JSONDecoder().decode(Tuning.self, from: Data(#"{"subjectStrength":0.5}"#.utf8))
+    #expect(old.seasons && old.followDay)
+    var t = Tuning.defaults; t.seasons = false; t.followDay = false
+    let back = try JSONDecoder().decode(Tuning.self, from: JSONEncoder().encode(t))
+    #expect(!back.seasons && !back.followDay)
+}

@@ -51,3 +51,21 @@ public enum Seasons {
         }
     }
 }
+
+/// Hand-marked places on the painting for the seasonal touches (App/Content/delights.json).
+public struct DelightsContent: Codable, Equatable, Sendable {
+    public struct Spot: Codable, Equatable, Sendable {
+        public var id: String
+        public var x, y: Double
+        /// Hats: width as a fraction of the canvas; tilt in degrees.
+        public var size: Double?
+        public var tilt: Double?
+    }
+    public struct Place: Codable, Equatable, Sendable { public var x, y: Double }
+    public var hats: [Spot]
+    public var eyes: [Spot]
+    public var star: Place
+
+    public static let empty = DelightsContent(hats: [], eyes: [], star: Place(x: 0.72, y: 0.06))
+    public static func decode(_ data: Data) throws -> DelightsContent { try JSONDecoder().decode(Self.self, from: data) }
+}
