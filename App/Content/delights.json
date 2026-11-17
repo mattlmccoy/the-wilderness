@@ -1,14 +1,14 @@
 {
-  "_note": "Placed by Matt with the Christmas placer (scripts/make_placer.py), 2026-11-16. Hats sit on the head; the raven's eye catches the light in a rare moment; the star shines over the angels.",
+  "_note": "Placed by Matt with the Christmas placer (scripts/make_placer.py), 2026-11-16. Hats sit on the head; the raven's eye catches the light in a rare moment; the star shines down on Christ; the crown of light follows the painting's halo; the cross stands on the far hill at Easter.",
   "hats": [
-    {"id": "lion", "x": 0.866, "y": 0.722, "size": 0.05, "tilt": -12},
-    {"id": "stag", "x": 0.277, "y": 0.566, "size": 0.032, "tilt": 8},
-    {"id": "beast", "x": 0.492, "y": 0.415, "size": 0.032, "tilt": -20},
-    {"id": "fox", "x": 0.51, "y": 0.539, "size": 0.026, "tilt": 10}
+    {"id": "lion", "x": 0.863, "y": 0.735, "size": 0.05, "tilt": -17},
+    {"id": "stag", "x": 0.276, "y": 0.577, "size": 0.032, "tilt": -9, "flip": true},
+    {"id": "beast", "x": 0.496, "y": 0.427, "size": 0.032, "tilt": -20, "flip": true},
+    {"id": "fox", "x": 0.511, "y": 0.539, "size": 0.026, "tilt": -22, "flip": true}
   ],
   "ravenEye": {"id": "raven", "x": 0.262, "y": 0.195},
-  "star": {"x": 0.918, "y": 0.084, "size": 0.028},
+  "star": {"x": 0.917, "y": 0.085, "size": 0.028},
   "turkey": {"hill": [{"x": 0.36, "y": 0.275}, {"x": 0.6, "y": 0.27}], "hillSize": 0.06, "ground": [{"x": -0.14, "y": 0.95}, {"x": 1.14, "y": 0.92}], "groundSize": 0.2},
-  "halo": {"x": 0.730, "y": 0.277, "size": 0.055},
-  "cross": {"x": 0.452, "y": 0.272, "size": 0.06}
+  "halo": {"x": 0.742, "y": 0.3, "size": 0.052},
+  "cross": {"x": 0.456, "y": 0.272, "size": 0.071}
 }
