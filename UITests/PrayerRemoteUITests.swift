@@ -44,4 +44,19 @@ final class PrayerRemoteUITests: XCTestCase {
         XCTAssertEqual(app.state, .runningForeground, "Menu during prayer left the app")
         XCTAssertNil(askWall([])["prayer"], "Menu did not reach the app: the session is still running")
     }
+
+    /// Matt, 2026-11-16: "if dreamcoat is run, there's no way to turn it off unless you fully close out the app".
+    func testMenuDuringTheDreamcoatEndsItAndStaysInTheApp() {
+        let app = XCUIApplication()
+        app.launchArguments += SavedCalibration.args() + ["-companionPort", "\(Self.port)"]
+        app.launch()
+        sleep(3)
+        _ = askWall([#"{"dreamcoat":{"_0":true}}"#])
+        sleep(2)
+        XCTAssertEqual(askWall([])["dreamcoat"] as? Bool, true, "the dreamcoat did not start")
+        XCUIRemote.shared.press(.menu)
+        sleep(2)
+        XCTAssertEqual(app.state, .runningForeground, "Menu during the dreamcoat left the app")
+        XCTAssertEqual(askWall([])["dreamcoat"] as? Bool, false, "Menu did not end the dreamcoat")
+    }
 }

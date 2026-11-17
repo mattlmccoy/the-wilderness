@@ -231,7 +231,8 @@ struct RootView: View {
                 onHold: { send(.holdSelect, content) }))
             .onPlayPauseCommand { send(.playPause, content) }
             // In Stillness, pass Back through so tvOS returns to the home screen.
-            .onExitCommand(perform: mode == .stillness && !quietForPrayer ? nil : { send(.back, content) })
+            .onExitCommand(perform: mode == .stillness && !quietForPrayer && machine?.dreamcoat(now: Self.now) != true
+                           ? nil : { send(.back, content) })   // Menu ends a prayer or the dreamcoat in the app
         }
     }
 

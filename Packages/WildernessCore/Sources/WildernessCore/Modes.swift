@@ -190,6 +190,8 @@ public struct ModeMachine: Equatable, Sendable {
         // Any press ends a prayer session; after a late one, the first press wakes the wall. Used up.
         if prayer != nil { endPrayer(now: now); return nil }
         if isAfterPrayerDark(now: now) { prayerDarkUntil = nil; return nil }
+        // Any press ends the dreamcoat, and does nothing else (Matt, 2026-11-16: no way to turn it off).
+        if dreamcoat(now: now) { dreamcoatUntil = nil; return nil }
         // Any press ends slow looking and leaves the wall at rest, words back on.
         if slowLookingSince != nil {
             slowLookingSince = nil

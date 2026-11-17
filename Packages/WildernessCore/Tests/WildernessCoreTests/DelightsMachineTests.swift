@@ -103,3 +103,17 @@ private extension ModeMachine {
         #expect(try JSONDecoder().decode(PhoneCommand.self, from: JSONEncoder().encode(c)) == c)
     }
 }
+
+@Test func anyPressEndsTheDreamcoatAndIsUsedUp() {
+    // Matt, 2026-11-16: "if dreamcoat is run, there's no way to turn it off unless you fully close the app".
+    var m = ModeMachine(calibrated: true, now: 0, intro: false)
+    var t = 1.0
+    for i in SecretCode.sequence { m.press(i, at: t); t += 0.3 }
+    #expect(m.dreamcoat(now: t))
+    let before = m.mode
+    m.press(.select, at: t + 5)
+    #expect(!m.dreamcoat(now: t + 5.1))
+    #expect(m.mode == before)          // the press only ended the dreamcoat; it opened nothing
+    m.press(.select, at: t + 6)        // the next press works as usual
+    #expect(m.mode != before)
+}
