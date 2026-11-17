@@ -25,7 +25,7 @@
 </style>
 <header>
   <h1>Christmas placer</h1>
-  <p>Drag a hat or the star. Arrow keys nudge it; [ and ] tilt it; − and + resize it; F flips which way the tip falls.</p>
+  <p>Drag a hat, the star, the crown of light or the Easter cross. Arrow keys nudge it; [ and ] tilt it; − and + resize it; F flips which way the tip falls.</p>
 </header>
 <main>
   <div id="stage"><canvas id="c"></canvas></div>
@@ -62,6 +62,12 @@
 const OUTLINES = __OUTLINES__;
 const state = __DELIGHTS__;
 state.star.size = state.star.size ?? 0.028;
+// The crown of light and the Easter cross (2026-11-16) move like the star.
+state.halo = state.halo ?? { x: 0.730, y: 0.277, size: 0.055 };
+state.cross = state.cross ?? { x: 0.452, y: 0.272, size: 0.06 };
+const POINTS = { star: "star", halo: "crown", cross: "cross" };
+const isPoint = s => typeof s === "string";
+const obj = s => isPoint(s) ? state[s] : s;
 for (const h of state.hats) { h.size = h.size ?? 0.03; h.tilt = h.tilt ?? 0; h.flip = h.flip ?? false; }
 
 const img = new Image();
@@ -141,6 +147,37 @@ function drawStar(g, s, W, H) {
   g.restore();
 }
 
+// Mirrors beam(), crown() and cross() in App/DelightsLayer.swift.
+function drawBeam(g, s, h, W, H) {
+  const ax = s.x * W, ay = s.y * H, bx = h.x * W, by = h.y * H, len = Math.hypot(bx - ax, by - ay);
+  if (len < 1) return;
+  const nx = -(by - ay) / len, ny = (bx - ax) / len, wide = W * 0.035;
+  g.save(); g.filter = "blur(10px)";
+  const grad = g.createLinearGradient(ax, ay, bx, by);
+  grad.addColorStop(0, "rgba(255,242,209,0.30)"); grad.addColorStop(0.75, "rgba(255,237,199,0.12)"); grad.addColorStop(1, "rgba(255,237,199,0)");
+  g.fillStyle = grad; g.beginPath();
+  g.moveTo(ax + nx * 3, ay + ny * 3); g.lineTo(bx + nx * wide, by + ny * wide); g.lineTo(bx - nx * wide, by - ny * wide); g.lineTo(ax - nx * 3, ay - ny * 3);
+  g.closePath(); g.fill(); g.restore();
+}
+function drawCrown(g, h, W, H) {
+  const cx = h.x * W, cy = h.y * H, r = h.size * W, n = 22;
+  g.save(); g.filter = "blur(1.2px)"; g.lineCap = "round"; g.lineWidth = Math.max(1.2, r * 0.035);
+  for (let i = 0; i < n; i++) {
+    const a = Math.PI * (0.88 + 1.24 * i / (n - 1)), len = r * (i % 2 === 0 ? 1.0 : 0.74);
+    const x0 = cx + Math.cos(a) * r * 0.55, y0 = cy + Math.sin(a) * r * 0.55, x1 = cx + Math.cos(a) * len, y1 = cy + Math.sin(a) * len;
+    const grad = g.createLinearGradient(x0, y0, x1, y1);
+    grad.addColorStop(0, "rgba(255,224,153,0.75)"); grad.addColorStop(1, "rgba(255,230,166,0)");
+    g.strokeStyle = grad; g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke();
+  }
+  g.restore();
+}
+function drawCross(g, c, W, H) {
+  const hgt = c.size * W, fx = c.x * W, fy = c.y * H, w = hgt * 0.1, armY = fy - hgt * 0.72, arm = hgt * 0.32;
+  const shape = () => { g.beginPath(); g.rect(fx - w / 2, fy - hgt, w, hgt); g.rect(fx - arm, armY - w / 2, 2 * arm, w); };
+  g.save(); g.filter = `blur(${hgt * 0.12}px)`; g.fillStyle = "rgba(255,230,179,0.55)"; shape(); g.fill(); g.restore();
+  g.save(); g.fillStyle = "rgba(255,247,230,0.85)"; shape(); g.fill(); g.restore();
+}
+
 function render() {
   if (!img.complete || !img.naturalWidth) return;
   const W = Math.round(img.naturalWidth * zoom), H = Math.round(img.naturalHeight * zoom);
@@ -158,15 +195,19 @@ function render() {
   const layer = document.createElement("canvas"); layer.width = W; layer.height = H;
   const g = layer.getContext("2d");
   for (const h of state.hats) drawHat(g, h, W, H);
+  drawBeam(g, state.star, state.halo, W, H);
   drawStar(g, state.star, W, H);
+  drawCrown(g, state.halo, W, H);
+  drawCross(g, state.cross, W, H);
   ctx.globalCompositeOperation = view === "wall" ? "screen" : "source-over";
   ctx.drawImage(layer, 0, 0);
   ctx.globalCompositeOperation = "source-over";
   if (selected) {
-    const s = selected === "star" ? state.star : selected;
+    const s = obj(selected);
     ctx.strokeStyle = "#d9a441"; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
-    const r = (s.size ?? 0.03) * W * (selected === "star" ? 1.1 : 0.9);
-    ctx.beginPath(); ctx.arc(s.x * W, s.y * H - (selected === "star" ? 0 : r * 0.5), r, 0, Math.PI * 2); ctx.stroke();
+    const r = (s.size ?? 0.03) * W * (isPoint(selected) ? 1.1 : 0.9);
+    const dy = selected === "cross" ? s.size * W * 0.5 : isPoint(selected) ? 0 : r * 0.5;
+    ctx.beginPath(); ctx.arc(s.x * W, s.y * H - dy, selected === "cross" ? r * 0.6 : r, 0, Math.PI * 2); ctx.stroke();
     ctx.setLineDash([]);
   }
   output();
@@ -180,17 +221,20 @@ function output() {
     hats: state.hats.map(h => ({ id: h.id, x: round(h.x), y: round(h.y), size: round(h.size), tilt: Math.round(h.tilt), ...(h.flip ? { flip: true } : {}) })),
     ravenEye: state.ravenEye,
     star: { x: round(state.star.x), y: round(state.star.y), size: round(state.star.size) },
+    ...(state.turkey ? { turkey: state.turkey } : {}),
+    halo: { x: round(state.halo.x), y: round(state.halo.y), size: round(state.halo.size) },
+    cross: { x: round(state.cross.x), y: round(state.cross.y), size: round(state.cross.size) },
   };
   document.getElementById("out").value = JSON.stringify(clean, null, 2)
     .replace(/\{\n\s+"id"/g, '{"id"').replace(/,\n\s+"(x|y|size|tilt|flip)"/g, ', "$1"').replace(/\n\s+\}(,?)\n/g, "}$1\n");
 }
 function select(s) {
   selected = s;
-  const t = s === "star" ? state.star : s;
-  document.getElementById("sel").textContent = s ? (s === "star" ? "star" : s.id + " hat") : "none";
+  const t = s ? obj(s) : null;
+  document.getElementById("sel").textContent = s ? (isPoint(s) ? POINTS[s] : s.id + " hat") : "none";
   document.getElementById("size").value = t ? t.size : 0.03;
-  document.getElementById("tilt").value = t && s !== "star" ? t.tilt : 0;
-  document.getElementById("tilt").disabled = document.getElementById("flip").disabled = document.getElementById("remove").disabled = !s || s === "star";
+  document.getElementById("tilt").value = t && !isPoint(s) ? t.tilt : 0;
+  document.getElementById("tilt").disabled = document.getElementById("flip").disabled = document.getElementById("remove").disabled = !s || isPoint(s);
   render();
 }
 function at(e) {
@@ -200,6 +244,8 @@ function at(e) {
 function hit(p) {
   const aspect = cv.height / cv.width;
   const items = [["star", state.star.x, state.star.y, state.star.size * 1.2],
+                 ["halo", state.halo.x, state.halo.y - state.halo.size * 0.4 / aspect, state.halo.size * 0.9],
+                 ["cross", state.cross.x, state.cross.y - state.cross.size * 0.5 / aspect, state.cross.size * 0.6],
                  ...state.hats.map(h => [h, h.x + 0.1 * h.size, h.y - 0.45 * h.size / aspect, h.size * 0.9])];
   let best = null, bd = Infinity;
   for (const [it, x, y, r] of items) {
@@ -211,7 +257,7 @@ function hit(p) {
 cv.addEventListener("pointerdown", e => {
   const p = at(e), h = hit(p);
   select(h);
-  if (h) { const t = h === "star" ? state.star : h; drag = { dx: t.x - p.x, dy: t.y - p.y, t }; cv.setPointerCapture(e.pointerId); }
+  if (h) { const t = obj(h); drag = { dx: t.x - p.x, dy: t.y - p.y, t }; cv.setPointerCapture(e.pointerId); }
 });
 cv.addEventListener("pointermove", e => {
   if (!drag) return;
@@ -220,20 +266,20 @@ cv.addEventListener("pointermove", e => {
 cv.addEventListener("pointerup", () => { drag = null; });
 document.addEventListener("keydown", e => {
   if (!selected || e.target.tagName === "TEXTAREA") return;
-  const t = selected === "star" ? state.star : selected, step = e.shiftKey ? 0.01 : 0.002;
+  const t = obj(selected), step = e.shiftKey ? 0.01 : 0.002;
   const k = e.key;
   if (k === "ArrowLeft") t.x -= step; else if (k === "ArrowRight") t.x += step;
   else if (k === "ArrowUp") t.y -= step; else if (k === "ArrowDown") t.y += step;
-  else if (k === "[" && selected !== "star") t.tilt -= 2; else if (k === "]" && selected !== "star") t.tilt += 2;
+  else if (k === "[" && !isPoint(selected)) t.tilt -= 2; else if (k === "]" && !isPoint(selected)) t.tilt += 2;
   else if (k === "-") t.size = Math.max(0.01, t.size - 0.001); else if (k === "=" || k === "+") t.size += 0.001;
-  else if ((k === "f" || k === "F") && selected !== "star") t.flip = !t.flip;
+  else if ((k === "f" || k === "F") && !isPoint(selected)) t.flip = !t.flip;
   else return;
   e.preventDefault(); select(selected);
 });
-document.getElementById("size").oninput = e => { if (!selected) return; (selected === "star" ? state.star : selected).size = +e.target.value; render(); };
-document.getElementById("tilt").oninput = e => { if (selected && selected !== "star") { selected.tilt = +e.target.value; render(); } };
-document.getElementById("flip").onclick = () => { if (selected && selected !== "star") { selected.flip = !selected.flip; render(); } };
-document.getElementById("remove").onclick = () => { if (selected && selected !== "star") { state.hats = state.hats.filter(h => h !== selected); select(null); } };
+document.getElementById("size").oninput = e => { if (!selected) return; obj(selected).size = +e.target.value; render(); };
+document.getElementById("tilt").oninput = e => { if (selected && !isPoint(selected)) { selected.tilt = +e.target.value; render(); } };
+document.getElementById("flip").onclick = () => { if (selected && !isPoint(selected)) { selected.flip = !selected.flip; render(); } };
+document.getElementById("remove").onclick = () => { if (selected && !isPoint(selected)) { state.hats = state.hats.filter(h => h !== selected); select(null); } };
 const addId = document.getElementById("addId");
 for (const id of Object.keys(OUTLINES)) addId.add(new Option(id, id));
 document.getElementById("add").onclick = () => {
