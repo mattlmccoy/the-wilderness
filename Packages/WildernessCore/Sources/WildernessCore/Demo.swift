@@ -6,15 +6,17 @@ import Foundation
 ///   Unfold 4 beats × 9 s · Context 4 pages × 8 s · rest 10 s
 public enum DemoScript {
     public static let introSeconds = 15.0
-    public static let restSeconds = 40.0
-    public static let exploreIds = ["christ", "raven", "lion", "pelican", "stag", "beast"]
-    public static let exploreSeconds = 10.0
-    /// Beats 1, 2, 6, 7 of Unfold: Eden, the promise, the angels, lord of the wild.
-    public static let unfoldBeats = [0, 1, 5, 6]
-    public static let unfoldBeatSeconds = 9.0
-    public static let contextIds = ["wilderness", "mountain", "far", "size"]
-    public static let contextPageSeconds = 8.0
-    public static let endRestSeconds = 10.0
+    // Matt, 2026-11-16: a quicker demo (about 1 min 40 s; it was 3 min 13 s). One of everything.
+    public static let restSeconds = 25.0
+    public static let exploreIds = ["christ", "raven", "lion"]
+    public static let exploreSeconds = 8.0
+    /// Beats 1 and 7 of Unfold: Eden; lord of the wild.
+    public static let unfoldBeats = [0, 6]
+    public static let unfoldBeatSeconds = 8.0
+    /// The wilderness, then the hidden angels (the restoration reveal).
+    public static let contextIds = ["wilderness", "angels"]
+    public static let contextPageSeconds = 7.0
+    public static let endRestSeconds = 5.0
 
     public static var restStart: Double { introSeconds }
     public static var exploreStart: Double { restStart + restSeconds }
@@ -51,10 +53,10 @@ public enum DemoScript {
         return .stillness
     }
 
-    /// A `since` for SunRays/PassingLight that puts one pass of rays 5 s into the rest segment.
+    /// A `since` for SunRays/PassingLight whose pass is brightest in the middle of the rest segment.
     public static func raysSince(demoSince start: Double, at t: Double) -> Double {
         let cycle = start + ((t - start) / total).rounded(.down) * total
-        let passStart = cycle + restStart + 5
+        let passStart = cycle + restStart + restSeconds / 2 - PassingLight.duration / 2
         return passStart - (PassingLight.every - PassingLight.duration)
     }
 }

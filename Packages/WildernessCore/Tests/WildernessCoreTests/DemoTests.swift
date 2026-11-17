@@ -11,7 +11,7 @@ private let unfold = UnfoldScript(beats: (0..<8).map { beat("b\($0)") })
 private func page(_ id: String) -> ContextPage {
     ContextPage(id: id, title: id, text: "t", light: [], visual: nil, textSide: .left, sources: ["s"], draft: true)
 }
-private let context = ContextScript(pages: ["wilderness", "desert", "mountain", "painter", "sack", "far", "size"].map(page))
+private let context = ContextScript(pages: ["wilderness", "desert", "mountain", "painter", "sack", "far", "size", "angels"].map(page))
 private let s0 = 1000.0
 private func mode(_ t: Double) -> Mode { DemoScript.mode(at: s0 + t, since: s0, script: unfold, context: context) }
 
@@ -21,15 +21,18 @@ private func mode(_ t: Double) -> Mode { DemoScript.mode(at: s0 + t, since: s0, 
     #expect(mode(20) == .stillness)
 }
 
-@Test func theDemoExploresSixFiguresShortThenExpanded() {
-    let e = DemoScript.exploreStart
-    #expect(mode(e + 2) == .explore(id: "christ", expanded: false))
-    #expect(mode(e + 7) == .explore(id: "christ", expanded: true))
-    #expect(mode(e + 10 + 2) == .explore(id: "raven", expanded: false))
-    #expect(mode(e + 59) == .explore(id: "beast", expanded: true))
+@Test func theDemoExploresThreeFiguresShortThenExpanded() {
+    // Matt, 2026-11-16: a quicker demo. Christ, the raven, the lion.
+    let e = DemoScript.exploreStart, k = DemoScript.exploreSeconds
+    #expect(DemoScript.exploreIds == ["christ", "raven", "lion"])
+    #expect(mode(e + 1) == .explore(id: "christ", expanded: false))
+    #expect(mode(e + k - 1) == .explore(id: "christ", expanded: true))
+    #expect(mode(e + k + 1) == .explore(id: "raven", expanded: false))
+    #expect(mode(e + 3 * k - 1) == .explore(id: "lion", expanded: true))
 }
 
-@Test func theDemoPlaysFourUnfoldBeatsCompressed() {
+@Test func theDemoPlaysTwoUnfoldBeatsCompressed() {
+    #expect(DemoScript.unfoldBeats == [0, 6])   // Eden; lord of the wild
     let u = DemoScript.unfoldStart
     guard case let .unfold(p) = mode(u + 1) else { Issue.record("not unfolding"); return }
     #expect(p.beat == DemoScript.unfoldBeats[0] && !p.paused)
@@ -41,18 +44,18 @@ private func mode(_ t: Double) -> Mode { DemoScript.mode(at: s0 + t, since: s0, 
 @Test func theDemoTurnsContextPagesByName() {
     let c = DemoScript.contextStart
     #expect(mode(c + 1) == .context(page: 0))                               // wilderness
-    #expect(mode(c + DemoScript.contextPageSeconds + 1) == .context(page: 2)) // mountain
+    #expect(mode(c + DemoScript.contextPageSeconds + 1) == .context(page: 7)) // angels (the restoration reveal)
 }
 
 @Test func theDemoLoopsForever() {
-    #expect(DemoScript.total > 150 && DemoScript.total < 240)
+    #expect(DemoScript.total >= 85 && DemoScript.total <= 105)   // about a minute and a half
     #expect(mode(DemoScript.total + 1) == .intro(startedAt: s0 + DemoScript.total))
     #expect(mode(DemoScript.total * 3 + 25) == .stillness)
 }
 
 @Test func theDemoShowsOnePassOfSunRaysWhileResting() {
-    // During the rest segment, the rays pass at their brightest.
-    let mid = s0 + DemoScript.restStart + 5 + PassingLight.duration / 2
+    // The rays are at their brightest in the middle of the (short) rest segment.
+    let mid = s0 + DemoScript.restStart + DemoScript.restSeconds / 2
     let f = SunRays.frame(at: mid, since: DemoScript.raysSince(demoSince: s0, at: mid))
     #expect(f != nil && f!.intensity > 0.25)
 }

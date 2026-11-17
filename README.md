@@ -193,7 +193,7 @@ figure breathes the hum of a Tibetan singing bowl with its strike cut away, tune
 has its own note of D major pentatonic: Christ is home, and the others rise from left to right
 across the painting.
 
-**A demo for filming.** Settings → Demo starts a three-minute loop that shows every feature once.
+**A demo for filming.** Settings → Demo starts a loop of about a minute and a half that shows each part once.
 Any press ends it.
 
 ![The boot-up: every outline draws itself, then fades](docs/media/demo-intro.gif)

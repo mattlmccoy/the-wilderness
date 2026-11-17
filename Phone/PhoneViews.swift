@@ -359,7 +359,7 @@ struct SettingsSheet: View {
                     Button("Show the alignment pattern") { client.send(.show(.pattern)) }
                     Button("Show About on the wall") { client.send(.show(.about)) }
                 }
-                Section(footer: Text("Plays every feature in a three-minute loop, for filming. Any press on the remote ends it.")) {
+                Section(footer: Text("Plays every feature once in a loop of about a minute and a half. Any press on the remote ends it.")) {
                     Button("Start the demo") { client.send(.demo(true)) }
                     Button("Stop the demo") { client.send(.demo(false)) }
                 }

@@ -20,7 +20,7 @@ final class IntentInbox {
 
 struct StartDemoIntent: AppIntent {
     static let title: LocalizedStringResource = "Start the demo"
-    static let description = IntentDescription("Starts the three-minute demo on the wall.")
+    static let description = IntentDescription("Starts the demo on the wall (about a minute and a half).")
     static let openAppWhenRun = true
     @MainActor func perform() async throws -> some IntentResult { IntentInbox.shared.post(.demo); return .result() }
 }
