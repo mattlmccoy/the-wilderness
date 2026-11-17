@@ -14,6 +14,10 @@ struct StillWordsLayer: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 15)) { timeline in
             let t = timeline.date.timeIntervalSinceReferenceDate - since
+            // Top-left aligned: WallColumn offsets from the canvas's corner (a centred container
+            // pushed the words off the text zone; found 2026-11-16, nothing was drawn where it should be).
+            ZStack(alignment: .topLeading) {
+            Color.clear.frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
             if let shown = StillRotation.line(at: t, day: day, words: words, licensed: licensed) {
                 WallColumn(placement: placement, anchorY: 0) {
                     VStack(alignment: .leading, spacing: 18) {
@@ -28,6 +32,7 @@ struct StillWordsLayer: View {
                     }
                 }
                 .opacity(shown.alpha)
+            }
             }
         }
         .frame(width: Artwork.canvasWidth, height: Artwork.canvasHeight)
