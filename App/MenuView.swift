@@ -62,7 +62,7 @@ extension MenuItem {
         case .explore: "one figure at a time"
         case .unfold: "the story, five minutes"
         case .context: "where it came from"
-        case .still: "seven minutes, light only"
+        case .still: "Christ, and His words"
         case .sound: "soft music"
         }
     }

@@ -83,15 +83,13 @@ public struct ModeMachine: Equatable, Sendable {
     public private(set) var dreamcoatUntil: Double?
     public func dreamcoat(now: Double) -> Bool { dreamcoatUntil.map { now < $0 } ?? false }
 
-    /// Menu → Be still: seven minutes of slow looking, light only (SlowLooking).
+    /// Menu → Be still: Christ alone, His words rotating on the canvas, until any button (StillRotation).
     public private(set) var slowLookingSince: Double?
-    private var slowIds: [String] = []
     public var isSlowLooking: Bool { slowLookingSince != nil }
 
     /// Be still, from the menu or the phone.
     public mutating func startSlowLooking(now: Double, library: AnnotationLibrary) {
         prayer = nil   // one quiet thing at a time: Be still replaces a prayer session
-        slowIds = Drift.tour(library)   // the light travels across the painting, not back and forth
         slowLookingSince = now
         textHidden = true
         lastInputAt = now
@@ -103,13 +101,6 @@ public struct ModeMachine: Equatable, Sendable {
         slowLookingSince = nil
         textHidden = false
         mode = .stillness
-    }
-
-    /// Which figure of the walk the light is on (1-based), for the phone.
-    public func slowProgress(now: Double) -> SlowProgress? {
-        guard let start = slowLookingSince else { return nil }
-        let n = SlowLooking.path(ids: slowIds).count
-        return SlowProgress(figure: min(Int((now - start) / SlowLooking.secondsPerFigure) + 1, n), of: n)
     }
 
     // MARK: Into the Quiet (docs/superpowers/specs/2026-11-16-prayer-mode-design.md)
@@ -362,15 +353,10 @@ public struct ModeMachine: Equatable, Sendable {
             return
         }
         if let d = prayerDarkUntil, now >= d { prayerDarkUntil = nil }
-        if let start = slowLookingSince {
-            if let id = SlowLooking.figure(at: now - start, ids: slowIds) {
-                mode = .explore(id: id, expanded: false)
-                lastInputAt = now   // never idle while it walks
-            } else {
-                slowLookingSince = nil
-                textHidden = false
-                mode = .stillness
-            }
+        if slowLookingSince != nil {
+            // Be still: Christ alone until any button; never idle while it runs.
+            mode = .explore(id: "christ", expanded: false)
+            lastInputAt = now
             return
         }
         if let h = hintUntil, now >= h { hintUntil = nil }

@@ -151,11 +151,19 @@ struct RootView: View {
                                   flashlight: quietForPrayer ? nil : flashlight?.point,
                                   wallOffset: Self.previewOffset,
                                   revealSince: revealSince(mode, content))
+                    // Be still: His words rotate on the canvas after the opening line.
+                    if machine?.isSlowLooking == true, let since = machine?.slowLookingSince {
+                        StillWordsLayer(words: content.stillWords, licensed: content.licensed, since: since + Self.stillWordsDelay,
+                                        day: CivilDate(wallDate),
+                                        placement: TextColumnLayout.place(preferred: .left, calibration: cal,
+                                                                          canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)))
+                            .transition(.opacity.animation(.easeInOut(duration: 2)))
+                    }
                     if machine?.isSlowLooking == true, let since = machine?.slowLookingSince, Self.now - since < 9 {
                         WallColumn(placement: TextColumnLayout.place(preferred: .left, calibration: cal,
                                                                      canvasZone: CanvasText.readingZone(library: content.library, zones: content.zones)),
                                    anchorY: 0) {
-                            Wayfinding.hint("Seven minutes of slow looking.\nBreathe with the light. Any button ends it.")
+                            Wayfinding.hint("Be still.\nThe words of Christ, and of the prophets who saw Him coming.\nAny button ends it.")
                         }
                         .transition(.opacity.animation(.easeInOut(duration: 2)))
                     }
@@ -177,7 +185,7 @@ struct RootView: View {
                     case let .explore(id, expanded):
                         ExploreView(library: content.library, state: .exploring(id: id, expanded: expanded),
                                     calibration: cal, showsHint: machine?.hintUntil != nil,
-                                    edgeLine: machine?.isSlowLooking == true ? 0 : wallTuning.edgeLine,   // Be still: the drift alone
+                                    edgeLine: machine?.isSlowLooking == true ? 0 : wallTuning.edgeLine,   // Be still: light alone
                                     canvasZone: CanvasText.zone(for: id, library: content.library, zones: content.zones),
                                     textHidden: machine?.textHidden ?? false)
                     case let .unfold(p):
@@ -247,7 +255,11 @@ struct RootView: View {
                                   tuning: tuningStore.tuning, soundOn: soundOn, showPainting: showPainting,
                                   textHidden: m.textHidden)
         // What is running, so the phone mirrors the wall.
-        s.still = m.slowProgress(now: Self.now)
+        s.still = m.isSlowLooking ? true : nil
+        if let since = m.slowLookingSince {
+            s.stillLine = StillRotation.line(at: Self.now - since - Self.stillWordsDelay, day: CivilDate(wallDate),
+                                             words: c.stillWords, licensed: c.licensed)?.line
+        }
         s.dreamcoat = m.dreamcoat(now: Self.now)
         s.seasons = seasons?.active ?? []
         s.demo = m.isDemo
@@ -401,6 +413,9 @@ struct RootView: View {
         return Self.now + wake.timeIntervalSince(wallDate)
     }
 
+    /// Be still: the words begin after the opening line has faded.
+    static let stillWordsDelay = 10.0
+
     /// The seasons decorate the painting, never the intro, alignment or settings screens (their text).
     static func showsSeasons(_ mode: Mode) -> Bool {
         switch mode {
@@ -460,15 +475,11 @@ struct RootView: View {
         if UIApplication.shared.isIdleTimerDisabled != keep { UIApplication.shared.isIdleTimerDisabled = keep }
     }
 
-    /// The drifting light: Be still's walk, or at rest a gentler loop round the painting
+    /// The drifting light at rest: a gentle loop round the painting
     /// (Tuning.drift; off in wind-down, the intro and alignment).
     @ViewBuilder private func drift(_ mode: Mode, _ c: AppContent) -> some View {
         let tour = Self.tour(c.library)
-        if let m = machine, m.isSlowLooking, let since = m.slowLookingSince {
-            DriftLayer(library: c.library, path: SlowLooking.path(ids: tour), since: since,
-                       dwell: SlowLooking.secondsPerFigure, fade: Drift.stillFade, loops: false,
-                       strength: wallTuning.subjectStrength)
-        } else {
+        do {
             let resting = mode == .stillness && windDown == .awake && machine?.isDemo != true && !quietForPrayer
             DriftLayer(library: c.library, path: tour, since: resting ? 0 : nil,
                        dwell: Drift.restDwell, fade: Drift.restFade, loops: true,
@@ -485,7 +496,8 @@ struct RootView: View {
 
     private func lightTargets(_ mode: Mode, _ c: AppContent) -> Set<String> {
         // Be still: the drift draws the light (DriftLayer), so the figure's own light stays off.
-        if machine?.isSlowLooking == true || quietForPrayer { return [] }
+        if quietForPrayer { return [] }
+        if machine?.isSlowLooking == true { return ["christ"] }   // Be still: Christ alone
         return switch mode {
         case let .explore(id, _): [id]
         case let .unfold(p): UnfoldView.targets(c.script, p)

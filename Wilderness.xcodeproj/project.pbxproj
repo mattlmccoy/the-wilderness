@@ -59,9 +59,11 @@
 		84E588C21FB288254E5105A9 /* EBGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */; };
 		88052D5A91DBAE1B9FC9BEE3 /* AliveLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B6A942754A14FEB94BB43E /* AliveLayer.swift */; };
 		8C3FD557B708F4DE76F945D8 /* context-monastery-of-the-temptation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E1732656C7709B1DB01DC8F7 /* context-monastery-of-the-temptation.jpg */; };
+		8F28BC92CA5A0C40FB31A03C /* stillwords.json in Resources */ = {isa = PBXBuildFile; fileRef = 28073FF3A81B1C0DA0BCC37B /* stillwords.json */; };
 		9BA4BD9DB0933ECA033F0AD8 /* OFL-CormorantGaramond.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */; };
 		9BC22C3E1CA5F3578E4A55B3 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEB97912DA0F3A1FBD72BF /* UITestSupport.swift */; };
 		9C8D9FF514A1BCA0E4EFE1D1 /* CalibrationFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */; };
+		9EBBCC9E04C84638FB2B4476 /* StillWordsLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6663A1A9D721CE9912623A10 /* StillWordsLayer.swift */; };
 		A03307C8A71EF39B9F612887 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDCA1AFD2A93B83EEEA2601 /* IntroView.swift */; };
 		A50F0CF636D0377ED97F7164 /* CormorantGaramond-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7E5A1A12CC0132851E5899D /* CormorantGaramond-Variable.ttf */; };
 		A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 949D7018FF5ACDAE3CF94E43 /* painting.jpg */; };
@@ -122,6 +124,7 @@
 		10055DBD8B0259D70A5114C9 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		1094886775B3B70A380C5972 /* PrayerLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerLayer.swift; sourceTree = "<group>"; };
 		1DA072F40D6888CD20136D43 /* OFL-CormorantGaramond.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-CormorantGaramond.txt"; sourceTree = "<group>"; };
+		28073FF3A81B1C0DA0BCC37B /* stillwords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stillwords.json; sourceTree = "<group>"; };
 		28AA1011679F17D8912C77D4 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		29BA13ECF8A5F9A7660C4A71 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		2AEF7E0A717D43A34913922E /* CalibrationFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationFlowUITests.swift; sourceTree = "<group>"; };
@@ -150,6 +153,7 @@
 		5D9AE1AEC28DA903527A1E75 /* PrayerRemoteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRemoteUITests.swift; sourceTree = "<group>"; };
 		609CF14238C48DEAE944C3AC /* unfold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = unfold.json; sourceTree = "<group>"; };
 		63272EBAD19DCC2048941CE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6663A1A9D721CE9912623A10 /* StillWordsLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillWordsLayer.swift; sourceTree = "<group>"; };
 		66BA4F43C7F39B2835A192BF /* EBGaramond-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Variable.ttf"; sourceTree = "<group>"; };
 		69A6BB2EC267DFB6DEB14308 /* glints.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = glints.json; sourceTree = "<group>"; };
 		6DD6D3673B536505D60D2A5E /* choir.m4a */ = {isa = PBXFileReference; path = choir.m4a; sourceTree = "<group>"; };
@@ -265,6 +269,7 @@
 				71C1AD2F8C4F4ADBF42FD038 /* SelectPressDetector.swift */,
 				96443CC736D66435C0FEE8F1 /* SettingsView.swift */,
 				28AA1011679F17D8912C77D4 /* SoundPlayer.swift */,
+				6663A1A9D721CE9912623A10 /* StillWordsLayer.swift */,
 				FD97476B6D5814CC002BB613 /* TuningStore.swift */,
 				6F06B70493ADCF9380EB26B7 /* Typography.swift */,
 				5575DEF51153E5584DC61376 /* UnfoldView.swift */,
@@ -311,6 +316,7 @@
 				4685DA18E56C3A97752987DC /* notices.json */,
 				949D7018FF5ACDAE3CF94E43 /* painting.jpg */,
 				A272C4FC196DD9B6924B91E2 /* prayer.json */,
+				28073FF3A81B1C0DA0BCC37B /* stillwords.json */,
 				400D1C002A2AD66C7B840729 /* textzones.json */,
 				609CF14238C48DEAE944C3AC /* unfold.json */,
 				EF96BD29AD8FCC6E195AB420 /* context-images */,
@@ -564,6 +570,7 @@
 				57B51D0271F3939ED6FC100D /* pad.m4a in Resources */,
 				A5ADFC6B3096B2F3F9E0C257 /* painting.jpg in Resources */,
 				392BBB720CE3B390E73A772B /* prayer.json in Resources */,
+				8F28BC92CA5A0C40FB31A03C /* stillwords.json in Resources */,
 				FF3CA8E3D6D2787175484F27 /* textzones.json in Resources */,
 				BFE720624A796505DB6F1E67 /* unfold.json in Resources */,
 			);
@@ -620,6 +627,7 @@
 				625D02A0740A97DEDBB1E05C /* SelectPressDetector.swift in Sources */,
 				2C4423B7AA26AE335AEEB402 /* SettingsView.swift in Sources */,
 				CD05E8F3650DFC776F8BF9C9 /* SoundPlayer.swift in Sources */,
+				9EBBCC9E04C84638FB2B4476 /* StillWordsLayer.swift in Sources */,
 				DC4E8BC56E809EAE400D43BC /* TuningStore.swift in Sources */,
 				3576D09A2B2003A03D056D30 /* Typography.swift in Sources */,
 				7F794CC19F710C80D4329BCB /* UnfoldView.swift in Sources */,

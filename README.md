@@ -89,12 +89,9 @@ to ease into the next. It always moves to the nearest figure it hasn't visited, 
 across the painting instead of jumping about. Small glints land on the painting's highlights, and
 every few minutes a few soft beams of sunlight slant down from above and fade.
 
-**Be still** turns that into seven minutes of slow looking: no words, just the light walking from
-Christ through every figure and back to him, each one dissolving into the next.
-
-![Be still, light only, as the wall sees it](docs/media/be-still.gif)
-
-*Be still, light only, as the wall sees it (3× speed): Christ, then the serpent at his feet.*
+**Be still** leaves Christ alone in the light and lets his own words come and go on the canvas, one
+every half minute: the sayings of Jesus, with the Old Testament verses that point to him set in gold
+between them. It runs until any button.
 
 ### Into the quiet
 

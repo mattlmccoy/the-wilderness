@@ -52,10 +52,6 @@ private let path = ["a", "b", "c"]
     #expect(w(121).isEmpty)
 }
 
-@Test func beStillWalksTheTourChristFirstAndLast() {
-    let p = SlowLooking.path(ids: Drift.tour(lib))
-    #expect(p == ["christ", "lion", "stag", "raven", "christ"])
-}
 
 @Test func driftingLightHasASettingThatOldProfilesReadAsOn() throws {
     #expect(Tuning.defaults.drift == 0.5)

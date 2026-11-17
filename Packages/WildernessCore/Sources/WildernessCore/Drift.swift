@@ -1,6 +1,6 @@
 import Foundation
 
-/// The light drifting slowly between subjects, at rest and in Be still
+/// The light drifting slowly between subjects, at rest
 /// (docs/superpowers/plans/2026-11-16-drift-and-parity.md).
 public enum Drift {
     /// A walk over the traced figures that always steps to the nearest one not yet visited,
@@ -53,6 +53,4 @@ public enum Drift {
 
     /// At rest: 40 s on each figure, 15 s to drift to the next, round and round.
     public static let restDwell = 40.0, restFade = 15.0
-    /// Be still: the walk's own 35 s per figure, with 12 s drifts.
-    public static let stillFade = 12.0
 }

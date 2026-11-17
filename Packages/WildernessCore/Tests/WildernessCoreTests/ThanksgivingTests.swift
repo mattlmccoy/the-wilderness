@@ -111,13 +111,14 @@ private let paths = TurkeyPaths(hill: [.init(x: 0.36, y: 0.275), .init(x: 0.60, 
 @Test func theSnapshotCarriesWhatTheWallIsDoing() throws {
     var s = WallSnapshot(mode: "explore", subjectId: "christ", header: nil, title: nil, short: nil, story: nil,
                          verses: [], paused: false, tuning: Tuning(), soundOn: false, showPainting: false)
-    s.still = SlowProgress(figure: 3, of: 13)
+    s.still = true
+    s.stillLine = PrayerLine(ref: "John 1:1", text: "words", translation: .bsb)
     s.dreamcoat = true
     s.seasons = [.thanksgiving]
     s.demo = false
     let back = try JSONDecoder().decode(WallSnapshot.self, from: JSONEncoder().encode(s))
     #expect(back == s)
-    #expect(back.status == ["Be still · 3 of 13", "Dreamcoat", "Thanksgiving"])
+    #expect(back.status == ["Be still", "Dreamcoat", "Thanksgiving"])
     // A wall built before these fields existed still decodes, with nothing to report.
     let old = #"{"mode":"rest","verses":[],"paused":false,"tuning":{},"soundOn":false,"showPainting":false}"#
     let o = try JSONDecoder().decode(WallSnapshot.self, from: Data(old.utf8))

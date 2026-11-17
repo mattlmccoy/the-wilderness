@@ -1,0 +1,285 @@
+{
+ "_note": "Be still: Christ's own words, with Old Testament verses that point to Him. Berean Standard Bible clauses (public domain, bereanbible.com/bsb.txt) as placeholders; the NIV is fetched at build time by scripts/fetch_verses.py. Chosen by Claude for Matt's review, 2026-11-16.",
+ "entries": [
+  {
+   "ref": "Mark 4:39",
+   "text": "Be still",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 14:6",
+   "text": "I am the way and the truth and the life. No one comes to the Father except through Me",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 40:3",
+   "text": "Prepare the way for the LORD in the wilderness; make a straight highway for our God in the desert",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 4:4",
+   "text": "Man shall not live on bread alone, but on every word that comes from the mouth of God",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 8:12",
+   "text": "I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 53:5",
+   "text": "But He was pierced for our transgressions, He was crushed for our iniquities",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "John 11:25",
+   "text": "I am the resurrection and the life. Whoever believes in Me will live, even though he dies",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 10:11",
+   "text": "I am the good shepherd. The good shepherd lays down His life for the sheep.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Micah 5:2",
+   "text": "But you, Bethlehem Ephrathah, who are small among the clans of Judah, out of you will come forth for Me One to be ruler over Israel",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "John 6:35",
+   "text": "I am the bread of life. Whoever comes to Me will never hunger, and whoever believes in Me will never thirst",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 15:5",
+   "text": "I am the vine and you are the branches. The one who remains in Me, and I in him, will bear much fruit",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 9:6",
+   "text": "And He will be called Wonderful Counselor, Mighty God, Everlasting Father, Prince of Peace",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 11:29",
+   "text": "Take My yoke upon you and learn from Me, for I am gentle and humble in heart, and you will find rest for your souls.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 14:27",
+   "text": "Peace I leave with you; My peace I give to you. I do not give to you as the world gives",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Zechariah 9:9",
+   "text": "See, your King comes to you, righteous and victorious, humble and riding on a donkey",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 5:3",
+   "text": "Blessed are the poor in spirit, for theirs is the kingdom of heaven",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 5:8",
+   "text": "Blessed are the pure in heart, for they will see God.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Psalm 22:18",
+   "text": "They divide my garments among them and cast lots for my clothing.",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 5:9",
+   "text": "Blessed are the peacemakers, for they will be called sons of God.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 6:33",
+   "text": "But seek first the kingdom of God and His righteousness, and all these things will be added unto you.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 7:14",
+   "text": "Behold, the virgin will be with child and give birth to a son, and will call Him Immanuel",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 6:34",
+   "text": "Therefore do not worry about tomorrow, for tomorrow will worry about itself",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 22:37",
+   "text": "Love the Lord your God with all your heart and with all your soul and with all your mind",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Psalm 16:10",
+   "text": "For You will not abandon my soul to Sheol, nor will You let Your Holy One see decay.",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 22:39",
+   "text": "Love your neighbor as yourself",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 13:34",
+   "text": "A new commandment I give you: Love one another. As I have loved you, so you also must love one another",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 61:1",
+   "text": "The Spirit of the Lord GOD is on Me, because the LORD has anointed Me to preach good news to the poor",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "John 15:13",
+   "text": "Greater love has no one than this, that he lay down his life for his friends.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 28:20",
+   "text": "And surely I am with you always, even to the end of the age",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Deuteronomy 18:15",
+   "text": "The LORD your God will raise up for you a prophet like me from among your brothers",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "John 16:33",
+   "text": "In the world you will have tribulation. But take courage; I have overcome the world",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 4:10",
+   "text": "Worship the Lord your God and serve Him only",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Psalm 118:22",
+   "text": "The stone the builders rejected has become the cornerstone.",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 4:7",
+   "text": "Do not put the Lord your God to the test",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Luke 23:34",
+   "text": "Father, forgive them, for they do not know what they are doing",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 42:1",
+   "text": "Here is My Servant, whom I uphold, My Chosen One, in whom My soul delights",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Luke 23:46",
+   "text": "Father, into Your hands I commit My Spirit",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 19:30",
+   "text": "It is finished",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 53:3",
+   "text": "He was despised and rejected by men, a man of sorrows, acquainted with grief",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Mark 1:15",
+   "text": "the kingdom of God is near. Repent and believe in the gospel",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 7:7",
+   "text": "Ask, and it will be given to you; seek, and you will find; knock, and the door will be opened to you.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Malachi 3:1",
+   "text": "Behold, I will send My messenger, who will prepare the way before Me",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "John 10:10",
+   "text": "I have come that they may have life, and have it in all its fullness",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Luke 19:10",
+   "text": "For the Son of Man came to seek and to save the lost",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Jeremiah 23:5",
+   "text": "I will raise up for David a righteous Branch, and He will reign wisely as King",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Mark 10:45",
+   "text": "For even the Son of Man did not come to be served, but to serve, and to give His life as a ransom for many",
+   "kind": "jesus"
+  },
+  {
+   "ref": "John 8:32",
+   "text": "Then you will know the truth, and the truth will set you free",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Daniel 7:13",
+   "text": "I saw One like the Son of Man coming with the clouds of heaven",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Revelation 22:13",
+   "text": "I am the Alpha and the Omega, the First and the Last, the Beginning and the End",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 18:20",
+   "text": "For where two or three gather together in My name, there am I with them",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Genesis 22:8",
+   "text": "God Himself will provide the lamb for the burnt offering, my son",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "John 20:29",
+   "text": "blessed are those who have not seen and yet have believed",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Luke 9:23",
+   "text": "If anyone wants to come after Me, he must deny himself and take up his cross daily and follow Me",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Isaiah 25:8",
+   "text": "He will swallow up death forever. The Lord GOD will wipe away the tears from every face",
+   "kind": "prophecy"
+  },
+  {
+   "ref": "Matthew 5:14",
+   "text": "You are the light of the world. A city on a hill cannot be hidden.",
+   "kind": "jesus"
+  },
+  {
+   "ref": "Matthew 11:28",
+   "text": "Come to Me, all you who are weary and burdened, and I will give you rest.",
+   "kind": "jesus"
+  }
+ ]
+}

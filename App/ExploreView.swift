@@ -63,6 +63,8 @@ struct AppContent {
     /// Into the Quiet: the morning and evening lines, and the licensed wording that replaces them.
     var prayer: PrayerContent = .empty
     var licensed: LicensedVerses = .none
+    /// Be still: Christ's words and the Old Testament verses that point to Him.
+    var stillWords: StillWords = .empty
 
     /// Each traced region's breathing rhythm (cheap: a handful of entries).
     var breathing: Breathing { Breathing(ids: library.annotations.filter { $0.outline != nil }.map(\.id)) }
@@ -85,7 +87,8 @@ enum ContentLoader {
                               notices: try Notices.decode(data("notices")),
                               delights: try DelightsContent.decode(data("delights")),
                               prayer: try PrayerContent.decode(data("prayer")),
-                              licensed: licensed)
+                              licensed: licensed,
+                              stillWords: try StillWords.decode(data("stillwords")))
         }
     }
 

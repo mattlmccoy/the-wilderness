@@ -98,8 +98,9 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
     public var textHidden: Bool? = nil
     /// Present only while the wall is calibrating.
     public var alignment: AlignmentState?
-    /// Be still is walking the light (nil = not running, or a wall built before 2026-11-16).
-    public var still: SlowProgress? = nil
+    /// Be still is running, and the line it shows now (Christ's words, or a verse that points to Him).
+    public var still: Bool? = nil
+    public var stillLine: PrayerLine? = nil
     public var dreamcoat: Bool? = nil
     /// The seasons the wall is showing now.
     public var seasons: [SeasonMode]? = nil
@@ -116,7 +117,7 @@ public struct WallSnapshot: Codable, Equatable, Sendable {
         var out: [String] = []
         if demo == true { out.append("Demo") }
         if let p = prayer { out.append("Into the quiet · \(p.movement.title)") }
-        if let s = still { out.append("Be still · \(s.figure) of \(s.of)") }
+        if still == true { out.append("Be still") }
         if dreamcoat == true { out.append("Dreamcoat") }
         out += (seasons ?? []).map(\.title)
         return out

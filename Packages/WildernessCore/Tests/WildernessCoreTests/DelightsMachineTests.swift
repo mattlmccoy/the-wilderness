@@ -29,17 +29,19 @@ private extension ModeMachine {
     #expect(m.mode == before)
 }
 
-@Test func beStillWalksTheFiguresWithTheLightOnly() {
+@Test func beStillStaysOnChristUntilAnyButton() {
+    // Matt, 2026-11-16: Christ alone, His words rotating, until any button (no walk, no end).
     var m = ModeMachine(calibrated: true, now: 0, intro: false)
     m.force(.menu(focus: .still))
     m.press(.select, at: 10)
-    #expect(m.isSlowLooking)
-    m.tick(now: 11, dt: 0.25, script: script)
-    #expect(m.mode == .explore(id: "christ", expanded: false))
-    #expect(m.textHidden)
-    m.tick(now: 10 + SlowLooking.secondsPerFigure + 1, dt: 0.25, script: script)
-    // The nearest figure next (Drift.tour): the lion beside Christ, not the stag across the painting.
-    #expect(m.mode == .explore(id: "lion", expanded: false))
+    #expect(m.isSlowLooking && m.textHidden)
+    let times: [Double] = [11, 46, 431, 3610]
+    for t in times {
+        m.tick(now: t, dt: 0.25, script: script)
+        #expect(m.mode == .explore(id: "christ", expanded: false) && m.isSlowLooking, "at \(t)")
+    }
+    m.press(.move(.right), at: 4000)
+    #expect(!m.isSlowLooking && m.mode == .stillness)
 }
 
 @Test func anyPressEndsSlowLookingAndBringsTheTextBack() {
@@ -49,14 +51,6 @@ private extension ModeMachine {
     m.tick(now: 11, dt: 0.25, script: script)
     m.press(.move(.left), at: 20)
     #expect(!m.isSlowLooking && m.mode == .stillness && !m.textHidden)
-}
-
-@Test func slowLookingEndsAtRestByItself() {
-    var m = ModeMachine(calibrated: true, now: 0, intro: false)
-    m.force(.menu(focus: .still))
-    m.press(.select, at: 10)
-    m.tick(now: 10 + SlowLooking.total(ids: ["christ", "stag", "lion"]) + 1, dt: 0.25, script: script)
-    #expect(!m.isSlowLooking && m.mode == .stillness)
 }
 
 @Test func theWholeCodeFromRestLeavesTheWallAtRest() {
@@ -74,9 +68,7 @@ private extension ModeMachine {
 @Test func thePhoneCanStartAndStopBeStill() {
     var m = ModeMachine(calibrated: true, now: 0, intro: false)
     m.startSlowLooking(now: 5, library: lib)
-    #expect(m.isSlowLooking && m.textHidden)
-    #expect(m.slowProgress(now: 6) == SlowProgress(figure: 1, of: SlowLooking.path(ids: ["christ", "stag", "lion"]).count))
-    #expect(m.slowProgress(now: 5 + SlowLooking.secondsPerFigure + 1)?.figure == 2)
+    #expect(m.isSlowLooking && m.textHidden && m.mode == .explore(id: "christ", expanded: false))
     m.stopSlowLooking()
     #expect(!m.isSlowLooking && !m.textHidden && m.mode == .stillness)
 }

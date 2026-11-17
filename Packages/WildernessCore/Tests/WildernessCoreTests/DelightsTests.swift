@@ -108,16 +108,6 @@ private func hm(_ date: Date) -> Int { let c = cal.dateComponents([.hour, .minut
 
 // MARK: Slow looking
 
-@Test func slowLookingWalksTheFiguresFromChristBackToChrist() {
-    let ids = ["christ", "raven", "lion", "stag", "angels"]
-    let path = SlowLooking.path(ids: ids)
-    #expect(path.first == "christ" && path.last == "christ")
-    #expect(Set(path) == Set(ids))
-    #expect(abs(SlowLooking.total(ids: ids) - Double(path.count) * SlowLooking.secondsPerFigure) < 1e-9)
-    #expect(SlowLooking.figure(at: 0, ids: ids) == "christ")
-    #expect(SlowLooking.figure(at: SlowLooking.secondsPerFigure + 1, ids: ids) == path[1])
-    #expect(SlowLooking.figure(at: SlowLooking.total(ids: ids) + 1, ids: ids) == nil)
-}
 
 // MARK: Wind-down
 

@@ -194,3 +194,9 @@ def test_every_reference_in_the_real_content_has_a_bsb_source():
     sources = json.loads((root / "docs/copy/verse-sources.json").read_text())
     missing = [r for r in wall_excerpts(root / "App/Content") if "BSB" not in sources.get(r, {})]
     assert missing == []
+
+
+def test_be_still_words_are_fetched_too(content, sources):
+    (content / "stillwords.json").write_text(json.dumps({"entries": [
+        {"ref": "Luke 10:19", "text": FIX["Luke 10:19"]["excerpt"], "kind": "jesus"}]}))
+    assert "Luke 10:19" in wall_excerpts(content)

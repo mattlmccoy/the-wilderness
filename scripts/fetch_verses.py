@@ -81,6 +81,11 @@ def wall_excerpts(content: Path) -> dict[str, str]:
         data = json.loads(prayer.read_text())
         for line in data.get("morning", []) + data.get("evening", []):
             out.setdefault(line["ref"], line["text"])
+    # Be still: Christ's words and the Old Testament verses that point to Him.
+    still = content / "stillwords.json"
+    if still.exists():
+        for line in json.loads(still.read_text()).get("entries", []):
+            out.setdefault(line["ref"], line["text"])
     return out
 
 

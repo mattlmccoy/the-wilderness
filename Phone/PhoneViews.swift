@@ -116,7 +116,7 @@ struct PhoneRootView: View {
 
     static func modeName(_ s: WallSnapshot?) -> String? {
         guard let s else { return nil }
-        if s.still != nil { return nil }   // "Be still · n of m" says it
+        if s.still == true { return nil }   // "Be still" says it
         switch s.mode {
         case "rest": return "At rest"
         case "menu": return "Menu"
@@ -133,7 +133,7 @@ struct PhoneRootView: View {
     /// egg, not a mode: a long press on the title, like the code on the remote.)
     private var modeRow: some View {
         let s = client.snapshot
-        let still = s?.still != nil
+        let still = s?.still == true
         return HStack(spacing: 0) {
             modeButton("Explore", on: s?.mode == "explore" && !still) { client.send(.go(.exploreStart)) }
             Spacer(minLength: 2)
@@ -262,6 +262,14 @@ struct ReadAlongView: View {
                         .font(PhoneType.title(24))
                     Text("Open the app on the Apple TV, and keep this phone on the same Wi-Fi.")
                         .font(PhoneType.text(17, italic: true)).foregroundStyle(PhonePalette.stone)
+                } else if let s = snapshot, s.still == true {
+                    // Be still: the words on the wall, larger.
+                    Text("BE STILL").font(PhoneType.text(13)).tracking(2).foregroundStyle(PhonePalette.stone)
+                    if let line = s.stillLine {
+                        Text(line.text).font(PhoneType.text(24, italic: true)).lineSpacing(5)
+                        Text("\(line.ref.uppercased())  ·  \(line.translation.rawValue)").font(PhoneType.text(13)).tracking(1)
+                            .foregroundStyle(PhonePalette.stone)
+                    }
                 } else if let s = snapshot, let title = s.title {
                     if let h = s.header { Text(h).font(PhoneType.text(13)).tracking(2).foregroundStyle(PhonePalette.stone) }
                     Text(title).font(PhoneType.title(30))
